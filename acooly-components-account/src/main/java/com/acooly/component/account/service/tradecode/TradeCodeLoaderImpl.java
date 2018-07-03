@@ -1,6 +1,5 @@
 package com.acooly.component.account.service.tradecode;
 
-import com.acooly.component.account.enums.DirectionEnum;
 import com.acooly.core.utils.Collections3;
 import com.google.common.collect.Lists;
 import org.springframework.beans.BeansException;
@@ -9,14 +8,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
+ * 全局交易码加载器
+ * <p>
+ * 交易码的来源：
+ * 1、组件内部的CommonTradeCodeEnum定义的公共基础交易嘛，比如：充值，提现等基础。
+ * 2、组件内置的管理系统界面中数据库维护的交易编。
+ * 3、集成项目中任何实现TradeCodeLoader接口的输出（spring容器内）
+ *
  * @author zhangpu@acooly.cn
  * @date 2018-06-18 02:22
  */
-@Component("integrationTradeCodeLoader")
-public class IntegrationTradeCodeLoader implements TradeCodeLoader, ApplicationContextAware, InitializingBean {
+@Component("tradeCodeLoader")
+public class TradeCodeLoaderImpl implements TradeCodeLoader, ApplicationContextAware, InitializingBean {
 
     private ApplicationContext applicationContext;
 
@@ -26,7 +35,7 @@ public class IntegrationTradeCodeLoader implements TradeCodeLoader, ApplicationC
     public List<TradeCode> loadTradeCodes() {
         return mergeTradeCodes();
     }
-    
+
     private List<TradeCode> mergeTradeCodes() {
         Map<String, TradeCode> tradeCodeMaps = new HashMap<>();
         if (Collections3.isNotEmpty(tradeCodeLoaders)) {
@@ -47,7 +56,7 @@ public class IntegrationTradeCodeLoader implements TradeCodeLoader, ApplicationC
     public void afterPropertiesSet() throws Exception {
         Map<String, TradeCodeLoader> tradeCodeLoaderMap = applicationContext.getBeansOfType(TradeCodeLoader.class);
         for (TradeCodeLoader tradeCodeLoader : tradeCodeLoaderMap.values()) {
-            if (tradeCodeLoader instanceof IntegrationTradeCodeLoader) {
+            if (tradeCodeLoader instanceof TradeCodeLoaderImpl) {
                 continue;
             }
             tradeCodeLoaders.add(tradeCodeLoader);
@@ -60,16 +69,5 @@ public class IntegrationTradeCodeLoader implements TradeCodeLoader, ApplicationC
         this.applicationContext = applicationContext;
     }
 
-
-    public static void main(String[] args) {
-        Set<TradeCode> tradeCodes = new HashSet<TradeCode>();
-
-        tradeCodes.add(CommonTradeCodeEnum.deposit);
-        tradeCodes.add(new DefaultTradeCode("deposit", "充值", DirectionEnum.in));
-
-        System.out.println(tradeCodes);
-
-
-    }
 
 }

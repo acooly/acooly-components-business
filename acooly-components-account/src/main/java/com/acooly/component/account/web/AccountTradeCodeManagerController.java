@@ -10,6 +10,7 @@ import com.acooly.component.account.entity.AccountTradeCode;
 import com.acooly.component.account.enums.DirectionEnum;
 import com.acooly.component.account.manage.AccountTradeCodeService;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,7 @@ public class AccountTradeCodeManagerController extends AbstractJQueryEntityContr
 
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+
         model.put("directions", DirectionEnum.mapping());
     }
 }

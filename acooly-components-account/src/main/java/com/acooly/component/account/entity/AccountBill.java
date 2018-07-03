@@ -48,12 +48,19 @@ public class AccountBill extends AbstractEntity {
     @NotNull
     private Long accountId;
 
+    @NotEmpty
+    @Size(max = 32)
+    private String accountNo;
+
+
+    @NotNull
+    private Long userId;
+
     /**
      * 用户名
      */
-    @NotEmpty
     @Size(max = 64)
-    private String userName;
+    private String username;
 
     /**
      * 交易金额
@@ -103,7 +110,7 @@ public class AccountBill extends AbstractEntity {
      */
     @Enumerated(EnumType.STRING)
     @NotNull
-    private AbleStatus status;
+    private AbleStatus status = AbleStatus.enable;
 
     /**
      * 备注

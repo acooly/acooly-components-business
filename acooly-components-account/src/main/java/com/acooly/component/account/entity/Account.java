@@ -14,10 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -37,9 +34,25 @@ public class Account extends AbstractEntity {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 用户ID，外部集成环境用户/客户唯一标志
+     */
+    @NotNull
+    private Long userId;
+
+    /**
+     * 账户唯一业务标志
+     */
     @NotEmpty
     @Size(max = 32)
     private String accountNo;
+
+
+    /**
+     * 用户名称（冗余）
+     */
+    @Size(max = 64)
+    private String username;
 
     /**
      * 账户类型
@@ -48,36 +61,25 @@ public class Account extends AbstractEntity {
     @NotNull
     private AccountTypeEnum accountType = AccountTypeEnum.main;
 
-    /**
-     * 用户编号，外部集成环境用户/客户标志
-     */
-    @NotEmpty
-    @Size(max = 64)
-    private String userName;
-
-    /**
-     * 用户ID，外部集成环境用户/客户标志，可选提高性能
-     */
-    private Long userId;
 
     /**
      * 余额
      */
     @NotNull
-    private Long balance;
+    private Long balance = 0L;
 
     /**
      * 冻结金额
      */
     @NotNull
-    private Long freeze;
+    private Long freeze = 0L;
 
     /**
      * 状态
      */
     @Enumerated(EnumType.STRING)
     @NotNull
-    private AbleStatus status;
+    private AbleStatus status = AbleStatus.enable;
 
     /**
      * 备注
@@ -85,5 +87,19 @@ public class Account extends AbstractEntity {
     @Size(max = 128)
     private String comments;
 
+
+    @Transient
+    public long getAvalible() {
+        return this.balance - this.freeze;
+    }
+
+    @Transient
+    public String getLabel() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ID:").append(getId()).append(",");
+        sb.append("No:").append(getAccountNo()).append(",");
+        sb.append("UserId:").append(getUserId()).append("}");
+        return sb.toString();
+    }
 
 }

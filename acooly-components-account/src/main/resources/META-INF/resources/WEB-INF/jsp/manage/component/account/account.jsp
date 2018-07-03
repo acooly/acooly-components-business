@@ -17,16 +17,13 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-				账户类型: <select style="width:80px;height:27px;" name="search_EQ_accountType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allAccountTypes}"><option value="${e.key}" ${param.search_EQ_accountType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					用户编号，外部集成环境用户/客户标志: <input type="text" class="text" size="15" name="search_LIKE_userName"/>
-					用户ID，外部集成环境用户/客户标志，可选提高性能: <input type="text" class="text" size="15" name="search_EQ_userId"/>
-					余额: <input type="text" class="text" size="15" name="search_EQ_balance"/>
-					冻结金额: <input type="text" class="text" size="15" name="search_EQ_freeze"/>
-				状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                    账户ID: <input type="text" class="text" size="15" name="search_EQ_id"/>
+                    账户编码: <input type="text" class="text" size="15" name="search_EQ_accountNo"/>
+					用户ID: <input type="text" class="text" size="15" name="search_EQ_userId"/>
+                    用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
+					余额: <input type="text" class="text" size="15" name="search_GTE_balance"/> ~ <input type="text" class="text" size="15" name="search_LTE_balance"/>
+                    类型: <select style="width:80px;height:27px;" name="search_EQ_accountType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allAccountTypes}"><option value="${e.key}" ${param.search_EQ_accountType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+				    状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_account_searchform','manage_account_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -43,11 +40,12 @@ $(function() {
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" >ID</th>
-			<th field="accountType" formatter="mappingFormatter">账户类型</th>
-			<th field="userName">用户编号，外部集成环境用户/客户标志</th>
-			<th field="userId" sum="true">用户ID，外部集成环境用户/客户标志，可选提高性能</th>
-			<th field="balance" sum="true">余额</th>
-			<th field="freeze" sum="true">冻结金额</th>
+            <th field="accountNo">账号</th>
+			<th field="userId" sum="true">用户ID</th>
+            <th field="username">用户名</th>
+			<th field="balance" sum="true" formatter="centMoneyFormatter">余额</th>
+			<th field="freeze" sum="true" formatter="centMoneyFormatter">冻结金额</th>
+            <th field="accountType" formatter="mappingFormatter">账户类型</th>
 			<th field="status" formatter="mappingFormatter">状态</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>

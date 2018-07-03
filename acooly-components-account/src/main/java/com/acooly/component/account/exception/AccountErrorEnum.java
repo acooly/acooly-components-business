@@ -1,7 +1,6 @@
-package com.acooly.component.account.service.tradecode;
+package com.acooly.component.account.exception;
 
-import com.acooly.component.account.enums.DirectionEnum;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.acooly.core.utils.enums.Messageable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,32 +9,22 @@ import java.util.Map;
 
 /**
  * @author zhangpu@acooly.cn
- * @date 2018-06-12 15:27
+ * @date 2018-07-01 16:20
  */
-public enum CommonTradeCodeEnum implements TradeCode {
+public enum AccountErrorEnum implements Messageable {
 
 
-    deposit("deposit", "充值", DirectionEnum.in),
+    ACCOUNT_INTERNAL_ERROR("ACCOUNT_UNKNOWN_ERROR", "账务内部错误"),
 
-    deposit_offline("deposit_offline", "线下充值", DirectionEnum.in),
+    ACCOUNT_INSUFFICIENT_BALANCE("ACCOUNT_INSUFFICIENT_BALANCE", "账户余额不足"),;
 
-    withdraw("withdraw", "出金", DirectionEnum.out),
-
-    withdraw_offline("withdraw", "线下出金", DirectionEnum.out),
-
-    transfer_out("transfer_out", "转出", DirectionEnum.out),
-
-    transfer_in("transfer_in", "转入", DirectionEnum.in),;
 
     private final String code;
     private final String message;
-    private DirectionEnum direction;
 
-
-    private CommonTradeCodeEnum(String code, String message, DirectionEnum direction) {
+    private AccountErrorEnum(String code, String message) {
         this.code = code;
         this.message = message;
-        this.direction = direction;
     }
 
     public String getCode() {
@@ -56,15 +45,9 @@ public enum CommonTradeCodeEnum implements TradeCode {
         return message;
     }
 
-    @Override
-    public DirectionEnum direction() {
-        return direction;
-    }
-
-
     public static Map<String, String> mapping() {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        for (CommonTradeCodeEnum type : values()) {
+        for (AccountErrorEnum type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -77,8 +60,8 @@ public enum CommonTradeCodeEnum implements TradeCode {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static CommonTradeCodeEnum find(String code) {
-        for (CommonTradeCodeEnum status : values()) {
+    public static AccountErrorEnum find(String code) {
+        for (AccountErrorEnum status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
@@ -91,9 +74,9 @@ public enum CommonTradeCodeEnum implements TradeCode {
      *
      * @return 全部枚举值。
      */
-    public static List<CommonTradeCodeEnum> getAll() {
-        List<CommonTradeCodeEnum> list = new ArrayList<CommonTradeCodeEnum>();
-        for (CommonTradeCodeEnum status : values()) {
+    public static List<AccountErrorEnum> getAll() {
+        List<AccountErrorEnum> list = new ArrayList<AccountErrorEnum>();
+        for (AccountErrorEnum status : values()) {
             list.add(status);
         }
         return list;
@@ -106,18 +89,11 @@ public enum CommonTradeCodeEnum implements TradeCode {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (CommonTradeCodeEnum status : values()) {
+        for (AccountErrorEnum status : values()) {
             list.add(status.code());
         }
         return list;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("code", code)
-                .append("message", message)
-                .toString();
-    }
 
 }
