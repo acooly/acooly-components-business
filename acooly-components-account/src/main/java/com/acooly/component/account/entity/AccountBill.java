@@ -20,10 +20,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * 账户进出账 Entity
+ * <p>
+ * todo：考虑科目的挂接；考虑交易码的分类（出金/入金等）
  *
  * @author acooly
  * Date: 2018-06-06 10:40:46
@@ -39,7 +40,7 @@ public class AccountBill extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty
-    @Size(max = 32)
+    @Size(max = 64)
     private String billNo;
 
     /**
@@ -49,15 +50,19 @@ public class AccountBill extends AbstractEntity {
     private Long accountId;
 
     @NotEmpty
-    @Size(max = 32)
+    @Size(max = 64)
     private String accountNo;
 
 
     @NotNull
     private Long userId;
 
+    @NotEmpty
+    @Size(max = 64)
+    private String userNo;
+
     /**
-     * 用户名
+     * 用户名（冗余）
      */
     @Size(max = 64)
     private String username;
@@ -89,12 +94,6 @@ public class AccountBill extends AbstractEntity {
     private String tradeCode;
 
     /**
-     * 交易时间
-     */
-    @NotNull
-    private Date tradeTime = new Date();
-
-    /**
      * 相关业务ID
      */
     private Long busiId;
@@ -104,6 +103,12 @@ public class AccountBill extends AbstractEntity {
      */
     @Size(max = 128)
     private String busiData;
+
+    /**
+     * 批量交易号
+     */
+    @Size(max = 64)
+    private String batchNo;
 
     /**
      * 状态

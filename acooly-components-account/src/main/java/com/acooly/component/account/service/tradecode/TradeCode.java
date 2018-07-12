@@ -36,8 +36,14 @@ public interface TradeCode {
         return null;
     }
 
-    ;
-
+    /**
+     * 显示专用标签
+     *
+     * @return
+     */
+    default String lable() {
+        return code() + "/" + message() + "/" + direction();
+    }
 
 
 }

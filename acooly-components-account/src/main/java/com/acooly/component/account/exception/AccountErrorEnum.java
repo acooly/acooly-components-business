@@ -16,7 +16,21 @@ public enum AccountErrorEnum implements Messageable {
 
     ACCOUNT_INTERNAL_ERROR("ACCOUNT_UNKNOWN_ERROR", "账务内部错误"),
 
-    ACCOUNT_INSUFFICIENT_BALANCE("ACCOUNT_INSUFFICIENT_BALANCE", "账户余额不足"),;
+    ACCOUNT_NOT_EXIST("ACCOUNT_NOT_EXIST", "账户不存在"),
+
+    ACCOUNT_ALREADT_EXISTED("ACCOUNT_NOT_EXIST", "账户已存在"),
+
+    ACCOUNT_INSUFFICIENT_BALANCE("ACCOUNT_INSUFFICIENT_BALANCE", "账户余额不足"),
+
+    ACCOUNT_BATCH_LIST_IS_EMPTY("ACCOUNT_BATCH_LIST_IS_EMPTY", "批量记账列表为空"),
+
+    ACCOUNT_BATCH_NOT_ALLOW_OVER_MAX("ACCOUNT_BATCH_NOT_ALLOW_OVER_MAX", "批量记账数量超过单批最大值"),
+
+    ACCOUNT_BATCH_KEEP_DIFFERENT("ACCOUNT_BATCH_KEEP_DIFFERENT", "批量记账批次号不一致"),
+
+    ACCOUNT_VERIFY_LATEST_BALANCE_FAIL("ACCOUNT_VERIFY_LATEST_BALANCE_FAIL", "最新交易流水交易后余额与账户余额不一致"),
+
+    ACCOUNT_VERIFY_BILL_FAIL("ACCOUNT_VERIFY_BILL_FAIL", "账户流水验证未通过"),;
 
 
     private final String code;
@@ -43,6 +57,10 @@ public enum AccountErrorEnum implements Messageable {
     @Override
     public String message() {
         return message;
+    }
+
+    public String getLabel() {
+        return this.code + "/" + this.message;
     }
 
     public static Map<String, String> mapping() {
@@ -94,6 +112,5 @@ public enum AccountErrorEnum implements Messageable {
         }
         return list;
     }
-
 
 }

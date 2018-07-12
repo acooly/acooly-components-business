@@ -2,6 +2,7 @@ package com.acooly.component.account.service;
 
 import com.acooly.component.account.dto.AccountInfo;
 import com.acooly.component.account.dto.AccountKeepInfo;
+import com.acooly.component.account.dto.TransferInfo;
 import com.acooly.component.account.entity.Account;
 
 import java.util.List;
@@ -23,10 +24,21 @@ public interface AccountTradeService {
     Account openAccount(AccountInfo accountInfo);
 
     /**
+     * 查询单个账户信息
+     *
+     * @param accountInfo
+     * @return
+     */
+    Account loadAccount(AccountInfo accountInfo);
+
+
+
+
+    /**
      * 单笔记账
      * 用于单边交易记账，如：充值，提现，冻结等
      *
-     * @param accountTradeInfo
+     * @param
      */
     void keepAccount(AccountKeepInfo accountTradeInfo);
 
@@ -38,14 +50,27 @@ public interface AccountTradeService {
      *
      * @param accountTradeInfos
      */
-    void keepAccounts(List<AccountKeepInfo> accountTradeInfos);
+    String keepAccounts(List<AccountKeepInfo> accountTradeInfos);
+
+    String keepAccounts(List<AccountKeepInfo> accountTradeInfos, String comments);
 
     /**
-     * 常用交易:单笔转账
+     * 单笔转账
      *
-     * @param from
-     * @param to
+     * @param transferInfo
+     * @return batchNo
      */
-    void transfer(AccountKeepInfo from, AccountKeepInfo to);
+    String transfer(TransferInfo transferInfo);
+
+    /**
+     * 批量自由转账
+     * <p>
+     * 默认最大300
+     *
+     * @param transferInfos
+     * @return batchNo
+     */
+    String transfer(List<TransferInfo> transferInfos);
+
 
 }

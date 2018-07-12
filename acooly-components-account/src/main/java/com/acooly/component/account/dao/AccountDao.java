@@ -24,7 +24,10 @@ public interface AccountDao extends EntityMybatisDao<Account> {
 
     @Select("select * from ac_account where user_id = #{userId} and account_type = #{accountType}")
     Account findByUserIdAndAccountType(@Param("userId") Long userId, @Param("accountType") AccountTypeEnum accountType);
-    
+
+    @Select("select * from ac_account where user_no = #{userNo} and account_type = #{accountType}")
+    Account findByUserNoAndAccountType(@Param("userNo") String userNo, @Param("accountType") AccountTypeEnum accountType);
+
     @Select("select * from ac_account where account_no = #{accountNo}")
     Account findByAccountNo(@Param("accountNo") String accountNo);
 

@@ -34,19 +34,27 @@ public class Account extends AbstractEntity {
      */
     private static final long serialVersionUID = 1L;
 
+
+    /**
+     * 账户唯一业务标志
+     */
+    @NotEmpty
+    @Size(max = 64)
+    private String accountNo;
+
     /**
      * 用户ID，外部集成环境用户/客户唯一标志
      */
     @NotNull
     private Long userId;
 
+
     /**
-     * 账户唯一业务标志
+     * 用户唯一业务标志
      */
     @NotEmpty
-    @Size(max = 32)
-    private String accountNo;
-
+    @Size(max = 64)
+    private String userNo;
 
     /**
      * 用户名称（冗余）
@@ -96,9 +104,12 @@ public class Account extends AbstractEntity {
     @Transient
     public String getLabel() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{ID:").append(getId()).append(",");
-        sb.append("No:").append(getAccountNo()).append(",");
-        sb.append("UserId:").append(getUserId()).append("}");
+        if (getId().equals(getUserId()) && getAccountNo().equals(getUserNo())) {
+            sb.append("{acct-user:").append(getId()).append("/").append(getAccountNo()).append("}");
+        } else {
+            sb.append("{acct:").append(getId()).append("/").append(getAccountNo()).append(",");
+            sb.append("user:").append(getUserId()).append("/").append(getUserNo()).append("}");
+        }
         return sb.toString();
     }
 

@@ -37,12 +37,19 @@ public class AccountKeepInfo extends AccountInfo {
     @Size(max = 1024)
     private String busiData;
 
+    /**
+     * 如果是批量记账，可以设置本批次的批次号，用于关联本次记账的所有流水，与业务端建立联系。
+     * <p>
+     * 如果不设置，则组件自动设置，成功记账后，会回写入本属性；如果设置，则请客户端保障批次唯一性。
+     */
+    private String batchNo;
+
 
     public AccountKeepInfo() {
     }
 
     public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount, Long busiId, String busiData) {
-        super(accountId, null, null, null);
+        super(accountId, null, null, null, null);
         this.tradeCode = tradeCode;
         this.amount = amount;
         this.busiId = busiId;
@@ -53,6 +60,20 @@ public class AccountKeepInfo extends AccountInfo {
         this(accountId, tradeCode, amount, null, null);
     }
 
+    public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount, String comments) {
+        this(accountId, tradeCode, amount, null, null);
+        setComments(comments);
+    }
+
+    public AccountKeepInfo(AccountInfo accountInfo, TradeCode tradeCode, Money amount, String comments) {
+        this.setAccountId(accountInfo.getAccountId());
+        this.setAccountNo(accountInfo.getAccountNo());
+        this.setUserId(accountInfo.getUserId());
+        this.setUserNo(accountInfo.getUserNo());
+        this.tradeCode = tradeCode;
+        this.amount = amount;
+        setComments(comments);
+    }
 
     @Override
     public String toString() {
@@ -61,8 +82,7 @@ public class AccountKeepInfo extends AccountInfo {
                 .add("accountNo", getAccountNo())
                 .add("userId", getUserId())
                 .add("username", getUsername())
-                .add("tradeCode", tradeCode.code() + "/" + tradeCode.message())
-                .add("direction", tradeCode.direction())
+                .add("tradeCode", tradeCode.code() + "/" + tradeCode.message() + "/" + tradeCode.direction())
                 .add("amount", amount)
                 .add("accountType", getAccountType())
                 .omitNullValues()
