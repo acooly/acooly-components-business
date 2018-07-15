@@ -4,6 +4,7 @@ import com.acooly.component.Main;
 import com.acooly.component.account.dto.AccountInfo;
 import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.dto.TransferInfo;
+import com.acooly.component.account.service.AccountManageService;
 import com.acooly.component.account.service.AccountTradeService;
 import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.core.common.BootApp;
@@ -29,6 +30,8 @@ public class AccountTradeServiceConcurrentTest {
         Apps.setProfileIfNotExists("sdev");
         final ApplicationContext ctx = new SpringApplication(Main.class).run(args);
         final AccountTradeService accountTradeService = ctx.getBean(AccountTradeService.class);
+        final AccountManageService accountManageService = ctx.getBean(AccountManageService.class);
+
         long initBalance = 1000000;
         // 初始化
         AccountInfo accountInfo1 = new AccountInfo(1l);
@@ -36,10 +39,10 @@ public class AccountTradeServiceConcurrentTest {
         AccountInfo accountInfo3 = new AccountInfo(3l);
         AccountInfo accountInfo4 = new AccountInfo(4l);
 
-        accountTradeService.openAccount(accountInfo1);
-        accountTradeService.openAccount(accountInfo2);
-        accountTradeService.openAccount(accountInfo3);
-        accountTradeService.openAccount(accountInfo4);
+        accountManageService.openAccount(accountInfo1);
+        accountManageService.openAccount(accountInfo2);
+        accountManageService.openAccount(accountInfo3);
+        accountManageService.openAccount(accountInfo4);
 
         // 1 充值 100000
         // 2 充值 100000

@@ -3,6 +3,7 @@ package com.acooly.component.account;
 import com.acooly.component.account.dto.AccountInfo;
 import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.dto.TransferInfo;
+import com.acooly.component.account.service.AccountManageService;
 import com.acooly.component.account.service.AccountTradeService;
 import com.acooly.component.account.service.AccountVerifyService;
 import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
@@ -42,7 +43,8 @@ public class AccountTransferTest extends AppTestBase {
 
     @Autowired
     private AccountTradeService accountTradeService;
-
+    @Autowired
+    private AccountManageService accountManageService;
     @Autowired
     private AccountVerifyService accountVerifyService;
 
@@ -56,7 +58,7 @@ public class AccountTransferTest extends AppTestBase {
         jdbcTemplate.execute("truncate table ac_account_bill");
         jdbcTemplate.execute("truncate table ac_account");
         for (long i = 1; i <= TEST_ACCOUNT_COUNT; i++) {
-            accountTradeService.openAccount(new AccountInfo(i, Ids.getDid()));
+            accountManageService.openAccount(new AccountInfo(i, Ids.getDid()));
             accountTradeService.keepAccount(new AccountKeepInfo(i, CommonTradeCodeEnum.deposit, Money.cent(TEST_ACCOUNT_INIT_BALANCE)));
         }
     }

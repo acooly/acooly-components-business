@@ -5,6 +5,7 @@ import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.dto.TransferInfo;
 import com.acooly.component.account.entity.Account;
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.enums.SimpleStatus;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -17,26 +18,6 @@ import java.util.List;
 public interface AccountTradeService {
 
 
-    /**
-     * 独立开户
-     *
-     * @param accountInfo
-     * @return
-     */
-    Account openAccount(AccountInfo accountInfo);
-
-    /**
-     * 查询单个账户信息
-     * <p>
-     * 组合方式：
-     * <p>
-     * 1、构造参数（accountId）
-     * 2、构造参数（accountNo）
-     *
-     * @param accountInfo
-     * @return
-     */
-    Account loadAccount(AccountInfo accountInfo);
 
 
     /**

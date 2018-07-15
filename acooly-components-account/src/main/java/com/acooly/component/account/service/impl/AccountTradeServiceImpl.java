@@ -1,7 +1,6 @@
 package com.acooly.component.account.service.impl;
 
 import com.acooly.component.account.AccountProperties;
-import com.acooly.component.account.dto.AccountInfo;
 import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.dto.TransferInfo;
 import com.acooly.component.account.entity.Account;
@@ -10,7 +9,6 @@ import com.acooly.component.account.enums.DirectionEnum;
 import com.acooly.component.account.exception.AccountErrorEnum;
 import com.acooly.component.account.exception.AccountOperationException;
 import com.acooly.component.account.manage.AccountBillService;
-import com.acooly.component.account.manage.AccountService;
 import com.acooly.component.account.service.AccountTradeService;
 import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.component.account.service.tradecode.TradeCode;
@@ -19,7 +17,6 @@ import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.validate.Validators;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +32,8 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class AccountTradeServiceImpl implements AccountTradeService {
+public class AccountTradeServiceImpl extends AccountSupportService implements AccountTradeService {
 
-    @Autowired
-    private AccountService accountService;
     @Autowired
     private AccountBillService accountBillService;
     @Autowired
@@ -52,12 +47,8 @@ public class AccountTradeServiceImpl implements AccountTradeService {
         try {
             doCheck(accountKeepInfo);
             Long id = loadAccountId(accountKeepInfo);
-            // 悲观锁加载
             account = accountService.loadAndLock(id);
-            if (account == null) {
-                log.error("记账 [失败] AccountKeepInfo: {}, 错误:{}", accountKeepInfo, AccountErrorEnum.ACCOUNT_NOT_EXIST.getLabel());
-                throw new AccountOperationException(AccountErrorEnum.ACCOUNT_NOT_EXIST);
-            }
+            doCheckAccount(account, accountKeepInfo);
             doAccountModify(account, accountKeepInfo);
             accountBill = doAccountBill(account, accountKeepInfo);
         } catch (BusinessException be) {
@@ -100,19 +91,6 @@ public class AccountTradeServiceImpl implements AccountTradeService {
         }
         log.info("批量记账 成功 batchNo:{} ,size:{}, {}", batchNo, accountKeepInfos.size(), comments);
         return batchNo;
-    }
-
-
-    @Override
-    public Account openAccount(AccountInfo accountInfo) {
-        doCheck(accountInfo);
-        return accountService.createAccount(accountInfo);
-    }
-
-
-    @Override
-    public Account loadAccount(AccountInfo accountInfo) {
-        return accountService.loadAccount(accountInfo);
     }
 
     @Transactional(rollbackOn = Throwable.class)
@@ -180,32 +158,6 @@ public class AccountTradeServiceImpl implements AccountTradeService {
         return Lists.newArrayList(from, to);
     }
 
-
-    /**
-     * 参数合法性检查
-     *
-     * @param accountInfo
-     */
-    protected void doCheck(AccountInfo accountInfo) {
-        Validators.assertJSR303(accountInfo);
-        accountInfo.check();
-    }
-
-
-    protected Long loadAccountId(AccountKeepInfo accountKeepInfo) {
-        // 获取主键ID
-        Long id = accountKeepInfo.getAccountId();
-        Account account = null;
-        if (id == null) {
-            account = accountService.loadAccount(accountKeepInfo);
-            if (account == null) {
-                log.error("记账 [失败] AccountKeepInfo: {}, 错误:{}", accountKeepInfo, AccountErrorEnum.ACCOUNT_NOT_EXIST.getLabel());
-                throw new AccountOperationException(AccountErrorEnum.ACCOUNT_NOT_EXIST);
-            }
-            id = account.getId();
-        }
-        return id;
-    }
 
     protected void doAccountModify(Account account, AccountKeepInfo accountKeepInfo) {
         Money amount = accountKeepInfo.getAmount();

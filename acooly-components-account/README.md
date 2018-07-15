@@ -72,7 +72,16 @@ TradeCode的来源：
 ### 核心接口
 
 ```java
+// 账户管理服务
+com.acooly.component.account.service.AccountManageService
+// 账务交易服务
 com.acooly.component.account.service.AccountTradeService
+// 账务校验服务
+com.acooly.component.account.service.AccountVerifyService
+// 分页查询
+com.acooly.component.account.manage.Account${...}Service
+// 交易码扩展接口
+com.acooly.component.account.service.tradecode.TradeCodeLoader
 ```
 详细接口，方法和参数说明请参考源代码的javadoc
 

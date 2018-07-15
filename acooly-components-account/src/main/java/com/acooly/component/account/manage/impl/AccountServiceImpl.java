@@ -12,9 +12,11 @@ import com.acooly.component.account.entity.Account;
 import com.acooly.component.account.exception.AccountErrorEnum;
 import com.acooly.component.account.exception.AccountOperationException;
 import com.acooly.component.account.manage.AccountService;
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -100,4 +102,35 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
         return getEntityDao().findAndLockById(id);
     }
 
+
+    @Override
+    public void statusChange(Long id, SimpleStatus status) {
+
+        try {
+            Account account = loadAccount(new AccountInfo(id));
+            if (account == null) {
+                log.warn("状态变更 [失败] accountId:{},原因：{}", id, AccountErrorEnum.ACCOUNT_NOT_EXIST);
+                throw new AccountOperationException(AccountErrorEnum.ACCOUNT_NOT_EXIST, "accountId:" + id);
+            }
+
+            if (account.getStatus() == SimpleStatus.disable) {
+                log.warn("状态变更 [失败] 账户状态为禁用，不能直接修改状态。account{}, status:{}", account.getLabel(), SimpleStatus.disable);
+                throw new AccountOperationException(AccountErrorEnum.ACCOUNT_STATUS_NOT_ALLOW_CHANGE, "account:" + account.getLabel());
+            }
+
+            if (account.getStatus() == status) {
+                log.info("状态变更 [成功] 指定修改的状态与实体本来状态一致，直接返回. status:{}", status);
+                return;
+            }
+            SimpleStatus orginalStatus = account.getStatus();
+            account.setStatus(status);
+            update(account);
+            log.info("状态变更 [成功] account:{} , status: {} -> {}", account.getLabel(), orginalStatus, status);
+        } catch (BusinessException be) {
+            throw be;
+        } catch (Exception e) {
+            throw new BusinessException(AccountErrorEnum.ACCOUNT_INTERNAL_ERROR);
+        }
+
+    }
 }

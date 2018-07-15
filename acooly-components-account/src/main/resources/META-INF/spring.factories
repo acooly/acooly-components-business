@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.acooly.component.account.AccountAutoConfig
+
+com.acooly.core.common.boot.component.ComponentInitializer=\
+com.acooly.component.account.AccountComponentInitializer

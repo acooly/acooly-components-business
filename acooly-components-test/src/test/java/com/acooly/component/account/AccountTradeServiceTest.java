@@ -1,22 +1,17 @@
 package com.acooly.component.account;
 
-import com.acooly.component.account.dto.AccountInfo;
 import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.dto.TransferInfo;
-import com.acooly.component.account.entity.Account;
-import com.acooly.component.account.enums.AccountTypeEnum;
 import com.acooly.component.account.enums.DirectionEnum;
 import com.acooly.component.account.service.AccountTradeService;
 import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.component.account.service.tradecode.DefaultTradeCode;
 import com.acooly.core.common.boot.Apps;
-import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.module.test.AppTestBase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.assertj.core.util.Lists;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -43,56 +38,6 @@ public class AccountTradeServiceTest extends AppTestBase {
 
     @Autowired
     private AccountTradeService accountTradeService;
-
-    /**
-     * 测试开户
-     * <p>
-     * <li>如果唯一标志在Account表存在，则直接返回，否则创建新的账户</li>
-     * <li>如果不设置AccountNo，则系统自动生成</li>
-     *
-     * <p>
-     * 用户ID与账户ID一致
-     * 用户No与账户No一致
-     * 重点：设置AccountId为UserId
-     */
-    @Test
-    public void testOpenAccountWithUserIdEquelsAccountId() {
-        try {
-            AccountInfo accountInfo = new AccountInfo(TEST_TO_ID, Ids.getDid());
-            accountInfo.setUsername("zhangpu");
-            accountInfo.setComments("开户");
-            Account account = accountTradeService.openAccount(accountInfo);
-            log.info("Account:{}", account);
-        } catch (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
-
-    /**
-     * 测试开户
-     * <p>
-     * <li>如果唯一标志在Account表存在，则直接返回，否则创建新的账户</li>
-     * <li>如果不设置AccountNo，则系统自动生成</li>
-     *
-     * <p>
-     * 根据用户ID关联开户，用户ID与账户ID不同
-     * 重点：不设置AccountId，由系统自己生成
-     */
-    @Test
-    public void testOpenAccountByUserId() {
-
-        try {
-            AccountInfo accountInfo = new AccountInfo(null, null, 1000L, Ids.getDid(), AccountTypeEnum.main);
-            accountInfo.setUsername("zhangpu");
-            accountInfo.setComments("开户");
-            Account account = accountTradeService.openAccount(accountInfo);
-            log.info("Account:{}", account);
-        } catch (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
 
     /**
      * 测试单笔记账
@@ -158,8 +103,8 @@ public class AccountTradeServiceTest extends AppTestBase {
      */
     @Test
     public void testBatchFreezeAndUnFreeze() {
-        accountTradeService.freeze(Lists.newArrayList(TEST_FROM_ID,TEST_TO_ID), Money.cent(20), "测试批量冻结");
-        accountTradeService.unfreeze(Lists.newArrayList(TEST_FROM_ID,TEST_TO_ID), Money.cent(10), "测试批量解冻");
+        accountTradeService.freeze(Lists.newArrayList(TEST_FROM_ID, TEST_TO_ID), Money.cent(20), "测试批量冻结");
+        accountTradeService.unfreeze(Lists.newArrayList(TEST_FROM_ID, TEST_TO_ID), Money.cent(10), "测试批量解冻");
     }
 
 
