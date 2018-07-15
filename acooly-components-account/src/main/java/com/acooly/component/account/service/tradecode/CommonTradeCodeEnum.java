@@ -25,7 +25,11 @@ public enum CommonTradeCodeEnum implements TradeCode {
 
     transfer_out("transfer_out", "转出", DirectionEnum.out),
 
-    transfer_in("transfer_in", "转入", DirectionEnum.in),;
+    transfer_in("transfer_in", "转入", DirectionEnum.in),
+
+    freeze("freeze", "冻结", DirectionEnum.keep),
+
+    unfreeze("unfreeze", "解冻", DirectionEnum.keep),;
 
     private final String code;
     private final String message;

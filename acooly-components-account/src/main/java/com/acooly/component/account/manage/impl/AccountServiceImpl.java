@@ -96,15 +96,6 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
     }
 
     @Override
-    public Account loadAndCreate(AccountInfo accountInfo) {
-        Account account = loadAccount(accountInfo);
-        if (account == null) {
-            account = createAccount(accountInfo);
-        }
-        return account;
-    }
-
-    @Override
     public Account loadAndLock(Long id) {
         return getEntityDao().findAndLockById(id);
     }

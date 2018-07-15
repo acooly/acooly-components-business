@@ -29,6 +29,6 @@ public class AccountProperties {
     /**
      * 批量处理最大值
      */
-    private int batchMaxSize = 300;
+    private int batchMaxSize = 600;
 
 }

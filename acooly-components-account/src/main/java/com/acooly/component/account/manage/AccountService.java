@@ -8,8 +8,11 @@
 package com.acooly.component.account.manage;
 
 import com.acooly.component.account.dto.AccountInfo;
+import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.entity.Account;
 import com.acooly.core.common.service.EntityService;
+
+import java.util.List;
 
 /**
  * 账户信息 Service接口
@@ -30,10 +33,13 @@ public interface AccountService extends EntityService<Account> {
      */
     Account loadAccount(AccountInfo accountInfo);
 
+    /**
+     * 新增账户
+     * @param accountInfo
+     * @return
+     */
     Account createAccount(AccountInfo accountInfo);
 
-
-    Account loadAndCreate(AccountInfo accountInfo);
 
 
     Account loadAndLock(Long id);

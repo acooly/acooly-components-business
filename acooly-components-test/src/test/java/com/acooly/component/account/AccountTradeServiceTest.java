@@ -15,6 +15,7 @@ import com.acooly.core.utils.Money;
 import com.acooly.module.test.AppTestBase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
+import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,7 @@ public class AccountTradeServiceTest extends AppTestBase {
      */
     @Test
     public void testKeepAccount() {
-        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(TEST_FROM_ID, CommonTradeCodeEnum.deposit, Money.amout("120"), "充值");
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(TEST_TO_ID, CommonTradeCodeEnum.deposit, Money.amout("120"), "充值");
         // 可选参数
         accountKeepInfo.setBusiId(1l);
         accountKeepInfo.setBusiData("busiId是充值交易的流水，这里可以做会话参数，可以是JSON格式");
@@ -142,9 +143,24 @@ public class AccountTradeServiceTest extends AppTestBase {
     }
 
 
+    /**
+     * 测试单笔冻结和解冻
+     */
+    @Test
+    public void testFreezeAndUnFreeze() {
+        accountTradeService.freeze(TEST_FROM_ID, Money.cent(20), "测试冻结");
+        accountTradeService.unfreeze(TEST_FROM_ID, Money.cent(10), "测试解冻");
+    }
 
 
-
+    /**
+     * 测试批量冻结和解冻
+     */
+    @Test
+    public void testBatchFreezeAndUnFreeze() {
+        accountTradeService.freeze(Lists.newArrayList(TEST_FROM_ID,TEST_TO_ID), Money.cent(20), "测试批量冻结");
+        accountTradeService.unfreeze(Lists.newArrayList(TEST_FROM_ID,TEST_TO_ID), Money.cent(10), "测试批量解冻");
+    }
 
 
     private static Money getRandomAmount() {

@@ -34,10 +34,7 @@ public class AccountVerifyServiceTest extends AppTestBase {
      */
     @Test
     public void testVerifyAccount() {
-        accountVerifyService.verifyAccount(new AccountInfo(1L));
-        accountVerifyService.verifyAccount(new AccountInfo(2L));
-        accountVerifyService.verifyAccount(new AccountInfo(3L));
-        accountVerifyService.verifyAccount(new AccountInfo(4L));
+        accountVerifyService.verifyAccount(new AccountInfo(TEST_FROM_ID));
     }
 
 }

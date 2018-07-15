@@ -12,6 +12,8 @@ import com.acooly.component.account.exception.AccountOperationException;
 import com.acooly.component.account.manage.AccountBillService;
 import com.acooly.component.account.manage.AccountService;
 import com.acooly.component.account.service.AccountTradeService;
+import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.component.account.service.tradecode.TradeCode;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -106,6 +109,12 @@ public class AccountTradeServiceImpl implements AccountTradeService {
         return accountService.createAccount(accountInfo);
     }
 
+
+    @Override
+    public Account loadAccount(AccountInfo accountInfo) {
+        return accountService.loadAccount(accountInfo);
+    }
+
     @Transactional(rollbackOn = Throwable.class)
     @Override
     public String keepAccounts(List<AccountKeepInfo> accountKeepInfos) {
@@ -125,6 +134,40 @@ public class AccountTradeServiceImpl implements AccountTradeService {
             accountKeepInfos.addAll(convertTransferToAccountKeepInfos(transferInfo));
         }
         return keepAccounts(accountKeepInfos, "批量转账");
+    }
+
+
+    @Override
+    public void freeze(Long accountId, Money amount, @Nullable String comments) {
+        doFreeze(accountId, amount, CommonTradeCodeEnum.freeze, comments);
+    }
+
+    @Override
+    public String freeze(List<Long> accountIds, Money amount, @Nullable String comments) {
+        return doFreeze(accountIds, amount, CommonTradeCodeEnum.freeze, comments);
+    }
+
+    @Override
+    public void unfreeze(Long accountId, Money amount, @Nullable String comments) {
+        doFreeze(accountId, amount, CommonTradeCodeEnum.unfreeze, comments);
+    }
+
+    @Override
+    public String unfreeze(List<Long> accountIds, Money amount, @Nullable String comments) {
+        return doFreeze(accountIds, amount, CommonTradeCodeEnum.unfreeze, comments);
+    }
+
+    protected void doFreeze(Long accountId, Money amount, TradeCode tradeCode, @Nullable String comments) {
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(accountId, tradeCode, amount, comments);
+        keepAccount(accountKeepInfo);
+    }
+
+    protected String doFreeze(List<Long> accountIds, Money amount, TradeCode tradeCode, @Nullable String comments) {
+        List<AccountKeepInfo> accountKeepInfos = Lists.newArrayList();
+        for (Long accountId : accountIds) {
+            accountKeepInfos.add(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+        }
+        return keepAccounts(accountKeepInfos, comments);
     }
 
     protected List<AccountKeepInfo> convertTransferToAccountKeepInfos(TransferInfo transferInfo) {
@@ -170,7 +213,7 @@ public class AccountTradeServiceImpl implements AccountTradeService {
             account.setBalance(account.getBalance() + amount.getCent());
         } else {
             if (amount.getCent() > account.getAvalible()) {
-                log.warn("记账 [余额变动] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{}", account.getLabel(),
+                log.warn("记账 [动账] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{}", account.getLabel(),
                         account.getAvalible(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
                 throw new AccountOperationException(AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
             }
@@ -180,11 +223,16 @@ public class AccountTradeServiceImpl implements AccountTradeService {
             } else if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.in) {
                 account.setBalance(account.getBalance() + amount.getCent());
             } else {
-                account.setBalance(account.getFreeze() + amount.getCent());
+                if (accountKeepInfo.getTradeCode().code().equals(CommonTradeCodeEnum.freeze.code())) {
+                    account.setFreeze(account.getFreeze() + amount.getCent());
+                } else {
+                    account.setFreeze(account.getFreeze() - amount.getCent());
+                }
+
             }
         }
         accountService.update(account);
-        log.debug("记账 [余额变动] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
+        log.debug("记账 [动账] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
                 accountKeepInfo.getTradeCode().message(), accountKeepInfo.getTradeCode().direction(),
                 accountKeepInfo.getAmount().getCent());
     }
@@ -208,7 +256,7 @@ public class AccountTradeServiceImpl implements AccountTradeService {
         accountBill.setBusiData(accountKeepInfo.getBusiData());
         accountBill.setBatchNo(accountKeepInfo.getBatchNo());
         accountBillService.save(accountBill);
-        log.debug("记账 [流水记账] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
+        log.debug("记账 [流水] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
                 accountKeepInfo.getTradeCode().message(), accountKeepInfo.getTradeCode().direction(),
                 accountKeepInfo.getAmount().getCent());
         return accountBill;

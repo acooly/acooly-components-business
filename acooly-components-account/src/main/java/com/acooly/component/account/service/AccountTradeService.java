@@ -4,7 +4,9 @@ import com.acooly.component.account.dto.AccountInfo;
 import com.acooly.component.account.dto.AccountKeepInfo;
 import com.acooly.component.account.dto.TransferInfo;
 import com.acooly.component.account.entity.Account;
+import com.acooly.core.utils.Money;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -25,6 +27,11 @@ public interface AccountTradeService {
 
     /**
      * 查询单个账户信息
+     * <p>
+     * 组合方式：
+     * <p>
+     * 1、构造参数（accountId）
+     * 2、构造参数（accountNo）
      *
      * @param accountInfo
      * @return
@@ -32,13 +39,11 @@ public interface AccountTradeService {
     Account loadAccount(AccountInfo accountInfo);
 
 
-
-
     /**
      * 单笔记账
      * 用于单边交易记账，如：充值，提现，冻结等
      *
-     * @param
+     * @param accountTradeInfo
      */
     void keepAccount(AccountKeepInfo accountTradeInfo);
 
@@ -52,7 +57,53 @@ public interface AccountTradeService {
      */
     String keepAccounts(List<AccountKeepInfo> accountTradeInfos);
 
-    String keepAccounts(List<AccountKeepInfo> accountTradeInfos, String comments);
+    /**
+     * 批量记账
+     * <p>
+     * 用户多变交易记账，如：付款等
+     * 逻辑为：按传入list列表的顺序执行
+     *
+     * @param accountTradeInfos
+     * @param comments
+     * @return
+     */
+    String keepAccounts(List<AccountKeepInfo> accountTradeInfos, @Nullable String comments);
+
+
+    /**
+     * 冻结
+     *
+     * @param accountId
+     * @param comments  可为空
+     */
+    void freeze(Long accountId, Money amount, @Nullable String comments);
+
+    /**
+     * 批量冻结
+     *
+     * @param accountIds
+     * @param comments   可为空
+     * @return batchNo
+     */
+    String freeze(List<Long> accountIds, Money amount, @Nullable String comments);
+
+    /**
+     * 解冻
+     *
+     * @param accountId
+     * @param comments  可为空
+     */
+    void unfreeze(Long accountId, Money amount, @Nullable String comments);
+
+    /**
+     * 批量解冻
+     *
+     * @param accountIds
+     * @param comments   可为空
+     * @return batchNo
+     */
+    String unfreeze(List<Long> accountIds, Money amount, @Nullable String comments);
+
 
     /**
      * 单笔转账
@@ -65,7 +116,7 @@ public interface AccountTradeService {
     /**
      * 批量自由转账
      * <p>
-     * 默认最大300
+     * 默认最大600
      *
      * @param transferInfos
      * @return batchNo
