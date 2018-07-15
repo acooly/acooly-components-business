@@ -10,6 +10,7 @@ package com.acooly.component.account.entity;
 import com.acooly.component.account.enums.AccountTypeEnum;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.enums.AbleStatus;
+import com.acooly.core.utils.enums.SimpleStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -87,7 +88,7 @@ public class Account extends AbstractEntity {
      */
     @Enumerated(EnumType.STRING)
     @NotNull
-    private AbleStatus status = AbleStatus.enable;
+    private SimpleStatus status = SimpleStatus.enable;
 
     /**
      * 备注
