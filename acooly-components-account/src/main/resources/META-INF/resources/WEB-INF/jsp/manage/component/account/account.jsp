@@ -41,10 +41,12 @@ $(function() {
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" >ID</th>
             <th field="accountNo">账号</th>
-			<th field="userId" sum="true">用户ID</th>
+			<th field="userId">用户ID</th>
+            <th field="userNo">用户编码</th>
             <th field="username">用户名</th>
 			<th field="balance" sum="true" formatter="centMoneyFormatter">余额</th>
 			<th field="freeze" sum="true" formatter="centMoneyFormatter">冻结金额</th>
+            <th field="freeze" sum="true" data-options="formatter:function(v,i,r){ return centMoneyFormatter(r.balance - r.freeze); }">可用金额</th>
             <th field="accountType" formatter="mappingFormatter">账户类型</th>
 			<th field="status" formatter="mappingFormatter">状态</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>

@@ -55,7 +55,7 @@ public class AccountAutoConfig extends WebMvcConfigurerAdapter {
 
             @Override
             public List<String> getInitSqlFile() {
-                return Lists.newArrayList("ac_account", "ac_account_bill");
+                return Lists.newArrayList("account");
             }
         };
     }
