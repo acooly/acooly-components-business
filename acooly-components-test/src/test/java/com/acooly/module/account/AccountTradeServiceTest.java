@@ -1,11 +1,11 @@
-package com.acooly.component.account;
+package com.acooly.module.account;
 
-import com.acooly.component.account.dto.AccountKeepInfo;
-import com.acooly.component.account.dto.TransferInfo;
-import com.acooly.component.account.enums.DirectionEnum;
-import com.acooly.component.account.service.AccountTradeService;
-import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
-import com.acooly.component.account.service.tradecode.DefaultTradeCode;
+import com.acooly.module.account.dto.AccountKeepInfo;
+import com.acooly.module.account.dto.TransferInfo;
+import com.acooly.module.account.enums.DirectionEnum;
+import com.acooly.module.account.service.AccountTradeService;
+import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.account.service.tradecode.DefaultTradeCode;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Money;
 import com.acooly.module.test.AppTestBase;
@@ -44,7 +44,7 @@ public class AccountTradeServiceTest extends AppTestBase {
      */
     @Test
     public void testKeepAccount() {
-        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(TEST_TO_ID, CommonTradeCodeEnum.deposit, Money.amout("120"), "充值");
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(TEST_FROM_ID, CommonTradeCodeEnum.deposit, Money.amout("120"), "充值");
         // 可选参数
         accountKeepInfo.setBusiId(1l);
         accountKeepInfo.setBusiData("busiId是充值交易的流水，这里可以做会话参数，可以是JSON格式");

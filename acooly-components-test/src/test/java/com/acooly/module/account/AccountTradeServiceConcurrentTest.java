@@ -1,12 +1,11 @@
-package com.acooly.component.account;
+package com.acooly.module.account;
 
-import com.acooly.component.Main;
-import com.acooly.component.account.dto.AccountInfo;
-import com.acooly.component.account.dto.AccountKeepInfo;
-import com.acooly.component.account.dto.TransferInfo;
-import com.acooly.component.account.service.AccountManageService;
-import com.acooly.component.account.service.AccountTradeService;
-import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.account.dto.AccountInfo;
+import com.acooly.module.account.dto.AccountKeepInfo;
+import com.acooly.module.account.dto.TransferInfo;
+import com.acooly.module.account.service.AccountManageService;
+import com.acooly.module.account.service.AccountTradeService;
+import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Money;
@@ -23,7 +22,7 @@ import java.util.concurrent.CountDownLatch;
  * @date 2018-07-04 00:56
  */
 @Slf4j
-@BootApp(sysName = "acooly-components", httpPort = 8080)
+//@BootApp(sysName = "acooly-components-test", httpPort = 8080)
 public class AccountTradeServiceConcurrentTest {
 
     public static void main(String[] args) throws Exception {

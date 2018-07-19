@@ -1,12 +1,12 @@
-package com.acooly.component.account;
+package com.acooly.module.account;
 
-import com.acooly.component.account.dto.AccountInfo;
-import com.acooly.component.account.dto.AccountKeepInfo;
-import com.acooly.component.account.dto.TransferInfo;
-import com.acooly.component.account.service.AccountManageService;
-import com.acooly.component.account.service.AccountTradeService;
-import com.acooly.component.account.service.AccountVerifyService;
-import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.account.dto.AccountInfo;
+import com.acooly.module.account.dto.AccountKeepInfo;
+import com.acooly.module.account.dto.TransferInfo;
+import com.acooly.module.account.service.AccountManageService;
+import com.acooly.module.account.service.AccountTradeService;
+import com.acooly.module.account.service.AccountVerifyService;
+import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;

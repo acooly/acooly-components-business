@@ -1,21 +1,15 @@
-package com.acooly.component.account;
+package com.acooly.module.account;
 
-import com.acooly.component.account.dto.AccountInfo;
-import com.acooly.component.account.dto.AccountKeepInfo;
-import com.acooly.component.account.dto.TransferInfo;
-import com.acooly.component.account.entity.AccountBill;
-import com.acooly.component.account.manage.AccountBillService;
-import com.acooly.component.account.service.AccountTradeService;
-import com.acooly.component.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.account.entity.AccountBill;
+import com.acooly.module.account.manage.AccountBillService;
+import com.acooly.module.account.service.AccountTradeService;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.module.test.AppTestBase;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
-import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.List;
 import java.util.Map;
 
 /**
