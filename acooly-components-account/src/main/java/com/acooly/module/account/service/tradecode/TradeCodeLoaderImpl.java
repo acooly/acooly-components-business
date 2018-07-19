@@ -48,7 +48,6 @@ public class TradeCodeLoaderImpl implements TradeCodeLoader, ApplicationContextA
             }
         }
         return Lists.newArrayList(tradeCodeMaps.values());
-
     }
 
 

@@ -20,11 +20,7 @@ $(function() {
 					交易编码: <input type="text" class="text" size="15" name="search_LIKE_tradeCode"/>
 					交易名称: <input type="text" class="text" size="15" name="search_LIKE_tradeName"/>
 					方向: <input type="text" class="text" size="15" name="search_LIKE_direction"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					update_time: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-          	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_accountTradeCode_searchform','manage_accountTradeCode_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_accountTradeCode_searchform','manage_accountTradeCode_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
         </tr>
@@ -44,8 +40,8 @@ $(function() {
 			<th field="tradeName">交易名称</th>
 			<th field="direction">方向</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
-		    <th field="updateTime" formatter="dateTimeFormatter">update_time</th>
-			<th field="comments">comments</th>
+		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
+			<th field="comments">备注</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_accountTradeCode_action',value,row)}">动作</th>
         </tr>
       </thead>

@@ -7,12 +7,16 @@
 		<td>${accountBill.id}</td>
 	</tr>					
 	<tr>
-		<th width="25%">账户ID:</th>
-		<td>${accountBill.accountId}</td>
-	</tr>					
+		<th width="25%">账户:</th>
+		<td>${accountBill.accountId}/${accountBill.accountNo}</td>
+	</tr>
+	<tr>
+		<th>用户:</th>
+		<td>${accountBill.userId}/${accountBill.userNo}</td>
+	</tr>
 	<tr>
 		<th>用户名:</th>
-		<td>${accountBill.userName}</td>
+		<td>${accountBill.username}</td>
 	</tr>					
 	<tr>
 		<th>交易金额:</th>
@@ -28,12 +32,8 @@
 	</tr>					
 	<tr>
 		<th>交易码:</th>
-		<td>${accountBill.tradeCode}</td>
-	</tr>					
-	<tr>
-		<th>交易时间:</th>
-		<td><fmt:formatDate value="${accountBill.tradeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-	</tr>					
+		<td>${accountBill.tradeCode}/${allTradeCodes[accountBill.tradeCode]}</td>
+	</tr>
 	<tr>
 		<th>相关业务ID:</th>
 		<td>${accountBill.busiId}</td>
@@ -47,13 +47,9 @@
 		<td>${accountBill.status.message}</td>
 	</tr>					
 	<tr>
-		<th>创建时间:</th>
+		<th>交易时间:</th>
 		<td><fmt:formatDate value="${accountBill.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-	</tr>					
-	<tr>
-		<th>更新时间:</th>
-		<td><fmt:formatDate value="${accountBill.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-	</tr>					
+	</tr>
 	<tr>
 		<th>备注:</th>
 		<td>${accountBill.comments}</td>
