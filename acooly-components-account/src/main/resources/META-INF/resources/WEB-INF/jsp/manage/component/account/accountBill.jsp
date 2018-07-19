@@ -17,8 +17,8 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					账户ID: <input type="text" class="text" size="15" name="search_EQ_accountId"/>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_userName"/>
+					账户编码: <input type="text" class="text" size="15" name="search_EQ_accountNo"/>
+					用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
 					交易金额: <input type="text" class="text" size="15" name="search_EQ_amount"/>
 					变动后余额: <input type="text" class="text" size="15" name="search_EQ_balancePost"/>
 				资金流向: <select style="width:80px;height:27px;" name="search_EQ_direction" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allDirections}"><option value="${e.key}" ${param.search_EQ_direction == e.key?'selected':''}>${e.value}</option></c:forEach></select>

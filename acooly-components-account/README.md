@@ -73,15 +73,15 @@ TradeCode的来源：
 
 ```java
 // 账户管理服务
-com.acooly.component.account.service.AccountManageService
+AccountManageService
 // 账务交易服务
-com.acooly.component.account.service.AccountTradeService
+AccountTradeService
 // 账务校验服务
-com.acooly.component.account.service.AccountVerifyService
+AccountVerifyService
 // 分页查询
 com.acooly.component.account.manage.Account${...}Service
 // 交易码扩展接口
-com.acooly.component.account.service.tradecode.TradeCodeLoader
+TradeCodeLoader
 ```
 详细接口，方法和参数说明请参考源代码的javadoc
 
@@ -108,7 +108,7 @@ public AccountInfo(Long userId, String userNo)
 public AccountInfo(@Nullable Long accountId, @Nullable String accountNo, Long userId, String userNo, AccountTypeEnum accountType) 
 ```
 
-通过以上构造完成AccountInfo的创建后，可选设置username和comments属性。详情请参考组件源代码：com.acooly.component.account.dto.AccountInfo
+通过以上构造完成AccountInfo的创建后，可选设置username和comments属性。详情请参考组件源代码：AccountInfo
 
 * 定位账户
 
@@ -146,7 +146,7 @@ Account openAccount(AccountInfo accountInfo);
 开户是特别需要注意的接口，关系到与你的会员体系的整合。一般来说，我们是现有会员系统，然后在会员系统基础上关联账务系统。所以，可能存在的情况如下：
 
 1. 用户ID和用户编码与账户ID和账户编码一致，一般用于默认账户，方便业务关联和管理。同时账户ID不采用数据库自增长方式生成，而是由userId方式指定。请参考单元测试：com.acooly.component.account.AccountTradeServiceTest的testOpenAccountWithUserIdEquelsAccountId方法。
-2. 用户ID和用户编码与账户ID和编码不一致，并通过accountType区分账户唯一性。需要对AccountInfo传入userId和userNo，但设置accountId和accountNo（也可以手动设置）为空，由账务组件自动生成。详细用法请参考单元测试：com.acooly.component.account.AccountTradeServiceTest.testOpenAccountByUserId()方法。
+2. 用户ID和用户编码与账户ID和编码不一致，并通过accountType区分账户唯一性。需要对AccountInfo传入userId和userNo，但设置accountId和accountNo（也可以手动设置）为空，由账务组件自动生成。详细用法请参考单元测试：AccountTradeServiceTest.testOpenAccountByUserId()方法。
 
 #### 暂停/启用/禁用
 

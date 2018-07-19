@@ -11,7 +11,7 @@
 		<td>${account.accountType.message}</td>
 	</tr>					
 	<tr>
-		<th>用户编号，外部集成环境用户/客户标志:</th>
+		<th>用户编号</th>
 		<td>${account.userName}</td>
 	</tr>					
 	<tr>
