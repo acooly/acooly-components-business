@@ -1,8 +1,8 @@
 package com.acooly.module;
 
-import com.acooly.module.service.tradecode.TradeCode;
-import com.acooly.module.service.tradecode.TradeCodeLoader;
 import com.acooly.core.common.boot.Apps;
+import com.acooly.module.account.service.tradecode.TradeCode;
+import com.acooly.module.account.service.tradecode.TradeCodeLoader;
 import com.acooly.module.test.AppTestBase;
 import org.junit.Test;
 
@@ -28,14 +28,13 @@ public class TradeCodeLoaderTest extends AppTestBase {
 
     /**
      * 查询所有可用交易码
-     *
+     * <p>
      * 该接口主要用户全局使用交易编码的场景，比如：前端交易查询的翻译。
-     *
+     * <p>
      * 交易码的来源：
      * 1、组件内部的CommonTradeCodeEnum定义的公共基础交易嘛，比如：充值，提现等基础。
      * 2、组件内置的管理系统界面中数据库维护的交易编。
      * 3、集成项目中任何实现TradeCodeLoader接口的输出（spring容器内）
-     *
      */
     @Test
     public void testQueryTradeCodes() {

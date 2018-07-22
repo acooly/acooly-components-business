@@ -1,15 +1,15 @@
 package com.acooly.module;
 
-import com.acooly.module.dto.AccountInfo;
-import com.acooly.module.dto.AccountKeepInfo;
-import com.acooly.module.dto.TransferInfo;
-import com.acooly.module.service.AccountManageService;
-import com.acooly.module.service.AccountTradeService;
-import com.acooly.module.service.AccountVerifyService;
-import com.acooly.module.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
+import com.acooly.module.account.dto.AccountInfo;
+import com.acooly.module.account.dto.AccountKeepInfo;
+import com.acooly.module.account.dto.TransferInfo;
+import com.acooly.module.account.service.AccountManageService;
+import com.acooly.module.account.service.AccountTradeService;
+import com.acooly.module.account.service.AccountVerifyService;
+import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.module.test.AppTestBase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
