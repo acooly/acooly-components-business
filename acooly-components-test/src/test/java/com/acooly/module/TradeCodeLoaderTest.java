@@ -1,7 +1,7 @@
-package com.acooly.module.account;
+package com.acooly.module;
 
-import com.acooly.module.account.service.tradecode.TradeCode;
-import com.acooly.module.account.service.tradecode.TradeCodeLoader;
+import com.acooly.module.service.tradecode.TradeCode;
+import com.acooly.module.service.tradecode.TradeCodeLoader;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.test.AppTestBase;
 import org.junit.Test;

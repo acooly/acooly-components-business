@@ -30,6 +30,11 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-components-account</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-components-member</artifactId>
+            <version>4.1.0-SNAPSHOT</version>
+        </dependency>
 
 
         <dependency>

@@ -1,11 +1,11 @@
-package com.acooly.module.account;
+package com.acooly.module;
 
-import com.acooly.module.account.dto.AccountKeepInfo;
-import com.acooly.module.account.dto.TransferInfo;
-import com.acooly.module.account.enums.DirectionEnum;
-import com.acooly.module.account.service.AccountTradeService;
-import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
-import com.acooly.module.account.service.tradecode.DefaultTradeCode;
+import com.acooly.module.dto.AccountKeepInfo;
+import com.acooly.module.dto.TransferInfo;
+import com.acooly.module.enums.DirectionEnum;
+import com.acooly.module.service.AccountTradeService;
+import com.acooly.module.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.service.tradecode.DefaultTradeCode;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Money;
 import com.acooly.module.test.AppTestBase;

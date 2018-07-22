@@ -1,4 +1,4 @@
-package com.acooly.module.account;
+package com.acooly.module.test;
 
 
 
@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
 /**
  * @author qiubo
  */
-@BootApp(sysName = "acooly-components", httpPort = 8080)
+@BootApp(sysName = "acooly-components-test", httpPort = 8080)
 public class Main {
     public static void main(String[] args) {
         Apps.setProfileIfNotExists("sdev");

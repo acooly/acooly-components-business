@@ -1,8 +1,8 @@
-package com.acooly.module.account;
+package com.acooly.module;
 
-import com.acooly.module.account.entity.AccountBill;
-import com.acooly.module.account.manage.AccountBillService;
-import com.acooly.module.account.service.AccountTradeService;
+import com.acooly.module.entity.AccountBill;
+import com.acooly.module.manage.AccountBillService;
+import com.acooly.module.service.AccountTradeService;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.utils.Money;

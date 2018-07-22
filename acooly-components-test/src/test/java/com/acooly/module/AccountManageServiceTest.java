@@ -1,9 +1,9 @@
-package com.acooly.module.account;
+package com.acooly.module;
 
-import com.acooly.module.account.dto.AccountInfo;
-import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.enums.AccountTypeEnum;
-import com.acooly.module.account.service.AccountManageService;
+import com.acooly.module.dto.AccountInfo;
+import com.acooly.module.entity.Account;
+import com.acooly.module.enums.AccountTypeEnum;
+import com.acooly.module.service.AccountManageService;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.enums.SimpleStatus;

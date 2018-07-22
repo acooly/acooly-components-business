@@ -1,7 +1,7 @@
-package com.acooly.module.account;
+package com.acooly.module;
 
-import com.acooly.module.account.dto.AccountInfo;
-import com.acooly.module.account.service.AccountVerifyService;
+import com.acooly.module.dto.AccountInfo;
+import com.acooly.module.service.AccountVerifyService;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.test.AppTestBase;
 import lombok.extern.slf4j.Slf4j;

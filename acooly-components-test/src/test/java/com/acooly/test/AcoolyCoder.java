@@ -12,14 +12,14 @@ public class AcoolyCoder {
         DefaultCodeGenerateService service = (DefaultCodeGenerateService) Generator.getGenerator();
         //set workspace if possible
         if (StringUtils.isBlank(service.getGenerateConfiguration().getWorkspace())) {
-            String workspace = getProjectPath() + "acooly-components-account";
+            String workspace = getProjectPath() + "acooly-components-member";
             service.getGenerateConfiguration().setWorkspace(workspace);
         }
         //set root pacakge if possible
         if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
             service.getGenerateConfiguration().setRootPackage(getRootPackage());
         }
-        service.generateTable("ac_account","ac_account_bill","ac_account_trade_code");
+        service.generateTable("b_member","b_member_profile","b_member_contact","b_member_personal","b_member_basic","b_member_secret_qa");
     }
 
     public static String getProjectPath() {
@@ -30,6 +30,6 @@ public class AcoolyCoder {
     }
 
     private static String getRootPackage() {
-        return "com.acooly.component.account";
+        return "com.acooly.module.member";
     }
 }
