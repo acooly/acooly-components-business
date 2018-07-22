@@ -31,4 +31,9 @@ public class AccountProperties {
      */
     private int batchMaxSize = 600;
 
+    /**
+     * 是否开启账务分析
+     */
+    private boolean analyseEnable=false;
+
 }
