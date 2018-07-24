@@ -17,6 +17,8 @@ import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
+import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
@@ -68,8 +70,30 @@ public class MemberServiceImpl implements MemberService {
 
     protected Member doRegister(MemberRegistryInfo memberRegistryInfo) {
         Member member = BeanCopier.copy(memberRegistryInfo, Member.class, BeanCopier.CopyStrategy.CONTAIN_NULL, "status");
+        // 判断查询设置parentUserNo
+        if (member.getParentid() != null) {
+            Member parent = memberEntityService.get(member.getParentid());
+            if (parent == null) {
+                log.warn("注册 失败 设置的parentId没有对应的会员存在。 memberInfo:{}", memberRegistryInfo);
+                throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST, "设置的parentId没有对应的会员存在");
+            }
+            member.setParentUserNo(parent.getUserNo());
+        }
+
+        if(Strings.isNoneBlank(memberRegistryInfo.getBroker())){
+
+        }
+
         memberEntityService.save(member);
         return member;
+    }
+
+    protected Member loadMemberByUsername(String username) {
+        return memberEntityService.findUniqueByUsername(username);
+    }
+
+    protected void doCheckUserExist(String username){
+
     }
 
 

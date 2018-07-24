@@ -18,8 +18,9 @@ public enum MemberErrorEnum implements Messageable {
 
     MEMBER_REGISTRY_ARGUMENT_NOT_MATCH("MEMBER_REGISTRY_ARGUMENT_NOT_MATCH", "注册参数不匹配"),
 
+    MEMEBER_NOT_EXIST("MEMEBER_NOT_EXIST", "会员不存在"),
 
-    ACCOUNT_NOT_EXIST("ACCOUNT_NOT_EXIST", "账户不存在"),
+
 
     ACCOUNT_ALREADT_EXISTED("ACCOUNT_NOT_EXIST", "账户已存在"),
 

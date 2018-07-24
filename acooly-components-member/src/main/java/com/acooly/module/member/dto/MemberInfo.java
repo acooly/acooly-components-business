@@ -36,9 +36,18 @@ public class MemberInfo extends InfoBase {
     private Long id;
 
     /**
+     * 添加时可选设置，不设置为系统自动生成
+     */
+    @Size(max = 64)
+    private String userNo;
+
+    /**
      * 父会员ID
      */
     private Long parentid;
+
+    @Size(max = 64)
+    private String parentUserNo;
 
     /**
      * 用户名

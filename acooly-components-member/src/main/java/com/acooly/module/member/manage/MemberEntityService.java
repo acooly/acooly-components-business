@@ -9,6 +9,7 @@ package com.acooly.module.member.manage;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.member.entity.Member;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 会员信息 Service接口
@@ -18,5 +19,10 @@ import com.acooly.module.member.entity.Member;
  *
  */
 public interface MemberEntityService extends EntityService<Member> {
+
+    Member findUniqueByUserNo(String userNo);
+
+
+    Member findUniqueByUsername(String username);
 
 }

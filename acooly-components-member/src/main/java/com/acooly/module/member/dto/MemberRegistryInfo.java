@@ -52,4 +52,23 @@ public class MemberRegistryInfo extends MemberInfo {
     @NotNull
     private WhetherStatus accountRegisty = WhetherStatus.no;
 
+    /**
+     * 客戶经理
+     * 一般是后端操作员(sys_user)
+     */
+    private String manager;
+
+    /**
+     * 经纪人
+     * 一般也是会员，会有持续跟进和服务
+     */
+    private String broker;
+
+
+    /**
+     * 邀请人
+     * 一般也是会员，指推荐，介绍和邀请的含义
+     */
+    private String inviter;
+
 }
