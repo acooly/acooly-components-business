@@ -32,10 +32,22 @@ public class MemberServiceTest extends AppTestBase {
     private MemberService memberService;
 
     /**
-     * 测试注册
+     * 最简：测试注册
      */
     @Test
     public void testRegister() {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
+        memberRegistryInfo.setUsername("zhangpu");
+        memberRegistryInfo.setPassword("Ab123456");
+        memberService.register(memberRegistryInfo);
+    }
+
+    /**
+     * 注册
+     * 1、同步注册账户
+     */
+    @Test
+    public void testRegisterMix() {
         MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
         memberRegistryInfo.setUsername("zhangpu");
         memberRegistryInfo.setPassword("Ab123456");
