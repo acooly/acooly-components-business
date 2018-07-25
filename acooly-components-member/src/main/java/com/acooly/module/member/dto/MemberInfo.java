@@ -67,7 +67,7 @@ public class MemberInfo extends InfoBase {
      * 用户类型
      */
     @NotNull
-    private MemberUserTypeEnum userType = MemberUserTypeEnum.personal;
+    private Integer userType = MemberUserTypeEnum.personal.code();
 
     /**
      * 手机号码

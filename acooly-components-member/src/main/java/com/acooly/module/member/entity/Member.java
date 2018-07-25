@@ -81,7 +81,7 @@ public class Member extends AbstractEntity {
      * 用户类型
      */
     @NotNull
-    private MemberUserTypeEnum userType = MemberUserTypeEnum.personal;
+    private Integer userType = MemberUserTypeEnum.personal.code();
 
     /**
      * 手机号码
@@ -96,13 +96,17 @@ public class Member extends AbstractEntity {
     private String email;
 
     /**
-     * 姓名
+     * 真实名称
+     * 个人：姓名
+     * 企业：公司名称
      */
     @Size(max = 16)
     private String realName;
 
     /**
-     * 身份证号码
+     * 证件号码
+     * 个人：身份证号码
+     * 企业：社会统一代码
      */
     @Size(max = 32)
     private String idCardNo;

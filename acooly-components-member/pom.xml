@@ -10,6 +10,9 @@
     <artifactId>acooly-components-member</artifactId>
     <name>acooly-components-member</name>
     <dependencies>
+
+
+        <!-- 基础组件依赖 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common</artifactId>
@@ -31,6 +34,15 @@
             <artifactId>acooly-component-security</artifactId>
         </dependency>
 
+
+        <!-- 应用组件依赖 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-certification</artifactId>
+        </dependency>
+
+
+        <!-- 业务组件依赖 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-components-account</artifactId>

@@ -37,8 +37,13 @@ public class MemberProperties {
     private boolean inviterMustBeMember = true;
 
     /**
+     * 注册时候同步实名认证
+     */
+    private boolean realNameAuthOnRegistry = true;
+
+    /**
      * 是否开启账务功能，同步开账户
      */
-    private boolean accountEnable = true;
+    private boolean accountRegisty = true;
 
 }

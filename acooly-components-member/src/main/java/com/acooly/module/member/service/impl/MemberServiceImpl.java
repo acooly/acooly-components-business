@@ -11,27 +11,37 @@ package com.acooly.module.member.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.OrderCheckException;
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.validate.Validators;
+import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.service.AccountManageService;
+import com.acooly.module.certification.enums.CertResult;
 import com.acooly.module.member.MemberProperties;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberContact;
+import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
+import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
+import com.acooly.module.member.manage.MemberContactEntityService;
 import com.acooly.module.member.manage.MemberEntityService;
+import com.acooly.module.member.manage.MemberPersonalEntityService;
 import com.acooly.module.member.manage.MemberProfileEntityService;
+import com.acooly.module.member.service.AbstractMemberService;
 import com.acooly.module.member.service.MemberService;
 import com.acooly.module.security.utils.Digests;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
 
 /**
  * 会员服务实现
@@ -40,7 +50,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl extends AbstractMemberService implements MemberService {
 
     public static final int HASH_INTERATIONS = 512;
     public static final int SALT_SIZE = 8;
@@ -50,6 +60,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberProfileEntityService memberProfileEntityService;
+
+    @Autowired
+    private MemberContactEntityService memberContactEntityService;
+
+    @Autowired
+    private MemberPersonalEntityService memberPersonalEntityService;
 
     @Autowired
     private AccountManageService accountManageService;
@@ -67,6 +83,7 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
+    @Transactional
     public Member register(MemberRegistryInfo memberRegistryInfo) {
         Member member = null;
         try {
@@ -75,8 +92,11 @@ public class MemberServiceImpl implements MemberService {
             // 注册会员主体
             member = doRegister(memberRegistryInfo);
             // 注册附属信息
-
-
+            doRegisterProfile(memberRegistryInfo, member);
+            // 判断执行同步开户
+            doOpenAccount(memberRegistryInfo, member);
+        } catch (OrderCheckException oe) {
+            throw oe;
         } catch (BusinessException be) {
             throw be;
         } catch (Exception e) {
@@ -97,6 +117,42 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+
+    /**
+     * 处理激活发送验证码
+     * <p>
+     * 可考虑设计为异步，注册成功后，异步发起
+     *
+     * @param memberRegistryInfo
+     */
+    protected void doActiveSend(MemberRegistryInfo memberRegistryInfo) {
+
+    }
+
+
+    /**
+     * 同步开默认账户
+     * <p>
+     * 根据配置或传入的参数
+     *
+     * @param memberRegistryInfo
+     * @param member
+     */
+    protected void doOpenAccount(MemberRegistryInfo memberRegistryInfo, Member member) {
+        if (memberRegistryInfo.getAccountRegisty() == null) {
+            if (!memberProperties.isAccountRegisty()) {
+                return;
+            }
+        } else {
+            if (!memberRegistryInfo.getAccountRegisty()) {
+                return;
+            }
+        }
+
+        accountManageService.openAccount(new AccountInfo(member.getId(), member.getUserNo()));
+        log.info("注册 同步开账户成功");
+    }
+
     /**
      * 注册会员主体信息
      *
@@ -112,6 +168,30 @@ public class MemberServiceImpl implements MemberService {
         doDigestPassword(member);
         memberEntityService.save(member);
         return member;
+    }
+
+
+    /**
+     * 会员实名认证
+     *
+     * @param member
+     */
+    protected CertResult doRealNameAuthenticate(Member member) {
+        if (!memberProperties.isRealNameAuthOnRegistry()
+                || member.getUserType() != MemberUserTypeEnum.personal.code()
+                || Strings.isBlank(member.getRealName()) || Strings.isBlank(member.getIdCardNo())) {
+            return null;
+        }
+
+        try {
+//            CertResult certResult = certificationService.certification(member.getRealName(), member.getIdCardNo());
+            //todo:此处待实名认证组件完善文档后，补充判断认证结果逻辑。如果认证失败，则跳过。
+//            return certResult;
+        } catch (Exception e) {
+            log.warn("注册 实名认证调用使用，忽略实名认证 继续注册。 错误信息:{}", e.getMessage());
+        }
+
+        return null;
     }
 
     /**
@@ -130,10 +210,25 @@ public class MemberServiceImpl implements MemberService {
         memberProfile.setInviter(memberRegistryInfo.getInviter());
         memberProfileEntityService.save(memberProfile);
 
+
+        CertResult certResult = doRealNameAuthenticate(member);
+        MemberPersonal memberPersonal = new MemberPersonal();
+        memberPersonal.setId(member.getId());
+        memberPersonal.setUserNo(member.getUserNo());
+        memberPersonal.setUsername(member.getUsername());
+        if (certResult != null) {
+            memberPersonal.setBirthday(Dates.parse(certResult.getBirthday()));
+//            memberPersonal.setGender();
+        }
+        memberPersonalEntityService.save(memberPersonal);
+
+        // 其他关联信息注册时候同步写入，后续只需要修改，简化后期开发成本
         MemberContact memberContact = new MemberContact();
         memberContact.setId(member.getId());
         memberContact.setUserNo(member.getUserNo());
         memberContact.setUsername(member.getUsername());
+        memberContact.setMobileNo(member.getMobileNo());
+        memberContactEntityService.save(memberContact);
 
 
     }
@@ -146,7 +241,7 @@ public class MemberServiceImpl implements MemberService {
      * @param member
      */
     protected void doSetParent(MemberRegistryInfo memberRegistryInfo, Member member) {
-        if (memberRegistryInfo.getParentid() == null || Strings.isBlank(memberRegistryInfo.getParentUserNo())) {
+        if (memberRegistryInfo.getParentid() != null || Strings.isNotBlank(memberRegistryInfo.getParentUserNo())) {
             Member parent = loadMember(memberRegistryInfo.getParentid(), memberRegistryInfo.getParentUserNo(), null);
             if (parent != null) {
                 member.setParentid(parent.getId());

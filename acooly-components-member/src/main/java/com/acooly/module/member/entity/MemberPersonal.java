@@ -10,6 +10,7 @@ package com.acooly.module.member.entity;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.module.member.enums.EducationLevelEnum;
+import com.acooly.module.member.enums.GenderEnum;
 import com.acooly.module.member.enums.HouseStatueEnum;
 import com.acooly.module.member.enums.IncomeMonthEnum;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * 会员个人信息 Entity
@@ -52,6 +54,19 @@ public class MemberPersonal extends AbstractEntity {
     @NotEmpty
     @Size(max = 32)
     private String username;
+
+
+    /**
+     * 生日
+     */
+    private Date birthday;
+
+    /**
+     * 性别
+     */
+    @Enumerated(EnumType.STRING)
+    private GenderEnum gender;
+
 
     /**
      * 婚姻状况
@@ -107,5 +122,16 @@ public class MemberPersonal extends AbstractEntity {
     @Size(max = 255)
     private String comments;
 
+
+    /**
+     * 根据生日计算年龄
+     * <p>
+     * todo:需完成aget的计算属性，等待core的Dates方法扩展
+     *
+     * @return
+     */
+    public int getAge() {
+        return 0;
+    }
 
 }

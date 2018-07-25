@@ -9,7 +9,6 @@
  */
 package com.acooly.module.member.dto;
 
-import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberRegisterTypeEnum;
 import lombok.Getter;
@@ -41,7 +40,7 @@ public class MemberRegistryInfo extends MemberInfo {
      * </p>
      */
     @NotNull
-    private MemberActiveTypeEnum memberActiveType = MemberActiveTypeEnum.mobileNo;
+    private MemberActiveTypeEnum memberActiveType = MemberActiveTypeEnum.human;
 
 
     /**
@@ -50,7 +49,7 @@ public class MemberRegistryInfo extends MemberInfo {
      * 该参数的优先级大于member组件的配置参数
      */
     @NotNull
-    private WhetherStatus accountRegisty = WhetherStatus.no;
+    private Boolean accountRegisty = false;
 
     /**
      * 客戶经理
