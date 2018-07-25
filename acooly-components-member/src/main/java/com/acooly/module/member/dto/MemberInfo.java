@@ -109,6 +109,22 @@ public class MemberInfo extends InfoBase {
     private MemberStatusEnum status = MemberStatusEnum.notactive;
 
 
+    public MemberInfo() {
+    }
+
+    /**
+     * for 标记用户
+     *
+     * @param id
+     * @param userNo
+     * @param username
+     */
+    public MemberInfo(Long id, String userNo, String username) {
+        this.id = id;
+        this.userNo = userNo;
+        this.username = username;
+    }
+
     /**
      * 备注
      */
@@ -121,6 +137,9 @@ public class MemberInfo extends InfoBase {
         sb.append("{");
         if (getId() != null) {
             sb.append("{ID:").append(getId()).append(",");
+        }
+        if (Strings.isNotBlank(getUserNo())) {
+            sb.append("userNo:").append(getUserNo()).append(",");
         }
         if (Strings.isNotBlank(getUsername())) {
             sb.append("username:").append(getUsername()).append(",");

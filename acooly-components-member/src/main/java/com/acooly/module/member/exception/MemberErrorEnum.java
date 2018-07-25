@@ -20,6 +20,9 @@ public enum MemberErrorEnum implements Messageable {
 
     MEMEBER_NOT_EXIST("MEMEBER_NOT_EXIST", "会员不存在"),
 
+    BROKER_MUST_BE_A_MEMBER("BROKER_MUST_BE_A_MEMBER", "经纪人必须是会员"),
+
+    INVITER_MUST_BE_A_MEMBER("INVITER_MUST_BE_A_MEMBER", "邀请人必须是会员"),
 
 
     ACCOUNT_ALREADT_EXISTED("ACCOUNT_NOT_EXIST", "账户已存在"),

@@ -26,6 +26,15 @@ public class MemberProperties {
      */
     private boolean enable = true;
 
+    /**
+     * 经纪人必须是会员（打开则会验证）
+     */
+    private boolean brokerMustBeMember = true;
+
+    /**
+     * 邀请人必须是会员（打开则会验证）
+     */
+    private boolean inviterMustBeMember = true;
 
     /**
      * 是否开启账务功能，同步开账户
