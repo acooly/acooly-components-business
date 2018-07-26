@@ -51,6 +51,8 @@ public class MemberProperties {
      */
     private long activeCaptchaTimeoutSeconds = 600;
 
-    private String activeMessageFmTemplate="你本次${action}验证码是：${captcha}, 用户名：${username}。";
+    private String activeSmsTemplateContent = "你本次${action}验证码是：${captcha}, 用户名：${username}。";
+
+    private String activeMailTemplateName = "member_active_demo";
 
 }

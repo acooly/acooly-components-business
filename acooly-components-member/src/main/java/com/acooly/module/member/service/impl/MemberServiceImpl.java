@@ -117,13 +117,13 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
 
     @Override
-    public void active(Long memberId, String activeValue) {
-        doActive(memberId, null, activeValue);
+    public void active(Long memberId, String activeValue, MemberActiveTypeEnum memberActiveType) {
+        doActive(memberId, null, activeValue, memberActiveType);
     }
 
     @Override
-    public void active(String username, String activeValue) {
-        doActive(null, username, activeValue);
+    public void active(String username, String activeValue, MemberActiveTypeEnum memberActiveType) {
+        doActive(null, username, activeValue, memberActiveType);
     }
 
 
@@ -133,14 +133,19 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     }
 
 
-    protected void doActive(Long memberId, String username, String activeValue) {
+    protected void doActive(Long memberId, String username, String activeValue, MemberActiveTypeEnum memberActiveType) {
         try {
             Member member = loadMember(memberId, null, username);
             if (member == null) {
                 log.warn("激活 失败 原因:{}, member:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, member);
                 throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST);
             }
-            doCaptchaVerify(member.getMobileNo(), activeValue);
+            if (memberActiveType == MemberActiveTypeEnum.mobileNo) {
+                doCaptchaVerify(member.getMobileNo(), activeValue);
+            } else if (memberActiveType == MemberActiveTypeEnum.email) {
+                doCaptchaVerify(member.getEmail(), activeValue);
+            }
+
             member.setStatus(MemberStatusEnum.enable);
             memberEntityService.update(member);
         } catch (OrderCheckException oe) {

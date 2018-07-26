@@ -75,12 +75,26 @@ public class MemberServiceTest extends AppTestBase {
     }
 
     /**
+     * 注册待邮件验证码激活
+     */
+    @Test
+    public void testRegisterActiveWithMail() {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
+        memberRegistryInfo.setUsername("zhangpu14");
+        memberRegistryInfo.setPassword("Ab123456");
+        memberRegistryInfo.setEmail("zhangpu@acooly.cn");
+        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.email);
+        Member member = memberService.register(memberRegistryInfo);
+        log.info("注册成功。member:{}", member);
+    }
+
+    /**
      * 使用手机验证码激活注册
      * 需要启动独立的redis服务
      */
     @Test
-    public void testActiveWithMobile() {
-        memberService.active("zhangpu10", "fhan24");
+    public void testActiveWithCaptcha() {
+        memberService.active("zhangpu14", "kpa3bd", MemberActiveTypeEnum.email);
     }
 
 }

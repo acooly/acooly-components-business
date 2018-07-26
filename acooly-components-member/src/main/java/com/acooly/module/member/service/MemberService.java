@@ -2,6 +2,7 @@ package com.acooly.module.member.service;
 
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
+import com.acooly.module.member.enums.MemberActiveTypeEnum;
 
 /**
  * 会员服务
@@ -26,9 +27,9 @@ public interface MemberService {
      * @param memberId
      * @param activeValue
      */
-    void active(Long memberId, String activeValue);
+    void active(Long memberId, String activeValue, MemberActiveTypeEnum memberActiveType);
 
-    void active(String username, String activeValue);
+    void active(String username, String activeValue, MemberActiveTypeEnum memberActiveType);
 
 
     /**
