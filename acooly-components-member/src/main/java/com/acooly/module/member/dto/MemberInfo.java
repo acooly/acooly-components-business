@@ -144,9 +144,7 @@ public class MemberInfo extends InfoBase {
         if (Strings.isNotBlank(getUsername())) {
             sb.append("username:").append(getUsername()).append(",");
         }
-        sb.substring(0, sb.length() - 1);
-        sb.append("}");
-        return sb.toString();
+        return sb.substring(0, sb.length() - 1) + "}";
     }
 
 

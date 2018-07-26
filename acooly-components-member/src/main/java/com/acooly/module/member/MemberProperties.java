@@ -46,4 +46,11 @@ public class MemberProperties {
      */
     private boolean accountRegisty = true;
 
+    /**
+     * 激活验证码有效时间（覆盖短信和验证码本身的有效期）
+     */
+    private long activeCaptchaTimeoutSeconds = 600;
+
+    private String activeMessageFmTemplate="你本次${action}验证码是：${captcha}, 用户名：${username}。";
+
 }

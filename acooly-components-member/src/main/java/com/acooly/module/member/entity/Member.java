@@ -8,6 +8,9 @@ package com.acooly.module.member.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.ToString;
+import com.acooly.module.member.enums.MemberGradeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import lombok.Getter;
@@ -66,6 +69,7 @@ public class Member extends AbstractEntity {
     /**
      * 密码
      */
+    @ToString.Invisible
     @NotEmpty
     @Size(max = 256)
     private String password;
@@ -73,6 +77,7 @@ public class Member extends AbstractEntity {
     /**
      * 密码盐
      */
+    @ToString.Invisible
     @NotEmpty
     @Size(max = 64)
     private String salt;
@@ -114,7 +119,7 @@ public class Member extends AbstractEntity {
     /**
      * 用户等级
      */
-    private int grade;
+    private int grade = MemberGradeEnum.normal.code();
 
     /**
      * 状态
@@ -130,4 +135,28 @@ public class Member extends AbstractEntity {
     private String comments;
 
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("{");
+        sb.append("id:'").append(getId()).append('\'');
+        sb.append(", userNo:'").append(userNo).append('\'');
+        sb.append(", username:'").append(username).append('\'');
+        sb.append(", userType:").append(userType);
+        if (Strings.isNoneBlank(mobileNo)) {
+            sb.append(", mobileNo:'").append(mobileNo).append('\'');
+        }
+        if (Strings.isNoneBlank(email)) {
+            sb.append(", email:'").append(email).append('\'');
+        }
+        if (Strings.isNoneBlank(realName)) {
+            sb.append(", realName:'").append(realName).append('\'');
+        }
+        if (Strings.isNoneBlank(idCardNo)) {
+            sb.append(", idCardNo:'").append(idCardNo).append('\'');
+        }
+        sb.append(", grade:").append(grade);
+        sb.append(", status:").append(status);
+        sb.append('}');
+        return sb.toString();
+    }
 }

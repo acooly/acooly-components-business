@@ -1,9 +1,9 @@
 package com.acooly.module.account.dto;
 
-import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
+import com.acooly.module.account.enums.AccountTypeEnum;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -89,10 +89,15 @@ public class AccountInfo extends InfoBase {
      * @param userNo
      */
     public AccountInfo(Long userId, String userNo) {
+        this(userId, userNo, null);
+    }
+
+    public AccountInfo(Long userId, String userNo, String username) {
         this.userId = userId;
         this.userNo = userNo;
         this.accountId = this.userId;
         this.accountNo = userNo;
+        this.username = username;
     }
 
 

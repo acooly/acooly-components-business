@@ -18,15 +18,16 @@ import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
+import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.certification.enums.CertResult;
-import com.acooly.module.member.MemberProperties;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberContact;
 import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
+import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
@@ -40,6 +41,8 @@ import com.acooly.module.security.utils.Digests;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.transaction.Transactional;
 
@@ -70,9 +73,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     @Autowired
     private AccountManageService accountManageService;
 
-    @Autowired
-    private MemberProperties memberProperties;
-
 
     /**
      * 会员注册
@@ -85,7 +85,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     @Override
     @Transactional
     public Member register(MemberRegistryInfo memberRegistryInfo) {
-        Member member = null;
+        final Member member;
         try {
             // 合法性检查
             doCheck(memberRegistryInfo);
@@ -95,6 +95,15 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             doRegisterProfile(memberRegistryInfo, member);
             // 判断执行同步开户
             doOpenAccount(memberRegistryInfo, member);
+            log.info("注册 成功 member:{}", member);
+
+            // 注册成功后，发送激活验证
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+                @Override
+                public void afterCommit() {
+                    doActiveSend(memberRegistryInfo, member);
+                }
+            });
         } catch (OrderCheckException oe) {
             throw oe;
         } catch (BusinessException be) {
@@ -109,12 +118,39 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
     @Override
     public void active(Long memberId, String activeValue) {
-
+        doActive(memberId, null, activeValue);
     }
+
+    @Override
+    public void active(String username, String activeValue) {
+        doActive(null, username, activeValue);
+    }
+
 
     @Override
     public void login(String username, String password) {
 
+    }
+
+
+    protected void doActive(Long memberId, String username, String activeValue) {
+        try {
+            Member member = loadMember(memberId, null, username);
+            if (member == null) {
+                log.warn("激活 失败 原因:{}, member:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, member);
+                throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST);
+            }
+            doCaptchaVerify(member.getMobileNo(), activeValue);
+            member.setStatus(MemberStatusEnum.enable);
+            memberEntityService.update(member);
+        } catch (OrderCheckException oe) {
+            throw oe;
+        } catch (BusinessException be) {
+            throw be;
+        } catch (Exception e) {
+            log.error("激活 失败 内部错误：{}", e);
+            throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "激活内部错误");
+        }
     }
 
 
@@ -125,8 +161,13 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      *
      * @param memberRegistryInfo
      */
-    protected void doActiveSend(MemberRegistryInfo memberRegistryInfo) {
-
+    protected void doActiveSend(MemberRegistryInfo memberRegistryInfo, Member member) {
+        // 只处理短信和邮件激活的验证发送
+        if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.mobileNo) {
+            doCaptchaSmsSend(member.getUsername(), member.getMobileNo());
+        } else if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.email) {
+            doCaptchaMailSend(member.getUsername(), member.getEmail());
+        }
     }
 
 
@@ -148,9 +189,8 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 return;
             }
         }
-
-        accountManageService.openAccount(new AccountInfo(member.getId(), member.getUserNo()));
-        log.info("注册 同步开账户成功");
+        Account account = accountManageService.openAccount(new AccountInfo(member.getId(), member.getUserNo(), member.getUsername()));
+        log.info("注册 同步开账户成功 account:{}", account.getLabel());
     }
 
     /**
@@ -166,6 +206,10 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             member.setUserNo(Ids.getDid());
         }
         doDigestPassword(member);
+        // 如果是自动激活，则设置会员状态为enable
+        if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.auto) {
+            member.setStatus(MemberStatusEnum.enable);
+        }
         memberEntityService.save(member);
         return member;
     }
@@ -321,6 +365,17 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 OrderCheckException.throwIt("mobileNo", "自动激活方式手机号码或邮件不能同时为空");
             }
         }
+
+        if (loadMember(null, null, memberRegistryInfo.getUsername()) != null) {
+            log.warn("注册 失败 原因:{}, memberInfo:{}", MemberErrorEnum.MEMEBER_USERNAME_ALREADY_EXIST, memberRegistryInfo.getLabel());
+            throw new MemberOperationException(MemberErrorEnum.MEMEBER_USERNAME_ALREADY_EXIST);
+        }
+
+        if (Strings.isNotBlank(memberRegistryInfo.getUserNo()) && loadMember(null, memberRegistryInfo.getUserNo(), null) != null) {
+            log.warn("注册 失败 原因:{}, memberInfo:{}", MemberErrorEnum.MEMEBER_USERNO_ALREADY_EXIST, memberRegistryInfo.getLabel());
+            throw new MemberOperationException(MemberErrorEnum.MEMEBER_USERNO_ALREADY_EXIST);
+        }
+
         if (Strings.isNoneBlank(memberRegistryInfo.getBroker()) && memberProperties.isBrokerMustBeMember()
                 && loadMember(null, null, memberRegistryInfo.getBroker()) == null) {
             log.warn("注册 失败 原因:{}, memberInfo:{}", MemberErrorEnum.BROKER_MUST_BE_A_MEMBER, memberRegistryInfo.getLabel());

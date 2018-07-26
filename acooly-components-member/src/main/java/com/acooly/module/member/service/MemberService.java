@@ -28,6 +28,8 @@ public interface MemberService {
      */
     void active(Long memberId, String activeValue);
 
+    void active(String username, String activeValue);
+
 
     /**
      * 登录认证

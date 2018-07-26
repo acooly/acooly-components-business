@@ -38,10 +38,24 @@
         <!-- 应用组件依赖 -->
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-event</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-certification</artifactId>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-captcha</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-sms</artifactId>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.acooly</groupId>-->
+            <!--<artifactId>acooly-component-mail</artifactId>-->
+        <!--</dependency>-->
         <!-- 业务组件依赖 -->
         <dependency>
             <groupId>com.acooly</groupId>
