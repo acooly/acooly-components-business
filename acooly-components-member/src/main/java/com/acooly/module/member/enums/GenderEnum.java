@@ -69,7 +69,15 @@ public enum GenderEnum implements Messageable {
                 return status;
             }
         }
-        throw new IllegalArgumentException("GenderEnum not legal:" + code);
+
+        if (GenderEnum.male.message.equals(code)) {
+            return GenderEnum.male;
+        }
+        if (GenderEnum.female.message.equals(code)) {
+            return GenderEnum.female;
+        }
+
+        throw null;
     }
 
     /**

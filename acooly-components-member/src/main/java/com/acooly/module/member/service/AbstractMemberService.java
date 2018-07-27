@@ -10,11 +10,20 @@
 package com.acooly.module.member.service;
 
 import com.acooly.core.utils.FreeMarkers;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.captcha.Captcha;
 import com.acooly.module.captcha.CaptchaService;
+import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.member.MemberProperties;
+import com.acooly.module.member.entity.Member;
+import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.exception.MemberOperationException;
+import com.acooly.module.member.manage.MemberContactEntityService;
+import com.acooly.module.member.manage.MemberEntityService;
+import com.acooly.module.member.manage.MemberPersonalEntityService;
+import com.acooly.module.member.manage.MemberProfileEntityService;
 import com.acooly.module.sms.SmsService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +41,23 @@ public abstract class AbstractMemberService {
 
 
     @Autowired
+    protected MemberEntityService memberEntityService;
+
+    @Autowired
+    protected MemberContactEntityService memberContactEntityService;
+
+    @Autowired
+    protected MemberPersonalEntityService memberPersonalEntityService;
+
+
+    @Autowired
+    protected MemberProfileEntityService memberProfileEntityService;
+
+    @Autowired
     protected MemberProperties memberProperties;
 
-//    @Autowired
-//    protected CertificationService certificationService;
+    @Autowired
+    protected CertificationService certificationService;
 
     @Autowired
     protected SmsService smsService;
@@ -61,7 +83,7 @@ public abstract class AbstractMemberService {
             map.put("action", "注册激活");
             map.put("captcha", captcha.getValue());
             map.put("username", username);
-            String content = FreeMarkers.rendereString(memberProperties.getActiveMailTemplateName(), map);
+            String content = FreeMarkers.rendereString(memberProperties.getActive().getSmsTemplateContent(), map);
             smsService.send(mobileNo, content);
             log.info("注册 发送激活验证码短信 成功。");
         } catch (Exception e) {
@@ -72,13 +94,12 @@ public abstract class AbstractMemberService {
     protected void doCaptchaMailSend(String username, String mail) {
         try {
             Captcha captcha = doGetCaptcha(mail);
-            //你本次{action}验证码是：{captcha}, 用户名：{username}。"
             Map<String, String> map = Maps.newHashMap();
             map.put("captcha", String.valueOf(captcha.getValue()));
             map.put("username", username);
             MailDto mailDto = new MailDto();
-            mailDto.to(mail).subject("注册激活邮件").setParams(map);
-            mailDto.templateName(memberProperties.getActiveMailTemplateName());
+            mailDto.to(mail).subject(memberProperties.getActive().getMailSubject()).setParams(map);
+            mailDto.templateName(memberProperties.getActive().getMailTemplateName());
             mailService.send(mailDto);
             log.info("注册 发送激活验证邮件 成功。");
         } catch (Exception e) {
@@ -89,7 +110,7 @@ public abstract class AbstractMemberService {
 
 
     protected Captcha doGetCaptcha(String Key) {
-        return captchaService.getCaptcha(Key, memberProperties.getActiveCaptchaTimeoutSeconds());
+        return captchaService.getCaptcha(Key, memberProperties.getActive().getCaptchaTimeoutSeconds());
     }
 
     /**
@@ -101,5 +122,34 @@ public abstract class AbstractMemberService {
     protected void doCaptchaVerify(String key, String answerValue) {
         captchaService.validateCaptcha(key, answerValue);
     }
+
+
+    /**
+     * 依次尝试加载会员
+     *
+     * @param id
+     * @param userNo
+     * @param username
+     * @return
+     */
+    protected Member loadMember(Long id, String userNo, String username) {
+        if (id != null) {
+            return memberEntityService.get(id);
+        }
+
+        if (Strings.isNotBlank(userNo)) {
+            return memberEntityService.findUniqueByUserNo(userNo);
+        }
+
+        if (Strings.isNotBlank(username)) {
+            return memberEntityService.findUniqueByUsername(username);
+        }
+        return null;
+    }
+
+    protected Member loadMember(Long id) {
+        return loadMember(id, null, null);
+    }
+
 
 }

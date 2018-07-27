@@ -10,7 +10,11 @@
 package com.acooly.module.member;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author zhangpu
@@ -24,35 +28,65 @@ public class MemberProperties {
     /**
      * 是否启用
      */
+    @NotNull
     private boolean enable = true;
 
     /**
      * 经纪人必须是会员（打开则会验证）
      */
+    @NotNull
     private boolean brokerMustBeMember = true;
 
     /**
      * 邀请人必须是会员（打开则会验证）
      */
+    @NotNull
     private boolean inviterMustBeMember = true;
 
     /**
      * 注册时候同步实名认证
      */
+    @NotNull
     private boolean realNameAuthOnRegistry = true;
 
     /**
      * 是否开启账务功能，同步开账户
      */
+    @NotNull
     private boolean accountRegisty = true;
 
+
+    private Active active = new Active();
+
+
     /**
-     * 激活验证码有效时间（覆盖短信和验证码本身的有效期）
+     * 激活相关配置
      */
-    private long activeCaptchaTimeoutSeconds = 600;
+    @Getter
+    @Setter
+    public static class Active {
 
-    private String activeSmsTemplateContent = "你本次${action}验证码是：${captcha}, 用户名：${username}。";
+        /**
+         * 激活验证码有效时长（秒）;短信和邮件公用
+         */
+        private long captchaTimeoutSeconds = 600;
 
-    private String activeMailTemplateName = "member_active_demo";
+        /**
+         * 激活短信模板内容
+         */
+        private String smsTemplateContent = "你本次${action}验证码是：${captcha}, 用户名：${username}。";
+
+        /**
+         * 激活邮件主题
+         */
+        private String mailSubject = "注册激活邮件";
+
+        /**
+         * 激活邮件模板名称（/resources/mail/*.ftl的文件名）
+         */
+        private String mailTemplateName = "member_active_demo";
+
+
+    }
 
 }

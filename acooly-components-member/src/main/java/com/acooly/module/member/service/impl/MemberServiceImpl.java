@@ -11,7 +11,6 @@ package com.acooly.module.member.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.OrderCheckException;
-import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
@@ -20,7 +19,6 @@ import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.service.AccountManageService;
-import com.acooly.module.certification.enums.CertResult;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberContact;
@@ -28,14 +26,11 @@ import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
-import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
-import com.acooly.module.member.manage.MemberContactEntityService;
-import com.acooly.module.member.manage.MemberEntityService;
-import com.acooly.module.member.manage.MemberPersonalEntityService;
 import com.acooly.module.member.manage.MemberProfileEntityService;
 import com.acooly.module.member.service.AbstractMemberService;
+import com.acooly.module.member.service.MemberRealNameService;
 import com.acooly.module.member.service.MemberService;
 import com.acooly.module.security.utils.Digests;
 import lombok.extern.slf4j.Slf4j;
@@ -59,19 +54,10 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     public static final int SALT_SIZE = 8;
 
     @Autowired
-    private MemberEntityService memberEntityService;
-
-    @Autowired
-    private MemberProfileEntityService memberProfileEntityService;
-
-    @Autowired
-    private MemberContactEntityService memberContactEntityService;
-
-    @Autowired
-    private MemberPersonalEntityService memberPersonalEntityService;
-
-    @Autowired
     private AccountManageService accountManageService;
+
+    @Autowired
+    private MemberRealNameService memberRealNameService;
 
 
     /**
@@ -93,10 +79,11 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             member = doRegister(memberRegistryInfo);
             // 注册附属信息
             doRegisterProfile(memberRegistryInfo, member);
+            // 根据配置开关同步实名认证
+            doRealNameVerify(member);
             // 判断执行同步开户
             doOpenAccount(memberRegistryInfo, member);
             log.info("注册 成功 member:{}", member);
-
             // 注册成功后，发送激活验证
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
                 @Override
@@ -145,7 +132,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             } else if (memberActiveType == MemberActiveTypeEnum.email) {
                 doCaptchaVerify(member.getEmail(), activeValue);
             }
-
             member.setStatus(MemberStatusEnum.enable);
             memberEntityService.update(member);
         } catch (OrderCheckException oe) {
@@ -225,22 +211,11 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      *
      * @param member
      */
-    protected CertResult doRealNameAuthenticate(Member member) {
-        if (!memberProperties.isRealNameAuthOnRegistry()
-                || member.getUserType() != MemberUserTypeEnum.personal.code()
-                || Strings.isBlank(member.getRealName()) || Strings.isBlank(member.getIdCardNo())) {
-            return null;
+    protected void doRealNameVerify(Member member) {
+        if (!memberProperties.isRealNameAuthOnRegistry()) {
+            return;
         }
-
-        try {
-//            CertResult certResult = certificationService.certification(member.getRealName(), member.getIdCardNo());
-            //todo:此处待实名认证组件完善文档后，补充判断认证结果逻辑。如果认证失败，则跳过。
-//            return certResult;
-        } catch (Exception e) {
-            log.warn("注册 实名认证调用使用，忽略实名认证 继续注册。 错误信息:{}", e.getMessage());
-        }
-
-        return null;
+        memberRealNameService.verify(member.getId());
     }
 
     /**
@@ -259,16 +234,10 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         memberProfile.setInviter(memberRegistryInfo.getInviter());
         memberProfileEntityService.save(memberProfile);
 
-
-        CertResult certResult = doRealNameAuthenticate(member);
         MemberPersonal memberPersonal = new MemberPersonal();
         memberPersonal.setId(member.getId());
         memberPersonal.setUserNo(member.getUserNo());
         memberPersonal.setUsername(member.getUsername());
-        if (certResult != null) {
-            memberPersonal.setBirthday(Dates.parse(certResult.getBirthday()));
-//            memberPersonal.setGender();
-        }
         memberPersonalEntityService.save(memberPersonal);
 
         // 其他关联信息注册时候同步写入，后续只需要修改，简化后期开发成本
@@ -278,8 +247,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         memberContact.setUsername(member.getUsername());
         memberContact.setMobileNo(member.getMobileNo());
         memberContactEntityService.save(memberContact);
-
-
     }
 
 
@@ -299,29 +266,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 log.warn("注册 失败 设置的parentId没有对应的会员存在。 memberInfo:{}", memberRegistryInfo.getLabel());
             }
         }
-    }
-
-    /**
-     * 依次尝试加载会员
-     *
-     * @param id
-     * @param userNo
-     * @param username
-     * @return
-     */
-    protected Member loadMember(Long id, String userNo, String username) {
-        if (id != null) {
-            return memberEntityService.get(id);
-        }
-
-        if (Strings.isNotBlank(userNo)) {
-            return memberEntityService.findUniqueByUserNo(userNo);
-        }
-
-        if (Strings.isNotBlank(username)) {
-            return memberEntityService.findUniqueByUsername(username);
-        }
-        return null;
     }
 
 

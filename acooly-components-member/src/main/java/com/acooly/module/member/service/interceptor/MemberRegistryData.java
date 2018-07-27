@@ -7,7 +7,7 @@
  * 修订记录:
  * zhangpu@acooly.cn 2018-07-26 17:43 创建
  */
-package com.acooly.module.member.service.event;
+package com.acooly.module.member.service.interceptor;
 
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
@@ -20,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class MemberRegistryEvent {
+public class MemberRegistryData {
 
     /**
      * 会员注册请求对象
@@ -38,10 +38,10 @@ public class MemberRegistryEvent {
     private MemberProfile memberProfile;
 
 
-    public MemberRegistryEvent() {
+    public MemberRegistryData() {
     }
 
-    public MemberRegistryEvent(MemberRegistryInfo memberRegistryInfo, Member member, MemberProfile memberProfile) {
+    public MemberRegistryData(MemberRegistryInfo memberRegistryInfo, Member member, MemberProfile memberProfile) {
         this.memberRegistryInfo = memberRegistryInfo;
         this.member = member;
         this.memberProfile = memberProfile;
