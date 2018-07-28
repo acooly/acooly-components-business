@@ -64,8 +64,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
     /**
      * 会员注册
-     * <p>
-     * todo: 外部扩展的事件机制
      *
      * @param memberRegistryInfo
      * @return
@@ -96,6 +94,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 @Override
                 public void afterCommit() {
                     memberRegistryInterceptor.afterCommitRegistry(memberRegistryData);
+                    eventBus.publish(memberRegistryData);
                     doActiveSend(memberRegistryInfo, member);
                 }
             });

@@ -53,7 +53,7 @@ public class MemberProperties {
      * 是否开启账务功能，同步开账户
      */
     @NotNull
-    private boolean accountRegisty = true;
+    private boolean accountRegisty = false;
 
 
     private Active active = new Active();

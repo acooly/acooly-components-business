@@ -14,6 +14,7 @@ import com.acooly.core.utils.Strings;
 import com.acooly.module.captcha.Captcha;
 import com.acooly.module.captcha.CaptchaService;
 import com.acooly.module.certification.CertificationService;
+import com.acooly.module.event.EventBus;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.member.MemberProperties;
@@ -57,6 +58,9 @@ public abstract class AbstractMemberService {
 
     @Autowired
     protected MemberProperties memberProperties;
+
+    @Autowired
+    protected EventBus eventBus;
 
     @Autowired
     protected CertificationService certificationService;
