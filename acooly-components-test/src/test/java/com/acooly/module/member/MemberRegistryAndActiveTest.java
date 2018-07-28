@@ -63,6 +63,7 @@ public class MemberRegistryAndActiveTest extends AbstractComponentsTest {
         memberRegistryInfo.setUsername(TEST_USERNAME);
         memberRegistryInfo.setPassword("Ab123456");
         memberRegistryInfo.setEmail("zhangpu@acooly.cn");
+        memberRegistryInfo.setAccountRegisty(false);
         memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.email);
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);

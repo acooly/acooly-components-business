@@ -18,17 +18,17 @@ import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.member.MemberProperties;
 import com.acooly.module.member.entity.Member;
-import com.acooly.module.member.exception.MemberErrorEnum;
-import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.manage.MemberContactEntityService;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.manage.MemberPersonalEntityService;
 import com.acooly.module.member.manage.MemberProfileEntityService;
+import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
 import com.acooly.module.sms.SmsService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -49,9 +49,11 @@ public abstract class AbstractMemberService {
     @Autowired
     protected MemberPersonalEntityService memberPersonalEntityService;
 
-
     @Autowired
     protected MemberProfileEntityService memberProfileEntityService;
+
+    @Resource(name = "memberRegistryInterceptor")
+    protected MemberRegistryInterceptor memberRegistryInterceptor;
 
     @Autowired
     protected MemberProperties memberProperties;
@@ -72,17 +74,18 @@ public abstract class AbstractMemberService {
     /**
      * 发送短信验证码
      *
-     * @param username
-     * @param mobileNo
+     * @param member
      */
-    protected void doCaptchaSmsSend(String username, String mobileNo) {
+    protected void doCaptchaSmsSend(Member member) {
         try {
+            String username = member.getUsername();
+            String mobileNo = member.getMobileNo();
             Captcha captcha = doGetCaptcha(mobileNo);
             //你本次{action}验证码是：{captcha}, 用户名：{username}。"
             Map<String, Object> map = Maps.newHashMap();
-            map.put("action", "注册激活");
             map.put("captcha", captcha.getValue());
             map.put("username", username);
+            memberRegistryInterceptor.onCaptchaSms(member, map);
             String content = FreeMarkers.rendereString(memberProperties.getActive().getSmsTemplateContent(), map);
             smsService.send(mobileNo, content);
             log.info("注册 发送激活验证码短信 成功。");
@@ -91,12 +94,15 @@ public abstract class AbstractMemberService {
         }
     }
 
-    protected void doCaptchaMailSend(String username, String mail) {
+    protected void doCaptchaMailSend(Member member) {
         try {
+            String username = member.getUsername();
+            String mail = member.getEmail();
             Captcha captcha = doGetCaptcha(mail);
             Map<String, String> map = Maps.newHashMap();
             map.put("captcha", String.valueOf(captcha.getValue()));
             map.put("username", username);
+            memberRegistryInterceptor.onCaptchaMail(member, map);
             MailDto mailDto = new MailDto();
             mailDto.to(mail).subject(memberProperties.getActive().getMailSubject()).setParams(map);
             mailDto.templateName(memberProperties.getActive().getMailTemplateName());

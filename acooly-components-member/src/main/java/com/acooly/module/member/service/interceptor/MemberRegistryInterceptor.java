@@ -9,6 +9,11 @@
  */
 package com.acooly.module.member.service.interceptor;
 
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.module.member.entity.Member;
+
+import java.util.Map;
+
 /**
  * 注册相关的扩拦截展器
  * <p>
@@ -21,20 +26,12 @@ package com.acooly.module.member.service.interceptor;
 public interface MemberRegistryInterceptor {
 
     /**
-     * 开始注册前
-     * 发布点：进入注册方法，为做任何处理时，参数验证前。
-     *
-     * @param memberRegistryEvent
-     */
-    void beforeRegistry(MemberRegistryData memberRegistryEvent);
-
-    /**
      * 开始注册时
      * 发布点：已完成参数和基本逻辑坚持，注册开始时
      *
-     * @param memberRegistryEvent
+     * @param memberRegistryData
      */
-    void beginRegistry(MemberRegistryData memberRegistryEvent);
+    void beginRegistry(MemberRegistryData memberRegistryData);
 
 
     /**
@@ -42,9 +39,9 @@ public interface MemberRegistryInterceptor {
      * <p>
      * 注册逻辑完成，但还未提交数据库时
      *
-     * @param memberRegistryEvent
+     * @param memberRegistryData
      */
-    void endRegistry(MemberRegistryData memberRegistryEvent);
+    void endRegistry(MemberRegistryData memberRegistryData);
 
 
     /**
@@ -52,15 +49,41 @@ public interface MemberRegistryInterceptor {
      * <p>
      * 完成所有注册工作，并提交到数据库后
      *
-     * @param memberRegistryEvent
+     * @param memberRegistryData
      */
-    void afterRegistry(MemberRegistryData memberRegistryEvent);
+    void afterCommitRegistry(MemberRegistryData memberRegistryData);
 
     /**
      * 注册异常时
      *
-     * @param memberRegistryEvent
+     * @param memberRegistryData
      */
-    void exceptionRegistry(MemberRegistryData memberRegistryEvent);
+    void exceptionRegistry(MemberRegistryData memberRegistryData, BusinessException be);
+
+
+    /**
+     * 根据配置发送注册短信验证码时的模板数据扩展。
+     * <p>
+     * 默认组件以在数据中提供：username, captcha
+     * 如果你的注册短信验证码模板新增了其他数据，则请实现该方法扩展.
+     * 注册短信的模板配置：acooly.member.active.smsTemplateContent
+     *
+     * @param member
+     * @param data
+     */
+    void onCaptchaSms(Member member, Map<String, Object> data);
+
+    /**
+     * 激活邮件模板数据扩展
+     * <p>
+     * 默认组件以在数据中提供：username, captcha
+     * 注册邮件的模板配置：acooly.member.active.mailTemplateName
+     * 这里配置的是/resources/mail/*.ftl的文件模板
+     * 注意：这里的参数data为Map<String,String>是因为发送组件的限制，够用，谅解。
+     *
+     * @param member
+     * @param data
+     */
+    void onCaptchaMail(Member member, Map<String, String> data);
 
 }

@@ -47,7 +47,7 @@ public class MemberProperties {
      * 注册时候同步实名认证
      */
     @NotNull
-    private boolean realNameAuthOnRegistry = true;
+    private boolean realNameOnRegistry = false;
 
     /**
      * 是否开启账务功能，同步开账户
@@ -74,7 +74,7 @@ public class MemberProperties {
         /**
          * 激活短信模板内容
          */
-        private String smsTemplateContent = "你本次${action}验证码是：${captcha}, 用户名：${username}。";
+        private String smsTemplateContent = "你本次注册的激活验证码是：${captcha}, 用户名：${username}。";
 
         /**
          * 激活邮件主题

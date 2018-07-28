@@ -14,6 +14,7 @@ import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
@@ -28,10 +29,11 @@ import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
-import com.acooly.module.member.manage.MemberProfileEntityService;
 import com.acooly.module.member.service.AbstractMemberService;
 import com.acooly.module.member.service.MemberRealNameService;
 import com.acooly.module.member.service.MemberService;
+import com.acooly.module.member.service.interceptor.MemberRegistryData;
+import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
 import com.acooly.module.security.utils.Digests;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +74,12 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     @Transactional
     public Member register(MemberRegistryInfo memberRegistryInfo) {
         final Member member;
+        final MemberRegistryData memberRegistryData = new MemberRegistryData();
         try {
+            memberRegistryData.setMemberRegistryInfo(memberRegistryInfo);
             // 合法性检查
             doCheck(memberRegistryInfo);
+            memberRegistryInterceptor.beginRegistry(memberRegistryData);
             // 注册会员主体
             member = doRegister(memberRegistryInfo);
             // 注册附属信息
@@ -83,21 +88,29 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             doRealNameVerify(member);
             // 判断执行同步开户
             doOpenAccount(memberRegistryInfo, member);
+            memberRegistryData.setMember(member);
+            memberRegistryInterceptor.endRegistry(memberRegistryData);
             log.info("注册 成功 member:{}", member);
             // 注册成功后，发送激活验证
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
                 @Override
                 public void afterCommit() {
+                    memberRegistryInterceptor.afterCommitRegistry(memberRegistryData);
                     doActiveSend(memberRegistryInfo, member);
                 }
             });
         } catch (OrderCheckException oe) {
-            throw oe;
+            MemberOperationException moe = new MemberOperationException((Messageable) oe);
+            publishExceptionEvent(memberRegistryInterceptor, memberRegistryData, moe);
+            throw moe;
         } catch (BusinessException be) {
+            publishExceptionEvent(memberRegistryInterceptor, memberRegistryData, be);
             throw be;
         } catch (Exception e) {
+            MemberOperationException moe = new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "注册内部错误");
             log.error("注册 失败 内部错误：{}", e);
-            throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "注册内部错误");
+            publishExceptionEvent(memberRegistryInterceptor, memberRegistryData, moe);
+            throw moe;
         }
         return member;
     }
@@ -119,6 +132,14 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
     }
 
+
+    private void publishExceptionEvent(MemberRegistryInterceptor memberRegistryInterceptor,
+                                       MemberRegistryData memberRegistryData, BusinessException be) {
+        try {
+            memberRegistryInterceptor.exceptionRegistry(memberRegistryData, be);
+        } catch (Exception e) {
+        }
+    }
 
     protected void doActive(Long memberId, String username, String activeValue, MemberActiveTypeEnum memberActiveType) {
         try {
@@ -155,9 +176,9 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     protected void doActiveSend(MemberRegistryInfo memberRegistryInfo, Member member) {
         // 只处理短信和邮件激活的验证发送
         if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.mobileNo) {
-            doCaptchaSmsSend(member.getUsername(), member.getMobileNo());
+            doCaptchaSmsSend(member);
         } else if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.email) {
-            doCaptchaMailSend(member.getUsername(), member.getEmail());
+            doCaptchaMailSend(member);
         }
     }
 
@@ -212,7 +233,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      * @param member
      */
     protected void doRealNameVerify(Member member) {
-        if (!memberProperties.isRealNameAuthOnRegistry()) {
+        if (!memberProperties.isRealNameOnRegistry()) {
             return;
         }
         memberRealNameService.verify(member.getId());

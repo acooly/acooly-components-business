@@ -11,7 +11,6 @@ package com.acooly.module.member.service.interceptor;
 
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
-import com.acooly.module.member.entity.MemberProfile;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,18 +31,12 @@ public class MemberRegistryData {
      */
     private Member member;
 
-    /**
-     * 会员配置信息（注册后 end and after）
-     */
-    private MemberProfile memberProfile;
-
 
     public MemberRegistryData() {
     }
 
-    public MemberRegistryData(MemberRegistryInfo memberRegistryInfo, Member member, MemberProfile memberProfile) {
+    public MemberRegistryData(MemberRegistryInfo memberRegistryInfo, Member member) {
         this.memberRegistryInfo = memberRegistryInfo;
         this.member = member;
-        this.memberProfile = memberProfile;
     }
 }
