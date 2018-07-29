@@ -35,6 +35,7 @@ import com.acooly.module.member.service.MemberService;
 import com.acooly.module.member.service.interceptor.MemberRegistryData;
 import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
 import com.acooly.module.security.utils.Digests;
+import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,7 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.transaction.Transactional;
+
 
 /**
  * 会员服务实现
@@ -128,17 +130,24 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
     @Override
     public void login(String username, String password) {
-
-    }
-
-
-    private void publishExceptionEvent(MemberRegistryInterceptor memberRegistryInterceptor,
-                                       MemberRegistryData memberRegistryData, BusinessException be) {
+        Assert.notNull(username, "用户名不能为空");
+        Assert.notNull(password, "密码不能为空");
         try {
-            memberRegistryInterceptor.exceptionRegistry(memberRegistryData, be);
+            Member member = loadMember(null, null, username);
+            if (member == null) {
+                log.warn("登录 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, username);
+                throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST, username);
+            }
+            validatePassword(member, password);
+        } catch (BusinessException be) {
+            throw be;
         } catch (Exception e) {
+            log.error("注册 失败 内部错误：{}", e);
+            throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "注册内部错误");
         }
+
     }
+
 
     protected void doActive(Long memberId, String username, String activeValue, MemberActiveTypeEnum memberActiveType) {
         try {
@@ -289,17 +298,14 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     }
 
 
-//    public void validatePassword(Member member, String password) {
-//        if (StringUtils.isBlank(password)) {
-//            throw new RuntimeException("密码不能为空");
-//        }
-//        String dbSalt = member.getSalt();
-//        String enPassword = digestPassword(password, dbSalt);
-//        String dbPassword = member.getPassword();
-//        if (!enPassword.equals(dbPassword)) {
-//            throw new RuntimeException("密码错误,请重新输入");
-//        }
-//    }
+    protected void validatePassword(Member member, String password) {
+        String dbSalt = member.getSalt();
+        String enPassword = digestPassword(password, dbSalt);
+        String dbPassword = member.getPassword();
+        if (!Strings.equals(enPassword, dbPassword)) {
+            throw new MemberOperationException(MemberErrorEnum.LOGIN_PASSWORD_VERIFY_FAIL);
+        }
+    }
 
     protected void doDigestPassword(Member member) {
         String salt = Encodes.encodeHex(Digests.generateSalt(SALT_SIZE));
@@ -355,6 +361,14 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 && loadMember(null, null, memberRegistryInfo.getInviter()) == null) {
             log.warn("注册 失败 原因:{}, memberInfo:{}", MemberErrorEnum.INVITER_MUST_BE_A_MEMBER, memberRegistryInfo.getLabel());
             throw new MemberOperationException(MemberErrorEnum.INVITER_MUST_BE_A_MEMBER);
+        }
+    }
+
+    private void publishExceptionEvent(MemberRegistryInterceptor memberRegistryInterceptor,
+                                       MemberRegistryData memberRegistryData, BusinessException be) {
+        try {
+            memberRegistryInterceptor.exceptionRegistry(memberRegistryData, be);
+        } catch (Exception e) {
         }
     }
 

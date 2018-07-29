@@ -22,13 +22,20 @@ public interface MemberService {
     Member register(MemberRegistryInfo memberRegistryInfo);
 
     /**
-     * 激活
+     * 激活（ID）
      *
      * @param memberId
      * @param activeValue
      */
     void active(Long memberId, String activeValue, MemberActiveTypeEnum memberActiveType);
 
+    /**
+     * 激活（用户名）
+     *
+     * @param username
+     * @param activeValue
+     * @param memberActiveType
+     */
     void active(String username, String activeValue, MemberActiveTypeEnum memberActiveType);
 
 
@@ -39,6 +46,10 @@ public interface MemberService {
      * @param password
      */
     void login(String username, String password);
+
+
+
+
 
 
 }

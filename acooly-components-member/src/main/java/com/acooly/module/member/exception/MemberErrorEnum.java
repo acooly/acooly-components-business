@@ -31,7 +31,9 @@ public enum MemberErrorEnum implements Messageable {
 
     MEMEBER_REALNAME_DATA_MISSING("MEMEBER_REALNAME_DATA_MISSING", "实名认证数据不全"),
 
-    MEMEBER_REALNAME_FAIL("MEMEBER_REALNAME_FAIL", "实名认证未通过"),;
+    MEMEBER_REALNAME_FAIL("MEMEBER_REALNAME_FAIL", "实名认证未通过"),
+
+    LOGIN_PASSWORD_VERIFY_FAIL("LOGIN_PASSWORD_VERIFY_FAIL", "密码错误"),;
 
 
     private final String code;

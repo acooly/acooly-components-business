@@ -20,6 +20,7 @@ public interface MemberRealNameService {
      * 会员实名认证
      * <p>
      * 根据会员系统已提交的认证信息进行认证。
+     * 能力依赖：实名认证组件
      *
      * @param id
      */
@@ -30,6 +31,7 @@ public interface MemberRealNameService {
      * 实名认证
      * <p>
      * 根据提交的信息进行认证，并写入会员系统
+     * 能力依赖：实名认证组件
      *
      * @param memberRealNameInfo
      */
