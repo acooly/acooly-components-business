@@ -12,6 +12,8 @@ package com.acooly.module.member.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * todo:待完成，区分个人和企业
  *
@@ -21,11 +23,12 @@ import lombok.Setter;
 @Setter
 public class MemberRealNameInfo {
 
+    /**
+     * 会员ID
+     */
+    @NotNull
     private Long id;
 
-    private String realName;
-
-    private String idCardNo;
-
+    private PersonalRealNameInfo personalRealNameInfo;
 
 }

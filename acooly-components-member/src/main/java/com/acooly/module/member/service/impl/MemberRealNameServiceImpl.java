@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.Date;
 
 
@@ -57,9 +58,36 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
                 throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST);
             }
 
-            if (member.getUserType() == MemberUserTypeEnum.personal.code()) {
+            if (member.getUserType() == MemberUserTypeEnum.personal) {
                 doPersonalVerify(member);
                 log.info("实名 [成功] 个人实名认证 member:{}", member);
+            } else {
+                // todo: 待开发企业实名认证
+                throw new OperationNotSupportedException();
+            }
+        } catch (OrderCheckException oe) {
+            throw oe;
+        } catch (BusinessException be) {
+            throw be;
+        } catch (Exception e) {
+            log.error("实名 失败 内部错误：{}", e);
+            throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "实名内部错误");
+        }
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
+    public void verify(MemberRealNameInfo memberRealNameInfo) {
+        try {
+            Member member = loadMember(memberRealNameInfo.getId());
+            if (member == null) {
+                log.warn("实名 [失败] 原因:{}, memberId:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, memberRealNameInfo.getId());
+                throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST);
+            }
+
+            if (member.getUserType() == MemberUserTypeEnum.personal && memberRealNameInfo.getPersonalRealNameInfo() == null) {
+                log.warn("实名 [失败] 原因:{}, memberId:{}", "个人实名认证的信息为空或不全", memberRealNameInfo.getId());
+                throw new MemberOperationException(MemberErrorEnum.MEMEBER_REALNAME_DATA_MISSING, "个人实名认证的信息为空或不全");
             }
         } catch (OrderCheckException oe) {
             throw oe;
@@ -70,11 +98,6 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "实名内部错误");
         }
 
-
-    }
-
-    @Override
-    public void verify(MemberRealNameInfo memberRealNameInfo) {
 
     }
 

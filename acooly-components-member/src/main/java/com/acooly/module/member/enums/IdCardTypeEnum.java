@@ -1,28 +1,39 @@
+/*
+ * www.acooly.cn Inc.
+ * Copyright (c) 2018 All Rights Reserved
+ */
+
+/*
+ * 修订记录:
+ * zhangpu@acooly.cn 2018-07-30 20:09 创建
+ */
 package com.acooly.module.member.enums;
 
+import com.acooly.core.utils.enums.Messageable;
+import com.google.common.collect.Maps;
+
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author zhangpu@acooly.cn
- * @date 2018-07-23 00:12
+ * @author zhangpu 2018-07-30 20:09
  */
-public enum MemberUserTypeEnum {
+public enum IdCardTypeEnum implements Messageable {
 
 
-    personal("personal", "个人"),
+    ID_Card("ID_Card", "身份证"),
 
-    enterprise_indi("enterprise_indi", "个体"),
 
-    enterprise("enterprise", "企业");
+    officers("officers", "军官证"),
+
+    driver("driver", "驾驶证");
 
 
     private final String code;
     private final String message;
 
-    private MemberUserTypeEnum(String code, String message) {
+    private IdCardTypeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -35,20 +46,19 @@ public enum MemberUserTypeEnum {
         return message;
     }
 
-
+    @Override
     public String code() {
         return code;
     }
 
-
+    @Override
     public String message() {
         return message;
     }
 
-
     public static Map<String, String> mapping() {
-        Map<String, String> map = new LinkedHashMap<String, String>();
-        for (MemberUserTypeEnum type : values()) {
+        Map<String, String> map = Maps.newLinkedHashMap();
+        for (IdCardTypeEnum type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -61,13 +71,13 @@ public enum MemberUserTypeEnum {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static MemberUserTypeEnum find(String code) {
-        for (MemberUserTypeEnum status : values()) {
+    public static IdCardTypeEnum find(String code) {
+        for (IdCardTypeEnum status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
         }
-        return null;
+        throw null;
     }
 
     /**
@@ -75,9 +85,9 @@ public enum MemberUserTypeEnum {
      *
      * @return 全部枚举值。
      */
-    public static List<MemberUserTypeEnum> getAll() {
-        List<MemberUserTypeEnum> list = new ArrayList<MemberUserTypeEnum>();
-        for (MemberUserTypeEnum status : values()) {
+    public static List<IdCardTypeEnum> getAll() {
+        List<IdCardTypeEnum> list = new ArrayList<IdCardTypeEnum>();
+        for (IdCardTypeEnum status : values()) {
             list.add(status);
         }
         return list;
@@ -90,7 +100,7 @@ public enum MemberUserTypeEnum {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (MemberUserTypeEnum status : values()) {
+        for (IdCardTypeEnum status : values()) {
             list.add(status.code());
         }
         return list;
