@@ -160,7 +160,7 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
      * @param member
      */
     protected CertResult doPersonalRealName(Member member) {
-        if (member.getUserType() != MemberUserTypeEnum.personal.code()
+        if (member.getUserType() != MemberUserTypeEnum.personal
                 || Strings.isBlank(member.getRealName()) || Strings.isBlank(member.getIdCardNo())) {
             log.warn("实名 [失败] 认证类型或认证数据不全");
             throw new MemberOperationException(MemberErrorEnum.MEMEBER_REALNAME_DATA_MISSING);
