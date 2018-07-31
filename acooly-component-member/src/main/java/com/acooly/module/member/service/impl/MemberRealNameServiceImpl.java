@@ -9,6 +9,7 @@
  */
 package com.acooly.module.member.service.impl;
 
+import com.acooly.core.common.enums.Gender;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Dates;
@@ -24,7 +25,6 @@ import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberContact;
 import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
-import com.acooly.module.member.enums.GenderEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
@@ -111,31 +111,51 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
 
     @Override
     public void saveVerify(MemberRealNameInfo memberRealNameInfo) {
-
+        try {
+            Validators.assertJSR303(memberRealNameInfo);
+            Member member = loadMember(memberRealNameInfo.getId());
+            if (member == null) {
+                log.warn("实名 [失败] 原因:{}, memberId:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, memberRealNameInfo.getId());
+                throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST);
+            }
+            PersonalRealNameInfo personalRealNameInfo = memberRealNameInfo.getPersonalRealNameInfo();
+            doPersonalVerify(memberRealNameInfo.getId(), personalRealNameInfo, false);
+            member.setRealName(personalRealNameInfo.getRealName());
+            member.setCertNo(personalRealNameInfo.getCertNo());
+            memberEntityService.save(member);
+        } catch (OrderCheckException oe) {
+            throw oe;
+        } catch (BusinessException be) {
+            throw be;
+        } catch (Exception e) {
+            log.error("实名 失败 内部错误：{}", e);
+            throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "实名内部错误");
+        }
     }
 
     protected void doPersonalVerify(Long id, PersonalRealNameInfo personalRealNameInfo, boolean mustVerify) {
         String realName = personalRealNameInfo.getRealName();
         String idcardNo = personalRealNameInfo.getCertNo();
         CertResult certResult = null;
-        String birthday = null;
-        String gender = null;
-        String address = null;
+        String birthday;
+        String gender;
+        String address;
         if (mustVerify) {
             certResult = doPersonalRealName(realName, idcardNo);
             birthday = certResult.getBirthday();
             gender = certResult.getSex();
             address = certResult.getAddress();
         } else {
-            IdCards.parse(idcardNo);
-
+            IdCards.IdCardInfo idCardInfo = IdCards.parse(idcardNo);
+            birthday = idCardInfo.getBirthday();
+            gender = idCardInfo.getGender().code();
+            address = idCardInfo.getPlace();
         }
-
 
         MemberPersonal memberPersonal = memberPersonalEntityService.get(id);
         if (memberPersonal != null) {
-            memberPersonal.setBirthday(convertBirthday(certResult.getBirthday()));
-            memberPersonal.setGender(GenderEnum.find(certResult.getSex()));
+            memberPersonal.setBirthday(convertBirthday(birthday));
+            memberPersonal.setGender(Gender.find(gender));
             memberPersonal.setRealName(realName);
             memberPersonal.setCertType(personalRealNameInfo.getCertType());
             memberPersonal.setCertNo(personalRealNameInfo.getCertNo());
@@ -144,25 +164,25 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             memberPersonal.setCertHoldPath(personalRealNameInfo.getCertHoldPath());
             memberPersonalEntityService.update(memberPersonal);
         }
-        if (Strings.isNotBlank(certResult.getAddress())) {
+        if (Strings.isNotBlank(address)) {
             MemberContact memberContact = memberContactEntityService.get(id);
             if (memberContact != null) {
+                if (Strings.contains(address, "-")) {
+                    String[] addresses = Strings.split(certResult.getAddress(), '-');
+                    if (addresses != null && addresses.length >= 1) {
+                        memberContact.setProvince(addresses[0]);
+                    }
 
-                String[] addresses = Strings.split(certResult.getAddress(), '-');
-                if (addresses != null && addresses.length >= 1) {
-                    memberContact.setProvince(addresses[0]);
-                }
+                    if (addresses != null && addresses.length >= 2) {
+                        memberContact.setCity(addresses[1]);
+                    }
 
-                if (addresses != null && addresses.length >= 2) {
-                    memberContact.setCity(addresses[1]);
-                }
-
-                if (addresses != null && addresses.length >= 3) {
-                    memberContact.setDistrict(addresses[2]);
-                }
-
-                if (addresses != null) {
+                    if (addresses != null && addresses.length >= 3) {
+                        memberContact.setDistrict(addresses[2]);
+                    }
                     memberContact.setAddress(Strings.join(addresses, ""));
+                } else {
+                    memberContact.setAddress(address);
                 }
             }
             memberContactEntityService.update(memberContact);

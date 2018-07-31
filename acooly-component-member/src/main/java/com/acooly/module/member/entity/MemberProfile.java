@@ -60,7 +60,7 @@ public class MemberProfile extends AbstractEntity {
     /**
      * 个性签名
      */
-    @Size(max = 256)
+    @Size(max = 255)
     private String dailyWords;
 
     /**
@@ -72,7 +72,7 @@ public class MemberProfile extends AbstractEntity {
     /**
      * 头像
      */
-    @Size(max = 256)
+    @Size(max = 255)
     private String profilePhoto;
 
     /**

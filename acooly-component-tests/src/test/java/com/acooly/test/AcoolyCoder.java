@@ -12,14 +12,14 @@ public class AcoolyCoder {
         DefaultCodeGenerateService service = (DefaultCodeGenerateService) Generator.getGenerator();
         //set workspace if possible
         if (StringUtils.isBlank(service.getGenerateConfiguration().getWorkspace())) {
-            String workspace = getProjectPath() + "acooly-components-member";
+            String workspace = getProjectPath() + "acooly-component-member";
             service.getGenerateConfiguration().setWorkspace(workspace);
         }
         //set root pacakge if possible
         if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
             service.getGenerateConfiguration().setRootPackage(getRootPackage());
         }
-        service.generateTable("b_member","b_member_profile","b_member_contact","b_member_personal","b_member_basic","b_member_secret_qa");
+        service.generateTable("b_member_enterprise");
     }
 
     public static String getProjectPath() {
