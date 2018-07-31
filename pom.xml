@@ -5,13 +5,13 @@
     <parent>
         <artifactId>acooly-app-parent</artifactId>
         <groupId>com.acooly</groupId>
-        <version>4.1.0-SNAPSHOT</version>
+        <version>4.2.0-SNAPSHOT</version>
     </parent>
     <groupId>com.acooly</groupId>
     <artifactId>acooly-components-parent</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.2.0-SNAPSHOT</version>
 
-    <name>acooly-components Projects</name>
+    <name>acooly-component Projects</name>
     <packaging>pom</packaging>
 
 
@@ -19,16 +19,21 @@
         <dependencies>
             <dependency>
                 <groupId>com.acooly</groupId>
-                <artifactId>acooly-components-account</artifactId>
+                <artifactId>acooly-component-account</artifactId>
+                <version>${parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-member</artifactId>
                 <version>${parent.version}</version>
             </dependency>
         </dependencies>
-
     </dependencyManagement>
 
     <modules>
-        <module>acooly-components-member</module>
-        <module>acooly-components-account</module>
-        <module>acooly-components-test</module>
+        <module>acooly-component-member</module>
+        <module>acooly-component-account</module>
+        <module>acooly-component-tests</module>
     </modules>
 </project>
