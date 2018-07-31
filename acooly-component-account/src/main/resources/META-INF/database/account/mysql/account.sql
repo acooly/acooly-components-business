@@ -25,6 +25,8 @@ CREATE TABLE `ac_account_bill` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `user_no` varchar(64) NOT NULL DEFAULT '' COMMENT '用户编码',
   `username` varchar(64) DEFAULT '' COMMENT '用户名(冗余)',
+  `merch_order_no` varchar(64) DEFAULT NULL COMMENT '外部订单号',
+  `biz_order_no` varchar(64) DEFAULT NULL COMMENT '内部订单号',
   `amount` bigint(20) NOT NULL COMMENT '交易金额',
   `balance_post` bigint(20) NOT NULL COMMENT '变动后余额',
   `direction` varchar(16) NOT NULL COMMENT '资金流向 {in:入金,out:出金,keep:不变}',

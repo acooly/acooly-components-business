@@ -32,8 +32,13 @@ public class AccountProperties {
     private int batchMaxSize = 600;
 
     /**
-     * 是否开启账务分析
+     * 是否验证交易的bizOrderNo
      */
-    private boolean analyseEnable=false;
+    private boolean checkBizOrderNo = true;
+
+    /**
+     * 是否开启账务分析(待实现)
+     */
+    private boolean analyseEnable = false;
 
 }

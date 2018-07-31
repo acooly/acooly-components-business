@@ -1,6 +1,7 @@
 package com.acooly.module.account.dto;
 
 import com.acooly.core.common.exception.OrderCheckException;
+import com.acooly.core.common.facade.DtoBase;
 import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.account.enums.AccountTypeEnum;
@@ -19,7 +20,7 @@ import javax.validation.constraints.Size;
  */
 @Setter
 @Getter
-public class AccountInfo extends InfoBase {
+public class AccountInfo extends DtoBase {
     /**
      * 账户ID
      */

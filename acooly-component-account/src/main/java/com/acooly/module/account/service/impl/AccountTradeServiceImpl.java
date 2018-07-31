@@ -1,6 +1,10 @@
 package com.acooly.module.account.service.impl;
 
-import com.acooly.module.account.AccountProperties;
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Money;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.entity.Account;
@@ -12,18 +16,13 @@ import com.acooly.module.account.manage.AccountBillService;
 import com.acooly.module.account.service.AccountTradeService;
 import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.module.account.service.tradecode.TradeCode;
-import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.utils.Collections3;
-import com.acooly.core.utils.Ids;
-import com.acooly.core.utils.Money;
-import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -36,16 +35,14 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
 
     @Autowired
     private AccountBillService accountBillService;
-    @Autowired
-    private AccountProperties accountProperties;
 
-    @Transactional(rollbackOn = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public void keepAccount(AccountKeepInfo accountKeepInfo) {
+        doCheck(accountKeepInfo);
         Account account = null;
         AccountBill accountBill = null;
         try {
-            doCheck(accountKeepInfo);
             Long id = loadAccountId(accountKeepInfo);
             account = accountService.loadAndLock(id);
             doCheckAccount(account, accountKeepInfo);
@@ -61,7 +58,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
                 (accountBill != null ? accountBill.getBalancePost() : "-"));
     }
 
-    @Transactional(rollbackOn = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public String keepAccounts(List<AccountKeepInfo> accountKeepInfos, String comments) {
         if (Collections3.isEmpty(accountKeepInfos)) {
@@ -93,7 +90,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         return batchNo;
     }
 
-    @Transactional(rollbackOn = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public String keepAccounts(List<AccountKeepInfo> accountKeepInfos) {
         return keepAccounts(accountKeepInfos, "");
@@ -196,6 +193,8 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         accountBill.setAccountNo(account.getAccountNo());
         accountBill.setUserId(account.getUserId());
         accountBill.setUserNo(account.getUserNo());
+        accountBill.setBizOrderNo(accountKeepInfo.getBizOrderNo());
+        accountBill.setMerchOrderNo(accountKeepInfo.getMerchOrderNo());
 
         accountBill.setAmount(accountKeepInfo.getAmount().getCent());
         accountBill.setBalancePost(account.getBalance());

@@ -7,9 +7,9 @@
 package com.acooly.module.account.entity;
 
 
-import com.acooly.module.account.enums.DirectionEnum;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.enums.AbleStatus;
+import com.acooly.module.account.enums.DirectionEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -66,6 +66,16 @@ public class AccountBill extends AbstractEntity {
      */
     @Size(max = 64)
     private String username;
+
+    /**
+     * 外部订单号
+     */
+    private String merchOrderNo;
+
+    /**
+     * 内部订单号
+     */
+    private String bizOrderNo;
 
     /**
      * 交易金额
