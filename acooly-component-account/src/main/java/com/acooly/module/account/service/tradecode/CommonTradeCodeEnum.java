@@ -21,7 +21,7 @@ public enum CommonTradeCodeEnum implements TradeCode {
 
     withdraw("withdraw", "出金", DirectionEnum.out),
 
-    withdraw_offline("withdraw", "线下出金", DirectionEnum.out),
+    withdraw_offline("withdraw_offline", "线下出金", DirectionEnum.out),
 
     transfer_out("transfer_out", "转出", DirectionEnum.out),
 
