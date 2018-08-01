@@ -28,7 +28,7 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties({AccountProperties.class})
 @ConditionalOnProperty(value = AccountProperties.PREFIX + ".enable", matchIfMissing = true)
-@ComponentScan(basePackages = "com.acooly.component.account")
+@ComponentScan(basePackages = "com.acooly.module.account")
 public class AccountAutoConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
