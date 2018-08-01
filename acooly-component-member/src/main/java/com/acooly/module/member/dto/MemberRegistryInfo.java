@@ -9,6 +9,7 @@
  */
 package com.acooly.module.member.dto;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberRegisterTypeEnum;
 import lombok.Getter;
@@ -46,10 +47,16 @@ public class MemberRegistryInfo extends MemberInfo {
     /**
      * 是否关联开启默认账户
      * <p>
-     * 该参数的优先级大于member组件的配置参数
+     * 该参数的优先级大于member组件的配置参数,不设置，则以member的组件配置参数为准
      */
-    @NotNull
-    private Boolean accountRegisty = false;
+    private Boolean accountRegisty;
+
+    /**
+     * 注册时候同步实名认证
+     * <p>
+     * 该参数的优先级大于member组件的配置参数,不设置，则以member的组件配置参数为准
+     */
+    private Boolean realNameOnRegisty;
 
     /**
      * 客戶经理
@@ -70,4 +77,23 @@ public class MemberRegistryInfo extends MemberInfo {
      */
     private String inviter;
 
+
+    public MemberRegistryInfo() {
+    }
+
+    public MemberRegistryInfo(String usename, String password, String mobileNo, String realName, String certNo) {
+        setUsername(usename);
+        setPassword(password);
+        setMobileNo(mobileNo);
+        if (Strings.isNoneBlank(realName) && Strings.isNotBlank(certNo)) {
+            this.realNameOnRegisty = true;
+            setRealName(realName);
+            setCertNo(certNo);
+        }
+
+    }
+
+    public MemberRegistryInfo(String usename, String password, String mobileNo) {
+        this(usename, password, mobileNo, null, null);
+    }
 }

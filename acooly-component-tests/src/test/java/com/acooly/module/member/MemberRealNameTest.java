@@ -11,21 +11,18 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 测试注册和激活
- * <p>
- * 注意：本测试需要启动独立的redis，不能使用sdev环境自动启动的。
+ * 测试会员实名认证
  *
  * @author zhangpu@acooly.cn
- * @date 2018-07-01 18:19
+ * @date 2018-08-01 12:19
  */
 @Slf4j
-public class MemberRegistryAndActiveTest extends AbstractComponentsTest {
+public class MemberRealNameTest extends AbstractComponentsTest {
 
     static final String TEST_USERNAME = "zhangpu";
 
     @Autowired
     private MemberService memberService;
-
 
     @Before
     public void before() {
@@ -34,35 +31,31 @@ public class MemberRegistryAndActiveTest extends AbstractComponentsTest {
 
 
     /**
-     * 注册待手机验证码激活
+     * 注册个人会员自动实名
+     * <p>
+     * 需要打开member组件的配置参数：realNameOnRegistry=true
+     * 或者
+     * 使用下面的构造，自动设置 MemberRegistryInfo的realNameOnRegistry=true
      */
     @Test
-    public void testRegisterActiveWithMobile() {
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
-        memberRegistryInfo.setUsername(TEST_USERNAME);
-        memberRegistryInfo.setPassword("Ab123456");
-        memberRegistryInfo.setMobileNo("13896177630");
-        memberRegistryInfo.setRealName("秦海贤");
-        memberRegistryInfo.setCertNo("360822198609284091");
-        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.mobileNo);
+    public void testRegisterAndAutoRealName() {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, "Ab123456", "13896177630",
+                "秦海贤", "360822198609284091");
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);
     }
 
     /**
-     * 注册待邮件验证码激活
+     * 注册个人会员不实名
      */
     @Test
-    public void testRegisterActiveWithMail() {
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
-        memberRegistryInfo.setUsername(TEST_USERNAME);
-        memberRegistryInfo.setPassword("Ab123456");
-        memberRegistryInfo.setEmail("zhangpu@acooly.cn");
-        memberRegistryInfo.setAccountRegisty(false);
-        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.email);
+    public void testRegister() {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, "Ab123456", "13896177630",
+                "秦海贤", "360822198609284091");
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);
     }
+
 
     /**
      * 使用手机验证码激活注册

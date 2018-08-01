@@ -13,6 +13,7 @@ import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
+import com.acooly.module.member.enums.CertTypeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import lombok.Getter;
@@ -90,11 +91,15 @@ public class MemberInfo extends InfoBase {
     private String realName;
 
     /**
-     * 身份证号码
+     * 证件类型
+     */
+    private CertTypeEnum certType = CertTypeEnum.ID;
+    /**
+     * 证件号码
      */
     @CertNo(blankable = true)
     @Size(max = 32)
-    private String idCardNo;
+    private String certNo;
 
     /**
      * 用户等级

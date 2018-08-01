@@ -85,7 +85,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             // 注册附属信息
             doRegisterProfile(memberRegistryInfo, member);
             // 根据配置开关同步实名认证
-            doRealNameVerify(member);
+            doRealNameVerify(memberRegistryInfo, member);
             // 判断执行同步开户
             doOpenAccount(memberRegistryInfo, member);
             memberRegistryData.setMember(member);
@@ -200,14 +200,9 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      * @param member
      */
     protected void doOpenAccount(MemberRegistryInfo memberRegistryInfo, Member member) {
-        if (memberRegistryInfo.getAccountRegisty() == null) {
-            if (!memberProperties.isAccountRegisty()) {
-                return;
-            }
-        } else {
-            if (!memberRegistryInfo.getAccountRegisty()) {
-                return;
-            }
+        boolean registry = memberRegistryInfo.getAccountRegisty() == null ? memberProperties.isAccountRegisty() : memberRegistryInfo.getAccountRegisty();
+        if (!registry) {
+            return;
         }
         Account account = accountManageService.openAccount(new AccountInfo(member.getId(), member.getUserNo(), member.getUsername()));
         log.info("注册 同步开账户成功 account:{}", account.getLabel());
@@ -240,10 +235,12 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      *
      * @param member
      */
-    protected void doRealNameVerify(Member member) {
-        if (!memberProperties.isRealNameOnRegistry()) {
+    protected void doRealNameVerify(MemberRegistryInfo memberRegistryInfo, Member member) {
+        boolean realName = memberRegistryInfo.getRealNameOnRegisty() == null ? memberProperties.isRealNameOnRegistry() : memberRegistryInfo.getRealNameOnRegisty();
+        if (!realName) {
             return;
         }
+
         memberRealNameService.verify(member.getId());
     }
 

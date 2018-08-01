@@ -64,7 +64,7 @@ public class MemberPersonal extends AbstractEntity {
      * 证件类型
      */
     @Enumerated(EnumType.STRING)
-    private CertTypeEnum certType = CertTypeEnum.ID_Card;
+    private CertTypeEnum certType = CertTypeEnum.ID;
 
     /**
      * 证件号码

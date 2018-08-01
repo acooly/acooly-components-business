@@ -37,4 +37,13 @@ public abstract class AbstractComponentsTest extends AppTestBase {
     @Autowired
     protected JdbcTemplate jdbcTemplate;
 
+
+    protected void cleanDatabase(String username){
+        jdbcTemplate.execute("delete from b_member where username = '" + username + "'");
+        jdbcTemplate.execute("delete from b_member_profile where username = '" + username + "'");
+        jdbcTemplate.execute("delete from b_member_contact where username = '" + username + "'");
+        jdbcTemplate.execute("delete from b_member_personal where username = '" + username + "'");
+        jdbcTemplate.execute("delete from b_member_enterprise where username = '" + username + "'");
+        jdbcTemplate.execute("delete from ac_account where username = '" + username + "'");
+    }
 }

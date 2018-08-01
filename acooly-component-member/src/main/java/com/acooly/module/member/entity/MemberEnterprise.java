@@ -18,7 +18,6 @@ import javax.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import com.acooly.core.common.domain.AbstractEntity;
-import java.util.Date;
 
 /**
  * 企业客户实名认证 Entity
@@ -70,7 +69,7 @@ public class MemberEnterprise extends AbstractEntity {
 
 	/** 法人证件类型: 默认身份证 */
 	@Size(max=64)
-    private CertTypeEnum legalCertType = CertTypeEnum.ID_Card;
+    private CertTypeEnum legalCertType = CertTypeEnum.ID;
 
 	/** 法人证件号码 */
 	@Size(max=64)
@@ -102,7 +101,7 @@ public class MemberEnterprise extends AbstractEntity {
 
 	/** 股东或实际控制人证件类型 */
     @Enumerated(EnumType.STRING)
-    private CertTypeEnum holdingCertType = CertTypeEnum.ID_Card;
+    private CertTypeEnum holdingCertType = CertTypeEnum.ID;
 
 	/** 股东或实际控制人证件号 */
 	@Size(max=64)

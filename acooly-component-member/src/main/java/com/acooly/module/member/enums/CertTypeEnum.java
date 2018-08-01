@@ -22,7 +22,7 @@ import java.util.Map;
 public enum CertTypeEnum implements Messageable {
 
 
-    ID_Card("ID_Card", "身份证"),
+    ID("ID", "身份证"),
 
 
     officers("officers", "军官证"),
