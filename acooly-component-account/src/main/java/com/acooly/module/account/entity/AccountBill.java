@@ -90,6 +90,16 @@ public class AccountBill extends AbstractEntity {
     private Long balancePost;
 
     /**
+     * 交易冻结金额
+     */
+    private Long freezeAmount;
+
+    /**
+     * 交易冻结后冻结总额
+     */
+    private Long freezePost;
+
+    /**
      * 资金流向
      */
     @Enumerated(EnumType.STRING)
