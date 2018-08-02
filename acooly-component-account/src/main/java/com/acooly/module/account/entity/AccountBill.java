@@ -81,23 +81,23 @@ public class AccountBill extends AbstractEntity {
      * 交易金额
      */
     @NotNull
-    private Long amount;
+    private Long amount = 0L;
 
     /**
      * 变动后余额
      */
     @NotNull
-    private Long balancePost;
+    private Long balancePost = 0L;
 
     /**
      * 交易冻结金额
      */
-    private Long freezeAmount;
+    private Long freezeAmount = 0L;
 
     /**
      * 交易冻结后冻结总额
      */
-    private Long freezePost;
+    private Long freezePost = 0L;
 
     /**
      * 资金流向

@@ -54,8 +54,11 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
             log.error("记账 [失败] AccountKeepInfo: {}, 错误:{}", accountKeepInfo, e.getMessage());
             throw new BusinessException(AccountErrorEnum.ACCOUNT_INTERNAL_ERROR);
         }
-        log.info("记账 成功：{} - {} - {} - {}", account.getLabel(), accountKeepInfo.getTradeCode().lable(), accountKeepInfo.getAmount().getCent(),
-                (accountBill != null ? accountBill.getBalancePost() : "-"));
+        log.info("记账 成功：{} - {} - {}{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().lable(),
+                accountKeepInfo.getTradeCode().symbol(),
+                accountKeepInfo.getAmount().getCent(),
+                (accountBill != null ? (accountKeepInfo.getTradeCode().direction() == DirectionEnum.keep ? accountBill.getFreezePost()
+                        : accountBill.getBalancePost()) : "-"));
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -160,30 +163,33 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         Money amount = accountKeepInfo.getAmount();
         if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.in) {
             account.setBalance(account.getBalance() + amount.getCent());
-        } else {
+        } else if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.out) {
             if (amount.getCent() > account.getAvalible()) {
-                log.warn("记账 [动账] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{}", account.getLabel(),
-                        account.getAvalible(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
+                log.warn("记账 [{}] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{}, accountKeepInfo:{}", accountKeepInfo.getTradeCode().lable(),
+                        account.getLabel(), account.getAvalible(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE, accountKeepInfo.getLabel());
                 throw new AccountOperationException(AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
             }
-
-            if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.out) {
-                account.setBalance(account.getBalance() - amount.getCent());
-            } else if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.in) {
-                account.setBalance(account.getBalance() + amount.getCent());
-            } else {
-                if (accountKeepInfo.getTradeCode().code().equals(CommonTradeCodeEnum.freeze.code())) {
-                    account.setFreeze(account.getFreeze() + amount.getCent());
-                } else {
-                    account.setFreeze(account.getFreeze() - amount.getCent());
+            account.setBalance(account.getBalance() - amount.getCent());
+        } else if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.keep) {
+            if (accountKeepInfo.getTradeCode().code().equals(CommonTradeCodeEnum.freeze.code())) {
+                if (amount.getCent() > account.getAvalible()) {
+                    log.warn("记账 [{}] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{},accountKeepInfo:{}", accountKeepInfo.getTradeCode().lable(), account.getLabel(),
+                            account.getAvalible(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE, accountKeepInfo.getLabel());
+                    throw new AccountOperationException(AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
                 }
-
+                account.setFreeze(account.getFreeze() + amount.getCent());
+            } else {
+                if (amount.getCent() > account.getFreeze()) {
+                    log.warn("记账 [{}] 失败, 账户:{}, 总冻结金额：{}，记账金额: {}, 错误原因：{},accountKeepInfo:{}", accountKeepInfo.getTradeCode().lable(), account.getLabel(),
+                            account.getFreeze(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_FREEZE, accountKeepInfo.getLabel());
+                    throw new AccountOperationException(AccountErrorEnum.ACCOUNT_INSUFFICIENT_FREEZE);
+                }
+                account.setFreeze(account.getFreeze() - amount.getCent());
             }
+
         }
         accountService.update(account);
-        log.debug("记账 [动账] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
-                accountKeepInfo.getTradeCode().message(), accountKeepInfo.getTradeCode().direction(),
-                accountKeepInfo.getAmount().getCent());
+        log.info("记账 [动账] 成功。{} - {} - {}", account.getLabel(), accountKeepInfo.getTradeCode().lable(), amount.getCent());
     }
 
     protected AccountBill doAccountBill(Account account, AccountKeepInfo accountKeepInfo) {
@@ -196,8 +202,13 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         accountBill.setBizOrderNo(accountKeepInfo.getBizOrderNo());
         accountBill.setMerchOrderNo(accountKeepInfo.getMerchOrderNo());
 
-        accountBill.setAmount(accountKeepInfo.getAmount().getCent());
-        accountBill.setBalancePost(account.getBalance());
+        if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.keep) {
+            accountBill.setFreezeAmount(accountKeepInfo.getAmount().getCent());
+            accountBill.setFreezePost(account.getFreeze());
+        } else {
+            accountBill.setAmount(accountKeepInfo.getAmount().getCent());
+            accountBill.setBalancePost(account.getBalance());
+        }
 
         accountBill.setDirection(accountKeepInfo.getTradeCode().direction());
         accountBill.setComments(accountKeepInfo.getComments());

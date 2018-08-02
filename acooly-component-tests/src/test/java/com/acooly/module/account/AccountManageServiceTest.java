@@ -41,13 +41,13 @@ public class AccountManageServiceTest extends AbstractComponentsTest {
      *
      * <p>
      * 用户ID与账户ID一致
-     * 用户No与账户No一致
+     * 用户No与账户No一致，如果不填写则自动生成
      * 重点：设置AccountId为UserId
      */
     @Test
     public void testOpenAccountWithUserIdEquelsAccountId() {
         try {
-            AccountInfo accountInfo = new AccountInfo(TEST_TO_ID, Ids.getDid());
+            AccountInfo accountInfo = new AccountInfo(TEST_FROM_ID, Ids.getDid());
             accountInfo.setUsername("zhangpu");
             accountInfo.setComments("开户");
             Account account = accountManageService.openAccount(accountInfo);
@@ -72,29 +72,29 @@ public class AccountManageServiceTest extends AbstractComponentsTest {
     public void testOpenAccountByUserId() {
 
         try {
-            AccountInfo accountInfo = new AccountInfo(TEST_FROM_ID);
-            Account account = accountManageService.loadAccount(accountInfo);
-            Assert.assertNotNull(account);
-            String accountNo = account.getAccountNo();
-            account = accountManageService.loadAccount(new AccountInfo(accountNo));
-            Assert.assertEquals(accountNo, account.getAccountNo());
+            AccountInfo accountInfo = new AccountInfo(null, null, 1000L, Ids.getDid(), AccountTypeEnum.main);
+            accountInfo.setUsername("zhangpu");
+            accountInfo.setComments("开户");
+            Account account = accountManageService.openAccount(accountInfo);
             log.info("Account:{}", account);
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
     }
 
+
     /**
      * 根据账户ID或No查询账户
      */
     @Test
     public void testloadAccountByIdOrNo() {
-
         try {
-            AccountInfo accountInfo = new AccountInfo(null, null, 1000L, Ids.getDid(), AccountTypeEnum.main);
-            accountInfo.setUsername("zhangpu");
-            accountInfo.setComments("开户");
-            Account account = accountManageService.openAccount(accountInfo);
+            AccountInfo accountInfo = new AccountInfo(TEST_FROM_ID);
+            Account account = accountManageService.loadAccount(accountInfo);
+            Assert.assertNotNull(account);
+            String accountNo = account.getAccountNo();
+            account = accountManageService.loadAccount(new AccountInfo(accountNo));
+            Assert.assertEquals(accountNo, account.getAccountNo());
             log.info("Account:{}", account);
         } catch (Exception e) {
             Assert.fail(e.getMessage());

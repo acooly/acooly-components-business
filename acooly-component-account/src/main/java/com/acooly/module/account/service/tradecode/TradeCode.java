@@ -45,5 +45,16 @@ public interface TradeCode {
         return code() + "/" + message() + "/" + direction();
     }
 
+    /**
+     * 运算发号
+     *
+     * @return
+     */
+    default String symbol() {
+        if (direction() == DirectionEnum.keep) {
+            return "";
+        }
+        return direction() == DirectionEnum.in ? "+" : "-";
+    }
 
 }

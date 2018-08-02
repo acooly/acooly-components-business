@@ -1,22 +1,17 @@
 package com.acooly.module.account;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Money;
+import com.acooly.module.AbstractComponentsTest;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.enums.DirectionEnum;
 import com.acooly.module.account.service.AccountTradeService;
 import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
 import com.acooly.module.account.service.tradecode.DefaultTradeCode;
-import com.acooly.module.test.AppTestBase;
-import com.acooly.module.test.Main;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +21,8 @@ import java.util.List;
  * @date 2018-07-01 18:19
  */
 @Slf4j
-@SpringBootTest(
-        classes = Main.class,
-        webEnvironment = SpringBootTest.WebEnvironment.NONE
-)
-public class AccountTradeServiceTest extends AppTestBase {
+public class AccountTradeServiceTest extends AbstractComponentsTest {
 
-    public static final String PROFILE = "sdev";
-
-    //设置环境
-    static {
-        Apps.setProfileIfNotExists(PROFILE);
-    }
 
     static final long TEST_FROM_ID = 100;
     static final long TEST_TO_ID = 101;
@@ -89,7 +74,7 @@ public class AccountTradeServiceTest extends AppTestBase {
      */
     @Test
     public void testTransfer() {
-        TransferInfo transferInfo = new TransferInfo(TEST_FROM_ID, TEST_TO_ID, Money.amout("1"));
+        TransferInfo transferInfo = new TransferInfo(TEST_FROM_ID, TEST_TO_ID, Money.amout("1000"));
         accountTradeService.transfer(transferInfo);
     }
 
@@ -99,8 +84,8 @@ public class AccountTradeServiceTest extends AppTestBase {
      */
     @Test
     public void testFreezeAndUnFreeze() {
-        accountTradeService.freeze(TEST_FROM_ID, Money.cent(20), "测试冻结");
-        accountTradeService.unfreeze(TEST_FROM_ID, Money.cent(10), "测试解冻");
+        accountTradeService.freeze(TEST_FROM_ID, Money.amout("20"), "测试冻结");
+        accountTradeService.unfreeze(TEST_FROM_ID, Money.amout("10"), "测试解冻");
     }
 
 
@@ -113,18 +98,5 @@ public class AccountTradeServiceTest extends AppTestBase {
         accountTradeService.unfreeze(Lists.newArrayList(TEST_FROM_ID, TEST_TO_ID), Money.cent(10), "测试批量解冻");
     }
 
-
-    private static Money getRandomAmount() {
-        return Money.cent(RandomUtils.nextLong(1, 20));
-    }
-
-    private static Pair<Long, Long> getPair(long start, long end) {
-        long from = RandomUtils.nextLong(start, end);
-        long to = RandomUtils.nextLong(start, end);
-        while (from == to) {
-            to = RandomUtils.nextLong(start, end);
-        }
-        return Pair.of(from, to);
-    }
 
 }

@@ -29,7 +29,7 @@ public class MemberRegistryAndActiveTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-        cleanDatabase(TEST_USERNAME);
+        cleanMemberDatabase(TEST_USERNAME);
     }
 
 

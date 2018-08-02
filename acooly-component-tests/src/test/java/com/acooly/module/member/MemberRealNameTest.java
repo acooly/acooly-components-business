@@ -26,7 +26,7 @@ public class MemberRealNameTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-        cleanDatabase(TEST_USERNAME);
+        cleanMemberDatabase(TEST_USERNAME);
     }
 
 

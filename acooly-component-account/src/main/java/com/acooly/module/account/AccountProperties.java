@@ -34,7 +34,7 @@ public class AccountProperties {
     /**
      * 是否验证交易的bizOrderNo
      */
-    private boolean checkBizOrderNo = true;
+    private boolean checkBizOrderNo = false;
 
     /**
      * 是否开启账务分析(待实现)

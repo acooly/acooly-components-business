@@ -2,7 +2,6 @@ package com.acooly.module.account.dto;
 
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.DtoBase;
-import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.account.enums.AccountTypeEnum;
 import lombok.Getter;
@@ -127,17 +126,18 @@ public class AccountInfo extends DtoBase {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         if (getAccountId() != null) {
-            sb.append("{ID:").append(getAccountId()).append(",");
+            sb.append("ID:").append(getAccountId()).append(",");
         }
         if (Strings.isNotBlank(getAccountNo())) {
             sb.append("No:").append(getAccountNo()).append(",");
         }
-        if (getAccountId() != null) {
-            sb.append("{userId:").append(getUserId()).append(",");
+        if (getUserId() != null) {
+            sb.append("userId:").append(getUserId()).append(",");
         }
-        sb.substring(0, sb.length() - 1);
-        sb.append("}");
-        return sb.toString();
+        if (Strings.isNotBlank(getUserNo())) {
+            sb.append("userNo:").append(getUserNo()).append(",");
+        }
+        return sb.substring(0, sb.length() - 1) + "}";
 
 
     }
