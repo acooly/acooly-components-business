@@ -136,26 +136,19 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
     protected void doPersonalVerify(Long id, PersonalRealNameInfo personalRealNameInfo, boolean mustVerify) {
         String realName = personalRealNameInfo.getRealName();
         String idcardNo = personalRealNameInfo.getCertNo();
-        CertResult certResult = null;
-        String birthday;
-        String gender;
-        String address;
+
+        IdCards.IdCardInfo idCardInfo;
         if (mustVerify) {
-            certResult = doPersonalRealName(realName, idcardNo);
-            birthday = certResult.getBirthday();
-            gender = certResult.getSex();
-            address = certResult.getAddress();
+            CertResult certResult = doPersonalRealName(realName, idcardNo);
+            idCardInfo = convertToIdCardInfo(certResult);
         } else {
-            IdCards.IdCardInfo idCardInfo = IdCards.parse(idcardNo);
-            birthday = idCardInfo.getBirthday();
-            gender = idCardInfo.getGender().code();
-            address = idCardInfo.getPlace();
+            idCardInfo = IdCards.parse(idcardNo);
         }
 
         MemberPersonal memberPersonal = memberPersonalEntityService.get(id);
         if (memberPersonal != null) {
-            memberPersonal.setBirthday(convertBirthday(birthday));
-            memberPersonal.setGender(Gender.find(gender));
+            memberPersonal.setBirthday(convertBirthday(idCardInfo.getBirthday()));
+            memberPersonal.setGender(idCardInfo.getGender());
             memberPersonal.setRealName(realName);
             memberPersonal.setCertType(personalRealNameInfo.getCertType());
             memberPersonal.setCertNo(personalRealNameInfo.getCertNo());
@@ -164,29 +157,15 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             memberPersonal.setCertHoldPath(personalRealNameInfo.getCertHoldPath());
             memberPersonalEntityService.update(memberPersonal);
         }
-        if (Strings.isNotBlank(address)) {
-            MemberContact memberContact = memberContactEntityService.get(id);
-            if (memberContact != null) {
-                if (Strings.contains(address, "-")) {
-                    String[] addresses = Strings.split(certResult.getAddress(), '-');
-                    if (addresses != null && addresses.length >= 1) {
-                        memberContact.setProvince(addresses[0]);
-                    }
 
-                    if (addresses != null && addresses.length >= 2) {
-                        memberContact.setCity(addresses[1]);
-                    }
-
-                    if (addresses != null && addresses.length >= 3) {
-                        memberContact.setDistrict(addresses[2]);
-                    }
-                    memberContact.setAddress(Strings.join(addresses, ""));
-                } else {
-                    memberContact.setAddress(address);
-                }
-            }
+        MemberContact memberContact = memberContactEntityService.get(id);
+        if (memberContact != null) {
+            memberContact.setProvince(idCardInfo.getProvince());
+            memberContact.setCity(idCardInfo.getCity());
+            memberContact.setDistrict(idCardInfo.getArea());
             memberContactEntityService.update(memberContact);
         }
+
         MemberProfile memberProfile = memberProfileEntityService.get(id);
         if (memberProfile != null) {
             memberProfile.setRealNameStatus(WhetherStatus.yes);
@@ -205,6 +184,27 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             log.warn("实名 失败 实名生日转换日期失败。 birthday:{}", birhday);
             return null;
         }
+    }
+
+    private IdCards.IdCardInfo convertToIdCardInfo(CertResult certResult) {
+        IdCards.IdCardInfo idCardInfo = new IdCards.IdCardInfo();
+        idCardInfo.setBirthday(certResult.getBirthday());
+        idCardInfo.setGender(Gender.find(certResult.getSex()));
+        if (Strings.contains(certResult.getAddress(), "-")) {
+            String[] addresses = Strings.split(certResult.getAddress(), '-');
+            if (addresses != null && addresses.length >= 1) {
+                idCardInfo.setProvince(addresses[0]);
+            }
+
+            if (addresses != null && addresses.length >= 2) {
+                idCardInfo.setCity(addresses[1]);
+            }
+
+            if (addresses != null && addresses.length >= 3) {
+                idCardInfo.setArea(addresses[2]);
+            }
+        }
+        return idCardInfo;
     }
 
 
