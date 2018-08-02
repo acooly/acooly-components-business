@@ -3,6 +3,7 @@ package com.acooly.module.account.service;
 import com.acooly.core.utils.Money;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
+import com.acooly.module.account.service.tradecode.TradeCode;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -84,6 +85,44 @@ public interface AccountTradeService {
      */
     String unfreeze(List<Long> accountIds, Money amount, @Nullable String comments);
 
+
+    /**
+     * 充值记账 包装接口
+     *
+     * @param accountId 账户ID
+     * @param amount    金额
+     * @param tradeCode 充值特殊交易码
+     * @param comments  备注
+     */
+    void deposit(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
+
+
+    /**
+     * 充值记账
+     *
+     * @param accountId 账户ID
+     * @param amount    金额
+     */
+    void deposit(Long accountId, Money amount);
+
+
+    /**
+     * 提现包装
+     *
+     * @param accountId
+     * @param amount
+     * @param tradeCode
+     * @param comments
+     */
+    void withdraw(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
+
+    /**
+     * 提现包装
+     *
+     * @param accountId
+     * @param amount
+     */
+    void withdraw(Long accountId, Money amount);
 
     /**
      * 单笔转账

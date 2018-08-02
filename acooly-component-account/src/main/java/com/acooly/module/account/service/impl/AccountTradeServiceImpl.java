@@ -142,6 +142,34 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         return doFreeze(accountIds, amount, CommonTradeCodeEnum.unfreeze, comments);
     }
 
+
+    @Override
+    public void deposit(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+        if (tradeCode == null) {
+            tradeCode = CommonTradeCodeEnum.deposit;
+        }
+        keepAccount(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+    }
+
+    @Override
+    public void deposit(Long accountId, Money amount) {
+        deposit(accountId, amount);
+    }
+
+    @Override
+    public void withdraw(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+        if (tradeCode == null) {
+            tradeCode = CommonTradeCodeEnum.withdraw;
+        }
+        keepAccount(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+    }
+
+    @Override
+    public void withdraw(Long accountId, Money amount) {
+        withdraw(accountId, amount);
+    }
+
+
     protected void doFreeze(Long accountId, Money amount, TradeCode tradeCode, @Nullable String comments) {
         AccountKeepInfo accountKeepInfo = new AccountKeepInfo(accountId, tradeCode, amount, comments);
         keepAccount(accountKeepInfo);
