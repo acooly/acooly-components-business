@@ -28,10 +28,17 @@ public enum MemberErrorEnum implements Messageable {
 
     INVITER_MUST_BE_A_MEMBER("INVITER_MUST_BE_A_MEMBER", "邀请人必须是会员"),
 
+    MEMEBER_STATUS_NOT_ENABLE("MEMEBER_STATUS_NOT_ENABLE", "用户状态不可用"),
+
 
     MEMEBER_REALNAME_DATA_MISSING("MEMEBER_REALNAME_DATA_MISSING", "实名认证数据不全"),
 
     MEMEBER_REALNAME_FAIL("MEMEBER_REALNAME_FAIL", "实名认证未通过"),
+
+    /**
+     * 为安全级别，对外登录错误统一为一个错误消息。内部采用不同的日志区分
+     */
+    LOGIN_VERIFY_FAIL("LOGIN_VERIFY_FAIL", "用户名或密码错误"),
 
     LOGIN_PASSWORD_VERIFY_FAIL("LOGIN_PASSWORD_VERIFY_FAIL", "密码错误"),;
 

@@ -135,14 +135,19 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         try {
             Member member = loadMember(null, null, username);
             if (member == null) {
-                log.warn("登录 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, username);
-                throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST, username);
+                log.warn("认证 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, username);
+                throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, username);
+            }
+            if (member.getStatus() != MemberStatusEnum.enable) {
+                log.warn("认证 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_STATUS_NOT_ENABLE, username);
+                throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL);
             }
             validatePassword(member, password);
+            log.info("认证 成功 username:{}", username);
         } catch (BusinessException be) {
             throw be;
         } catch (Exception e) {
-            log.error("注册 失败 内部错误：{}", e);
+            log.error("认证 失败 内部错误：{}", e);
             throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "注册内部错误");
         }
 
@@ -300,7 +305,8 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         String enPassword = digestPassword(password, dbSalt);
         String dbPassword = member.getPassword();
         if (!Strings.equals(enPassword, dbPassword)) {
-            throw new MemberOperationException(MemberErrorEnum.LOGIN_PASSWORD_VERIFY_FAIL);
+            log.warn("登录 [失败] 原因:{}, member:{}", MemberErrorEnum.LOGIN_PASSWORD_VERIFY_FAIL, member);
+            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL);
         }
     }
 
