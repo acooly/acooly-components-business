@@ -42,3 +42,14 @@ CREATE TABLE `ac_account_bill` (
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户进出账';
+
+CREATE TABLE `ac_account_trade_code` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `trade_code` varchar(16) DEFAULT NULL COMMENT '交易编码',
+  `trade_name` varchar(32) DEFAULT NULL COMMENT '交易名称',
+  `direction` varchar(16) DEFAULT NULL COMMENT '方向',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `comments` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自定义交易码';
