@@ -10,8 +10,6 @@
 package com.acooly.module.member;
 
 import com.acooly.core.common.boot.component.ComponentInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
@@ -19,8 +17,6 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @date 2018-07-10
  */
 public class MemberComponentInitializer implements ComponentInitializer {
-
-    private static final Logger logger = LoggerFactory.getLogger(MemberComponentInitializer.class);
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {

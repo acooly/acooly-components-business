@@ -97,7 +97,8 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             doPersonalVerify(memberRealNameInfo.getId(), personalRealNameInfo, true);
             member.setRealName(personalRealNameInfo.getRealName());
             member.setCertNo(personalRealNameInfo.getCertNo());
-            memberEntityService.save(member);
+            memberEntityService.update(member);
+            log.info("实名 [成功] memberRealNameInfo：{}", memberRealNameInfo);
         } catch (OrderCheckException oe) {
             throw oe;
         } catch (BusinessException be) {
@@ -108,7 +109,7 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
         }
     }
 
-
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public void saveVerify(MemberRealNameInfo memberRealNameInfo) {
         try {
@@ -122,7 +123,8 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             doPersonalVerify(memberRealNameInfo.getId(), personalRealNameInfo, false);
             member.setRealName(personalRealNameInfo.getRealName());
             member.setCertNo(personalRealNameInfo.getCertNo());
-            memberEntityService.save(member);
+            memberEntityService.update(member);
+            log.info("实名（外部） [成功] memberRealNameInfo：{}", memberRealNameInfo);
         } catch (OrderCheckException oe) {
             throw oe;
         } catch (BusinessException be) {
@@ -143,6 +145,7 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             idCardInfo = convertToIdCardInfo(certResult);
         } else {
             idCardInfo = IdCards.parse(idcardNo);
+            idCardInfo.setBirthday(idCardInfo.getBirthday() + "000000000");
         }
 
         MemberPersonal memberPersonal = memberPersonalEntityService.get(id);

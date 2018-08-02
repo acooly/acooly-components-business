@@ -32,6 +32,12 @@ public class MemberRealNameInfo extends InfoBase {
 
     private PersonalRealNameInfo personalRealNameInfo;
 
+    public MemberRealNameInfo() {
 
+    }
 
+    public MemberRealNameInfo(Long id, String realName, String certNo) {
+        this.id = id;
+        this.personalRealNameInfo = new PersonalRealNameInfo(realName, certNo);
+    }
 }

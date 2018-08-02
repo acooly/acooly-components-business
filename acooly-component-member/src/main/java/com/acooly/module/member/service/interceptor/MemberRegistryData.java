@@ -9,6 +9,7 @@
  */
 package com.acooly.module.member.service.interceptor;
 
+import com.acooly.core.common.facade.InfoBase;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class MemberRegistryData {
+public class MemberRegistryData extends InfoBase {
 
     /**
      * 会员注册请求对象
