@@ -1,8 +1,8 @@
 package com.acooly.module.account.service;
 
+import com.acooly.core.utils.Money;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
-import com.acooly.core.utils.Money;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -13,8 +13,6 @@ import java.util.List;
  * @author zhangpu
  */
 public interface AccountTradeService {
-
-
 
 
     /**
@@ -32,6 +30,7 @@ public interface AccountTradeService {
      * 逻辑为：按传入list列表的顺序执行
      *
      * @param accountTradeInfos
+     * @return 批次号
      */
     String keepAccounts(List<AccountKeepInfo> accountTradeInfos);
 
@@ -43,7 +42,7 @@ public interface AccountTradeService {
      *
      * @param accountTradeInfos
      * @param comments
-     * @return
+     * @return 批次号
      */
     String keepAccounts(List<AccountKeepInfo> accountTradeInfos, @Nullable String comments);
 
@@ -51,7 +50,8 @@ public interface AccountTradeService {
     /**
      * 冻结
      *
-     * @param accountId
+     * @param accountId 账户ID
+     * @param amount    冻结金额
      * @param comments  可为空
      */
     void freeze(Long accountId, Money amount, @Nullable String comments);
@@ -69,6 +69,7 @@ public interface AccountTradeService {
      * 解冻
      *
      * @param accountId
+     * @param amount    冻结金额
      * @param comments  可为空
      */
     void unfreeze(Long accountId, Money amount, @Nullable String comments);
@@ -77,6 +78,7 @@ public interface AccountTradeService {
      * 批量解冻
      *
      * @param accountIds
+     * @param amount     冻结金额
      * @param comments   可为空
      * @return batchNo
      */

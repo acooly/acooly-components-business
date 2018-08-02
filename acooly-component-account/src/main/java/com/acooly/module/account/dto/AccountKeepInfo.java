@@ -1,7 +1,8 @@
 package com.acooly.module.account.dto;
 
-import com.acooly.module.account.service.tradecode.TradeCode;
 import com.acooly.core.utils.Money;
+import com.acooly.module.account.enums.DirectionEnum;
+import com.acooly.module.account.service.tradecode.TradeCode;
 import com.google.common.base.MoreObjects;
 import lombok.Getter;
 import lombok.Setter;
@@ -73,6 +74,14 @@ public class AccountKeepInfo extends AccountInfo {
         this.tradeCode = tradeCode;
         this.amount = amount;
         setComments(comments);
+    }
+
+
+    public long getSymbolAmount() {
+        if (this.tradeCode.direction() == DirectionEnum.keep) {
+            return 0;
+        }
+        return this.tradeCode.direction() == DirectionEnum.in ? this.amount.getCent() : (this.amount.getCent() * -1);
     }
 
     @Override

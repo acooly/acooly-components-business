@@ -73,6 +73,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
             throw new AccountOperationException(AccountErrorEnum.ACCOUNT_BATCH_NOT_ALLOW_OVER_MAX);
         }
         String batchNo = Collections3.getFirst(accountKeepInfos).getBatchNo();
+        long checkAmountSum = 0;
         for (AccountKeepInfo accountKeepInfo : accountKeepInfos) {
             if (Strings.equals(accountKeepInfo.getBatchNo(), batchNo)) {
                 batchNo = accountKeepInfo.getBatchNo();
@@ -80,6 +81,12 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
                 log.warn("批量记账 验证失败 原因:{}, accountKeepInfo: {}", AccountErrorEnum.ACCOUNT_BATCH_KEEP_DIFFERENT, accountKeepInfo.toString());
                 throw new AccountOperationException(AccountErrorEnum.ACCOUNT_BATCH_KEEP_DIFFERENT, accountKeepInfo.toString());
             }
+            checkAmountSum = checkAmountSum + accountKeepInfo.getSymbolAmount();
+        }
+
+        if (checkAmountSum != 0) {
+            log.warn("批量记账 {} - 验证失败:{}", comments, AccountErrorEnum.ACCOUNT_BATCH_AMOUNT_SUM_MISMATCH.getLabel());
+            throw new AccountOperationException(AccountErrorEnum.ACCOUNT_BATCH_AMOUNT_SUM_MISMATCH);
         }
         if (Strings.isBlank(batchNo)) {
             batchNo = Ids.getDid();
