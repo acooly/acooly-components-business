@@ -24,6 +24,11 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-member</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-lottery</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.acooly</groupId>
