@@ -48,6 +48,20 @@ public class MemberSecretQa extends AbstractEntity {
     private String userNo;
 
     /**
+     * 用户名
+     */
+    @NotEmpty
+    @Size(max = 32)
+    private String username;
+
+    /**
+     * 问题编码
+     */
+    @NotEmpty
+    @Size(max = 32)
+    private String questionCode;
+
+    /**
      * 问题
      */
     @NotEmpty

@@ -12,6 +12,8 @@ package com.acooly.module.member.service;
 import com.acooly.module.member.dto.MemberRealNameInfo;
 
 /**
+ * 实名认证服务
+ *
  * @author zhangpu 2018-07-27 14:04
  */
 public interface MemberRealNameService {

@@ -5,7 +5,7 @@
 
 /*
  * 修订记录:
- * zhangpu@acooly.cn 2018-07-25 16:19 创建
+ * zhangpu@acooly.cn 2018-08-03 18:43 创建
  */
 package com.acooly.module.member.enums;
 
@@ -17,17 +17,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author zhangpu 2018-07-25 16:19
+ * 安全问题
+ *
+ * @author zhangpu 2018-08-03 18:43
  */
-public enum GenderEnum implements Messageable {
+public enum SecretQuestionEnum implements Messageable {
 
-    male("male", "男"),
-    female("female", "女");
+    MATHER_BIRTHDAY("MATHER_BIRTHDAY", "我母亲的生日？"),
+
+    FATHER_BIRTHDAY("FATHER_BIRTHDAY", "我父亲的生日？"),
+
+    PRIMARY_SCHOOL_FULL_NAME("PRIMARY_SCHOOL_FULL_NAME", "我小学的全名称？"),
+
+    MY_FAVORITE_MOVIE("MY_FAVORITE_MOVIE", "我最喜欢的电影？"),
+
+    MY_GREATEST_HOBBY("MY_GREATEST_HOBBY", "我最大的爱好？"),
+
+    MY_IDEAL_JOB("MY_IDEAL_JOB", "我的理想工作？"),
+
+    MY_CHILDHOOD_NICKNAME("MY_CHILDHOOD_NICKNAME", "我童年时代的绰号？"),
+
+    MY_FAVORITE_STAR_STUDENT("MY_FAVORITE_STAR_STUDENT", "我学生时代最喜欢的明星或角色？"),
+
+    MY_FIRST_LEADER_NAME("MY_FIRST_LEADER_NAME", "我的第一个上司的名字？"),
+
+    MY_BEST_FRIEND_BOYHOOD("MY_BEST_FRIEND_BOYHOOD", "我少年时代最好的朋友叫什么名字？");
 
     private final String code;
     private final String message;
 
-    private GenderEnum(String code, String message) {
+    private SecretQuestionEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -40,17 +59,19 @@ public enum GenderEnum implements Messageable {
         return message;
     }
 
+    @Override
     public String code() {
         return code;
     }
 
+    @Override
     public String message() {
         return message;
     }
 
     public static Map<String, String> mapping() {
         Map<String, String> map = Maps.newLinkedHashMap();
-        for (GenderEnum type : values()) {
+        for (SecretQuestionEnum type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -63,20 +84,12 @@ public enum GenderEnum implements Messageable {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static GenderEnum find(String code) {
-        for (GenderEnum status : values()) {
+    public static SecretQuestionEnum find(String code) {
+        for (SecretQuestionEnum status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
         }
-
-        if (GenderEnum.male.message.equals(code)) {
-            return GenderEnum.male;
-        }
-        if (GenderEnum.female.message.equals(code)) {
-            return GenderEnum.female;
-        }
-
         throw null;
     }
 
@@ -85,9 +98,9 @@ public enum GenderEnum implements Messageable {
      *
      * @return 全部枚举值。
      */
-    public static List<GenderEnum> getAll() {
-        List<GenderEnum> list = new ArrayList<GenderEnum>();
-        for (GenderEnum status : values()) {
+    public static List<SecretQuestionEnum> getAll() {
+        List<SecretQuestionEnum> list = new ArrayList<SecretQuestionEnum>();
+        for (SecretQuestionEnum status : values()) {
             list.add(status);
         }
         return list;
@@ -100,15 +113,11 @@ public enum GenderEnum implements Messageable {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (GenderEnum status : values()) {
+        for (SecretQuestionEnum status : values()) {
             list.add(status.code());
         }
         return list;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s:%s", this.code, this.message);
-    }
 
 }
