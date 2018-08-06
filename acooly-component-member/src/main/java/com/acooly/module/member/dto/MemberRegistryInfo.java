@@ -11,7 +11,7 @@ package com.acooly.module.member.dto;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
-import com.acooly.module.member.enums.MemberRegisterTypeEnum;
+import com.acooly.module.member.enums.MemberUserTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,21 +24,13 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class MemberRegistryInfo extends MemberInfo {
     /**
-     * 注册方式
-     *
-     * <li>normal: 注册后未激活，需要走激活流程</li>
-     * <li>actived: 注册后自动激活</li>
+     * 用户类型
      */
     @NotNull
-    private MemberRegisterTypeEnum memberRegisterType = MemberRegisterTypeEnum.normal;
+    private MemberUserTypeEnum memberUserType = MemberUserTypeEnum.personal;
 
     /**
      * 激活方式
-     * <p>
-     * 需要根据注册方式搭配使用。
-     * <li>如果memberRegisterType = normal，则根据memberActiveType的方式走不同的流程</li>
-     * <li>如果memberRegisterType = actived，则根据memberActiveType来验证对应的是否有值（比如如果选择的是mobileNo，则要求mobileNo不为空）</li>
-     * </p>
      */
     @NotNull
     private MemberActiveTypeEnum memberActiveType = MemberActiveTypeEnum.human;

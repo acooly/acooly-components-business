@@ -92,7 +92,7 @@ public enum MemberActiveTypeEnum implements Messageable {
                 return status;
             }
         }
-        throw new IllegalArgumentException("MemberRegisterTypeEnum not legal:" + code);
+        return null;
     }
 
     /**

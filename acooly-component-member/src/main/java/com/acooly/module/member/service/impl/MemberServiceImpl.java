@@ -21,14 +21,8 @@ import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.dto.MemberRegistryInfo;
-import com.acooly.module.member.entity.Member;
-import com.acooly.module.member.entity.MemberContact;
-import com.acooly.module.member.entity.MemberPersonal;
-import com.acooly.module.member.entity.MemberProfile;
-import com.acooly.module.member.enums.MemberActiveTypeEnum;
-import com.acooly.module.member.enums.MemberStatusEnum;
-import com.acooly.module.member.enums.MemberTemplateEnum;
-import com.acooly.module.member.enums.SendTypeEnum;
+import com.acooly.module.member.entity.*;
+import com.acooly.module.member.enums.*;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.AbstractMemberService;
@@ -58,7 +52,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
     @Autowired
     private MemberRealNameService memberRealNameService;
-
 
     /**
      * 会员注册
@@ -155,10 +148,10 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                         @Override
                         public void afterCommit() {
                             if (memberProperties.isSendSmsOnActiveSuccess() && sendType == SendTypeEnum.SMS) {
-                                memberSendingService.send(username, MemberTemplateEnum.active, SendTypeEnum.SMS);
+                                memberSendingService.send(username, MemberTemplateEnum.active, SendTypeEnum.SMS, false);
                             }
                             if (memberProperties.isSendMailOnActiveSuccess() && sendType == SendTypeEnum.MAIL) {
-                                memberSendingService.send(username, MemberTemplateEnum.active, SendTypeEnum.MAIL);
+                                memberSendingService.send(username, MemberTemplateEnum.active, SendTypeEnum.MAIL, false);
                             }
                         }
                     });
@@ -188,9 +181,9 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
     protected void doActiveSend(String username, MemberActiveTypeEnum memberActiveType) {
         // 只处理短信和邮件激活的验证发送
         if (memberActiveType == MemberActiveTypeEnum.mobileNo) {
-            memberSendingService.captchaSend(username, MemberTemplateEnum.register, SendTypeEnum.SMS);
+            memberSendingService.send(username, MemberTemplateEnum.register, SendTypeEnum.SMS, true);
         } else if (memberActiveType == MemberActiveTypeEnum.email) {
-            memberSendingService.captchaSend(username, MemberTemplateEnum.register, SendTypeEnum.MAIL);
+            memberSendingService.send(username, MemberTemplateEnum.register, SendTypeEnum.MAIL, true);
         }
     }
 
@@ -220,6 +213,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      */
     protected Member doRegister(MemberRegistryInfo memberRegistryInfo) {
         Member member = BeanCopier.copy(memberRegistryInfo, Member.class, BeanCopier.CopyStrategy.CONTAIN_NULL, "status");
+        member.setUserType(memberRegistryInfo.getMemberUserType());
         doSetParent(memberRegistryInfo, member);
         if (Strings.isBlank(member.getUserNo())) {
             member.setUserNo(Ids.getDid());
@@ -244,7 +238,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         if (!realName) {
             return;
         }
-
         memberRealNameService.verify(member.getId());
     }
 
@@ -264,11 +257,22 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         memberProfile.setInviter(memberRegistryInfo.getInviter());
         memberProfileEntityService.save(memberProfile);
 
-        MemberPersonal memberPersonal = new MemberPersonal();
-        memberPersonal.setId(member.getId());
-        memberPersonal.setUserNo(member.getUserNo());
-        memberPersonal.setUsername(member.getUsername());
-        memberPersonalEntityService.save(memberPersonal);
+
+        if (memberRegistryInfo.getMemberUserType() == MemberUserTypeEnum.personal) {
+            MemberPersonal memberPersonal = new MemberPersonal();
+            memberPersonal.setId(member.getId());
+            memberPersonal.setUserNo(member.getUserNo());
+            memberPersonal.setUsername(member.getUsername());
+            memberPersonalEntityService.save(memberPersonal);
+        } else {
+            MemberEnterprise memberEnterprise = new MemberEnterprise();
+            memberEnterprise.setId(member.getId());
+            memberEnterprise.setUserNo(member.getUserNo());
+            memberEnterprise.setUsername(member.getUsername());
+            memberEnterprise.setEntType(memberRegistryInfo.getMemberUserType());
+            memberEnterpriseEntityService.save(memberEnterprise);
+        }
+
 
         // 其他关联信息注册时候同步写入，后续只需要修改，简化后期开发成本
         MemberContact memberContact = new MemberContact();

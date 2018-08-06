@@ -24,10 +24,11 @@ public enum CertTypeEnum implements Messageable {
 
     ID("ID", "身份证"),
 
-
     officers("officers", "军官证"),
 
-    driver("driver", "驾驶证");
+    driver("driver", "驾驶证"),
+
+    USCC("USCC", "营业执照");
 
 
     private final String code;

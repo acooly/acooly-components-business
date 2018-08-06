@@ -19,20 +19,17 @@ public enum MemberTemplateEnum implements Messageable {
 
     register("register", "注册"),
 
+    registerQuick("registerQuick", "注册"),
+
     active("active", "激活"),
 
     changePassword("changePassword", "修改密码"),
 
-    changePasswordSuccess("changePasswordSuccess", "修改密码成功"),
+    resetPassword("resetPassword", "重置密码"),
 
-    RESET_PASSWORD("RESET_PASSWORD", "重置密码"),
+    changeMobileNo("changeMobileNo", "修改手机号码"),
 
-    RESET_PASSWORD_SUCCESS("RESET_PASSWORD_SUCCESS", "重置密码成功"),
-
-    CHANGE_MOBILE_NO("CHANGE_MOBILE_NO", "修改手机号码"),
-
-    CHANGE_MOBILE_NO_SUCCESS("CHANGE_MOBILE_NO_SUCCESS", "修改手机号码成功");
-
+    resetMobileNo("resetMobileNo", "重置手机号码");
 
     private final String code;
     private final String message;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.module.member.entity.MemberEnterprise;
-import com.acooly.module.member.manage.MemberEnterpriseService;
+import com.acooly.module.member.manage.MemberEnterpriseEntityService;
 import com.acooly.module.member.enums.HoldingEnumEnum;
 
 /**
@@ -29,7 +29,7 @@ import com.acooly.module.member.enums.HoldingEnumEnum;
  */
 @Controller
 @RequestMapping(value = "/manage/component/member/memberEnterprise")
-public class MemberEnterpriseManagerController extends AbstractJQueryEntityController<MemberEnterprise, MemberEnterpriseService> {
+public class MemberEnterpriseManagerController extends AbstractJQueryEntityController<MemberEnterprise, MemberEnterpriseEntityService> {
 	
 
 	{
@@ -38,7 +38,7 @@ public class MemberEnterpriseManagerController extends AbstractJQueryEntityContr
 
 	@SuppressWarnings("unused")
 	@Autowired
-	private MemberEnterpriseService memberEnterpriseService;
+	private MemberEnterpriseEntityService memberEnterpriseService;
 
 	
 	@Override

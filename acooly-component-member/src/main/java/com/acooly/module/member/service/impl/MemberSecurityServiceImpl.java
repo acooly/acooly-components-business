@@ -74,7 +74,7 @@ public class MemberSecurityServiceImpl extends AbstractMemberService implements 
         Assert.notNull(username, "用户名不能为空");
         Assert.notNull(newPassword, "新密码不能为空");
         try {
-            Member member = loadAndCheckMember(null, null, username);
+            Member member = loadAndCheckMember(MemberInfo.of(username));
             if (Strings.isNoneBlank(oldPassword)) {
                 doValidatePassword(member, oldPassword);
             }

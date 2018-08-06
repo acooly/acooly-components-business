@@ -17,6 +17,6 @@ import com.acooly.module.member.entity.MemberEnterprise;
  * @author acooly
  *
  */
-public interface MemberEnterpriseService extends EntityService<MemberEnterprise> {
+public interface MemberEnterpriseEntityService extends EntityService<MemberEnterprise> {
 
 }

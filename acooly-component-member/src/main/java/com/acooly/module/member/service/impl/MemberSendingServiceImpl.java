@@ -7,6 +7,7 @@ import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.module.captcha.Captcha;
 import com.acooly.module.mail.MailDto;
+import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberTemplateEnum;
 import com.acooly.module.member.enums.SendTypeEnum;
@@ -20,7 +21,6 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -34,30 +34,34 @@ import java.util.Map;
 public class MemberSendingServiceImpl extends AbstractMemberService implements MemberSendingService {
 
     @Override
-    public void send(String username, Messageable action, SendTypeEnum sendType, @Nullable String target) {
-        doSend(username, action, sendType, false, target);
-    }
-
-    @Override
-    public void send(String username, Messageable action, SendTypeEnum sendType) {
-        doSend(username, action, sendType, false, null);
-    }
-
-    @Override
-    public void captchaSend(String username, Messageable action, SendTypeEnum sendType, @Nullable String target) {
-        doSend(username, action, sendType, true, target);
-    }
-
-    @Override
-    public void captchaSend(String username, Messageable action, SendTypeEnum sendType) {
-        doSend(username, action, sendType, true, null);
-    }
-
-    @Override
-    public void captchaVerify(String username, Messageable action, SendTypeEnum sendType, @Nullable String target, String captchaValue) {
+    public void send(String username, String target, Messageable action, SendTypeEnum sendType, boolean includeCaptcha) {
         try {
-            Member member = loadCheckExistMember(null, null, username);
-            target = getTarget(target, member, action, sendType);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("action", action.message());
+            map.put("username", username);
+            if (includeCaptcha) {
+                Captcha captcha = doGetCaptcha(target, action.code());
+                map.put("captcha", captcha.getValue());
+            }
+            if (sendType == SendTypeEnum.SMS) {
+                String templateName = memberCaptchaInterceptor.onCaptchaSMS(null, action.code(), map);
+                doSendSms(target, action, templateName, map);
+            } else {
+                MailSendInfo mailSendInfo = memberCaptchaInterceptor.onCaptchaMail(null, action.code(), map);
+                doSendMail(target, action, mailSendInfo, map);
+            }
+            log.info("发送 [{}] 成功。", action.message());
+        } catch (BusinessException be) {
+            throw be;
+        } catch (Exception e) {
+            log.error("发送 [{}] 失败", e);
+            throw new MemberOperationException(MemberErrorEnum.CAPTCHA_SEND_ERROR);
+        }
+    }
+
+    @Override
+    public void captchaVerify(String username, String target, Messageable action, SendTypeEnum sendType, String captchaValue) {
+        try {
             captchaService.validateCaptcha(target, action.code(), captchaValue);
             log.info("验证码验证 [成功] username:{},action:{},sendType:{}", username, action.code(), sendType.code());
         } catch (BusinessException be) {
@@ -69,15 +73,10 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
     }
 
     @Override
-    public void captchaVerify(String username, Messageable action, SendTypeEnum sendType, String captchaValue) {
-        captchaVerify(username, action, sendType, null, captchaValue);
-    }
-
-
-    protected void doSend(String username, Messageable action, SendTypeEnum sendType, boolean includeCaptcha, @Nullable String target) {
+    public void send(String username, Messageable action, SendTypeEnum sendType, boolean includeCaptcha) {
         try {
-            Member member = loadCheckExistMember(null, null, username);
-            target = getTarget(target, member, action, sendType);
+            Member member = loadCheckExistMember(MemberInfo.of(username));
+            String target = getTarget(member, action, sendType);
             Map<String, Object> map = Maps.newHashMap();
             map.put("action", action.message());
             map.put("username", username);
@@ -101,6 +100,21 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
         } catch (Exception e) {
             log.error("发送 [{}] 失败", e);
             throw new MemberOperationException(MemberErrorEnum.CAPTCHA_SEND_ERROR);
+        }
+    }
+
+    @Override
+    public void captchaVerify(String username, Messageable action, SendTypeEnum sendType, String captchaValue) {
+        try {
+            Member member = loadCheckExistMember(MemberInfo.of(username));
+            String target = getTarget(member, action, sendType);
+            captchaService.validateCaptcha(target, action.code(), captchaValue);
+            log.info("验证码验证 [成功] username:{},action:{},sendType:{}", username, action.code(), sendType.code());
+        } catch (BusinessException be) {
+            throw be;
+        } catch (Exception e) {
+            log.error("验证码验证 [{}] 验证失败", e);
+            throw new MemberOperationException(MemberErrorEnum.CAPTCHA_VERIFY_ERROR);
         }
     }
 
@@ -143,12 +157,10 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
     }
 
 
-    private String getTarget(String target, Member member, Messageable action, SendTypeEnum sendType) {
+    private String getTarget(Member member, Messageable action, SendTypeEnum sendType) {
+        String target = (sendType == SendTypeEnum.SMS ? member.getMobileNo() : member.getEmail());
         if (Strings.isBlank(target)) {
-            target = (sendType == SendTypeEnum.SMS ? member.getMobileNo() : member.getEmail());
-        }
-        if (Strings.isBlank(target)) {
-            log.warn("发送 [失败] 发送目标地址为空。username:{},action:{},sendType:{}",
+            log.warn("发送/验证 [失败] 发送/验证目标地址为空。username:{},action:{},sendType:{}",
                     member.getUsername(), action.code(), sendType);
             throw new MemberOperationException(MemberErrorEnum.CAPTCHA_SEND_TARGET_EMPTY);
         }

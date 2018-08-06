@@ -9,7 +9,7 @@ package com.acooly.module.member.manage.impl;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.service.EntityServiceImpl;
-import com.acooly.module.member.manage.MemberEnterpriseService;
+import com.acooly.module.member.manage.MemberEnterpriseEntityService;
 import com.acooly.module.member.dao.MemberEnterpriseDao;
 import com.acooly.module.member.entity.MemberEnterprise;
 
@@ -22,6 +22,6 @@ import com.acooly.module.member.entity.MemberEnterprise;
  *
  */
 @Service("memberEnterpriseService")
-public class MemberEnterpriseServiceImpl extends EntityServiceImpl<MemberEnterprise, MemberEnterpriseDao> implements MemberEnterpriseService {
+public class MemberEnterpriseEntityServiceImpl extends EntityServiceImpl<MemberEnterprise, MemberEnterpriseDao> implements MemberEnterpriseEntityService {
 
 }

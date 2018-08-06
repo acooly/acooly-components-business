@@ -3,6 +3,7 @@ package com.acooly.module.account.dto;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.DtoBase;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.Messageable;
 import com.acooly.module.account.enums.AccountTypeEnum;
 import lombok.Getter;
 import lombok.NonNull;
@@ -43,7 +44,7 @@ public class AccountInfo extends DtoBase {
     private String userNo;
 
     @NonNull
-    private AccountTypeEnum accountType = AccountTypeEnum.main;
+    private Messageable accountType = AccountTypeEnum.main;
 
     @Size(max = 32)
     private String username;

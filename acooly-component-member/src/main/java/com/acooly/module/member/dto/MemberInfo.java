@@ -11,9 +11,9 @@ package com.acooly.module.member.dto;
 
 import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
 import com.acooly.module.member.enums.CertTypeEnum;
+import com.acooly.module.member.enums.MemberGradeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import lombok.Getter;
@@ -87,7 +87,7 @@ public class MemberInfo extends InfoBase {
     /**
      * 姓名
      */
-    @Size(max = 16)
+    @Size(max = 128)
     private String realName;
 
     /**
@@ -97,14 +97,20 @@ public class MemberInfo extends InfoBase {
     /**
      * 证件号码
      */
-    @CertNo(blankable = true)
     @Size(max = 32)
     private String certNo;
 
     /**
      * 用户等级
      */
-    private int grade;
+    private int grade = MemberGradeEnum.normal.code();
+
+
+    /**
+     * 备注
+     */
+    @Size(max = 128)
+    private String comments;
 
     /**
      * 状态
@@ -130,12 +136,14 @@ public class MemberInfo extends InfoBase {
         this.username = username;
     }
 
-    /**
-     * 备注
-     */
-    @Size(max = 128)
-    private String comments;
 
+    public static MemberInfo of(Long id) {
+        return new MemberInfo(id, null, null);
+    }
+
+    public static MemberInfo of(String username) {
+        return new MemberInfo(null, null, username);
+    }
 
     public String getLabel() {
         StringBuilder sb = new StringBuilder();

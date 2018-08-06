@@ -4,6 +4,10 @@ import com.acooly.module.AbstractComponentsTest;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
+import com.acooly.module.member.enums.MemberTemplateEnum;
+import com.acooly.module.member.enums.MemberUserTypeEnum;
+import com.acooly.module.member.enums.SendTypeEnum;
+import com.acooly.module.member.service.MemberSendingService;
 import com.acooly.module.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -25,7 +29,7 @@ public class MemberServiceTest extends AbstractComponentsTest {
      */
     static final String TEST_USERNAME = "zhangpu";
     static final String TEST_PASSWORD = "Ab123456";
-
+    static final String TEST_MOBILE_NO = "13896177630";
     /**
      * 测试的经纪人用户
      */
@@ -33,6 +37,9 @@ public class MemberServiceTest extends AbstractComponentsTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private MemberSendingService memberSendingService;
 
 
     @Before
@@ -123,6 +130,25 @@ public class MemberServiceTest extends AbstractComponentsTest {
         log.info("注册成功。member:{}", member);
     }
 
+    /**
+     * 注册待手机验证码激活
+     */
+    @Test
+    public void testRegisterEnterpriseActiveWithMobile() {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME,TEST_PASSWORD,TEST_MOBILE_NO);
+        memberRegistryInfo.setMobileNo("13896177630");
+        memberRegistryInfo.setRealName("普易软件（上海）有限公司重庆分公司");
+        memberRegistryInfo.setCertNo("91500000MA5UHELY6Q");
+        memberRegistryInfo.setMemberUserType(MemberUserTypeEnum.enterprise);
+        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.mobileNo);
+        Member member = memberService.register(memberRegistryInfo);
+        log.info("注册成功。member:{}", member);
+    }
+
+
+    /**
+     * 测试再次发送（短信或邮件）
+     */
     @Test
     public void testActiveSendWithSms() {
         memberService.activeSend(TEST_USERNAME, MemberActiveTypeEnum.email);
@@ -133,8 +159,32 @@ public class MemberServiceTest extends AbstractComponentsTest {
      * 需要启动独立的redis服务
      */
     @Test
-    public void testActiveWithCaptcha1() {
+    public void testActiveWithCaptcha() {
         memberService.active(TEST_USERNAME, "6225fh", MemberActiveTypeEnum.email);
+    }
+
+
+    /**
+     * 先短信验证再注册场景（App短信注册，手机号码可以是用户名）
+     * 第一步：发送短信验证码
+     */
+    @Test
+    public void testAppRegisterCaptchaSend() {
+        memberSendingService.send(TEST_USERNAME, TEST_MOBILE_NO, MemberTemplateEnum.registerQuick, SendTypeEnum.SMS, true);
+    }
+
+    /**
+     * 先短信验证再注册场景
+     * 第二部：验证短信验证码通过后直接注册为激活的用户
+     */
+    @Test
+    public void testAppCaptchaVerifyAndRegistry() {
+        // 1、验证短信验证码
+        memberSendingService.captchaVerify(TEST_USERNAME, TEST_MOBILE_NO, MemberTemplateEnum.registerQuick, SendTypeEnum.SMS, "bcy47w");
+        // 2、直接注册并激活用户
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, TEST_MOBILE_NO);
+        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.auto);
+        memberService.register(memberRegistryInfo);
     }
 
 

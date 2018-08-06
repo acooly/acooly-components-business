@@ -7,7 +7,6 @@
 package com.acooly.module.account.dao;
 
 import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.mybatis.EntityMybatisDao;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -23,10 +22,10 @@ public interface AccountDao extends EntityMybatisDao<Account> {
 
 
     @Select("select * from ac_account where user_id = #{userId} and account_type = #{accountType}")
-    Account findByUserIdAndAccountType(@Param("userId") Long userId, @Param("accountType") AccountTypeEnum accountType);
+    Account findByUserIdAndAccountType(@Param("userId") Long userId, @Param("accountType") String accountType);
 
     @Select("select * from ac_account where user_no = #{userNo} and account_type = #{accountType}")
-    Account findByUserNoAndAccountType(@Param("userNo") String userNo, @Param("accountType") AccountTypeEnum accountType);
+    Account findByUserNoAndAccountType(@Param("userNo") String userNo, @Param("accountType") String accountType);
 
     @Select("select * from ac_account where account_no = #{accountNo}")
     Account findByAccountNo(@Param("accountNo") String accountNo);

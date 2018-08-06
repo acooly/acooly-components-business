@@ -42,7 +42,7 @@ public class MemberSecurityServiceTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-//        cleanMemberDatabase(TEST_USERNAME);
+        cleanMemberDatabase(TEST_USERNAME);
         log.info("初始化数据完成。username:{}", TEST_USERNAME);
     }
 
@@ -85,15 +85,15 @@ public class MemberSecurityServiceTest extends AbstractComponentsTest {
      */
     @Test
     public void testChangePasswordSend() {
-//        doRegister(true);
-        memberSendingService.captchaSend(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS);
+        doRegister(true);
+        memberSendingService.send(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS, true);
     }
 
 
     @Test
     public void testChangePasswordVerify() {
         // 1、验证验证码
-        memberSendingService.captchaVerify(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS, "fpycmy");
+        memberSendingService.captchaVerify(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS, "racerw");
         // 2、验证老密码和修改密码
         String newPassword = "CD123456";
         memberSecurityService.changePassword(TEST_USERNAME, TEST_PASSWORD, newPassword);

@@ -6,18 +6,18 @@
  */
 package com.acooly.module.account.manage.impl;
 
-import com.acooly.module.account.dao.AccountDao;
-import com.acooly.module.account.dto.AccountInfo;
-import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.exception.AccountErrorEnum;
-import com.acooly.module.account.exception.AccountOperationException;
-import com.acooly.module.account.manage.AccountService;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.module.account.dao.AccountDao;
+import com.acooly.module.account.dto.AccountInfo;
+import com.acooly.module.account.entity.Account;
+import com.acooly.module.account.exception.AccountErrorEnum;
+import com.acooly.module.account.exception.AccountOperationException;
+import com.acooly.module.account.manage.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -53,14 +53,14 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
         }
         // 3、用户ID+账户类型加载
         if (accountInfo.getUserId() != null && accountInfo.getAccountType() != null) {
-            account = getEntityDao().findByUserIdAndAccountType(accountInfo.getUserId(), accountInfo.getAccountType());
+            account = getEntityDao().findByUserIdAndAccountType(accountInfo.getUserId(), accountInfo.getAccountType().code());
             if (account != null) {
                 return account;
             }
         }
         // 4、用户编码+账户类型加载
         if (Strings.isNotBlank(accountInfo.getUserNo()) && accountInfo.getAccountType() != null) {
-            account = getEntityDao().findByUserNoAndAccountType(accountInfo.getUserNo(), accountInfo.getAccountType());
+            account = getEntityDao().findByUserNoAndAccountType(accountInfo.getUserNo(), accountInfo.getAccountType().code());
             if (account != null) {
                 return account;
             }
@@ -78,6 +78,7 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
         }
         account = BeanCopier.copy(accountInfo, Account.class);
         account.setId(accountInfo.getAccountId());
+        account.setAccountType(accountInfo.getAccountType().code());
 
         if (Strings.isNotBlank(account.getUserNo())) {
             // UserNo不为空，AccountNo为空，则设置UserNo为默认的AccountNo

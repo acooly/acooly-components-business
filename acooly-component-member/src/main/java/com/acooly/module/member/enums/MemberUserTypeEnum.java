@@ -1,5 +1,7 @@
 package com.acooly.module.member.enums;
 
+import com.acooly.core.utils.enums.Messageable;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.Map;
  * @author zhangpu@acooly.cn
  * @date 2018-07-23 00:12
  */
-public enum MemberUserTypeEnum {
+public enum MemberUserTypeEnum implements Messageable {
 
 
     personal("personal", "个人"),
@@ -36,11 +38,12 @@ public enum MemberUserTypeEnum {
     }
 
 
+    @Override
     public String code() {
         return code;
     }
 
-
+    @Override
     public String message() {
         return message;
     }

@@ -16,14 +16,12 @@ import com.acooly.module.certification.CertificationService;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.member.MemberProperties;
+import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
-import com.acooly.module.member.manage.MemberContactEntityService;
-import com.acooly.module.member.manage.MemberEntityService;
-import com.acooly.module.member.manage.MemberPersonalEntityService;
-import com.acooly.module.member.manage.MemberProfileEntityService;
+import com.acooly.module.member.manage.*;
 import com.acooly.module.member.service.interceptor.MemberCaptchaInterceptor;
 import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
 import com.acooly.module.security.utils.Digests;
@@ -56,6 +54,10 @@ public abstract class AbstractMemberService {
 
     @Autowired
     protected MemberProfileEntityService memberProfileEntityService;
+
+    @Autowired
+    protected MemberEnterpriseEntityService memberEnterpriseEntityService;
+
 
     @Autowired
     protected MemberSendingService memberSendingService;
@@ -131,27 +133,28 @@ public abstract class AbstractMemberService {
     }
 
 
-    protected Member loadAndCheckMember(Long id, String userNo, String username) {
-        Member member = loadMember(null, null, username);
+    protected Member loadAndCheckMember(MemberInfo memberInfo) {
+        Member member = loadMember(memberInfo.getId(), memberInfo.getUserNo(), memberInfo.getUsername());
         if (member == null) {
-            log.warn("加载会员 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, username);
-            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, username);
+            log.warn("加载会员 [失败] 原因:{}, member:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, memberInfo.getLabel());
+            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, memberInfo.getLabel());
         }
         if (member.getStatus() != MemberStatusEnum.enable) {
-            log.warn("加载会员 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_STATUS_NOT_ENABLE, username);
-            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL);
+            log.warn("加载会员 [失败] 原因:{}, member:{}", MemberErrorEnum.MEMEBER_STATUS_NOT_ENABLE, memberInfo.getLabel());
+            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, memberInfo.getLabel());
         }
         return member;
     }
 
-    protected Member loadCheckExistMember(Long id, String userNo, String username) {
-        Member member = loadMember(null, null, username);
+    protected Member loadCheckExistMember(MemberInfo memberInfo) {
+        Member member = loadMember(memberInfo.getId(), memberInfo.getUserNo(), memberInfo.getUsername());
         if (member == null) {
-            log.warn("加载会员 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, username);
-            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, username);
+            log.warn("加载会员 [失败] 原因:{}, member:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, memberInfo.getLabel());
+            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, memberInfo.getLabel());
         }
         return member;
     }
+
 
     protected Member loadMember(Long id) {
         return loadMember(id, null, null);

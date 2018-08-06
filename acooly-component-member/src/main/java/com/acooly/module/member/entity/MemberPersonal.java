@@ -9,8 +9,12 @@ package com.acooly.module.member.entity;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.enums.Gender;
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.enums.WhetherStatus;
-import com.acooly.module.member.enums.*;
+import com.acooly.module.member.enums.CertTypeEnum;
+import com.acooly.module.member.enums.EducationLevelEnum;
+import com.acooly.module.member.enums.HouseStatueEnum;
+import com.acooly.module.member.enums.IncomeMonthEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -20,6 +24,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -161,12 +166,16 @@ public class MemberPersonal extends AbstractEntity {
     /**
      * 根据生日计算年龄
      * <p>
-     * todo:需完成aget的计算属性，等待core的Dates方法扩展
      *
      * @return
      */
-    public int getAge() {
-        return 0;
+    public long getAge() {
+        if (this.birthday == null) {
+            return 0;
+        }
+
+        return Dates.sub(new Date(), this.birthday, Calendar.YEAR);
+
     }
 
 }
