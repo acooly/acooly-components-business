@@ -24,6 +24,8 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
+ * 会员发送服务
+ *
  * @author zhangpu@acooly.cn
  * @date 2018-08-06 14:45
  */
@@ -57,6 +59,7 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
             Member member = loadCheckExistMember(null, null, username);
             target = getTarget(target, member, action, sendType);
             captchaService.validateCaptcha(target, action.code(), captchaValue);
+            log.info("验证码验证 [成功] username:{},action:{},sendType:{}", username, action.code(), sendType.code());
         } catch (BusinessException be) {
             throw be;
         } catch (Exception e) {

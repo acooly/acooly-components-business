@@ -87,7 +87,7 @@ public class MemberProperties implements InitializingBean {
         smsTemplates.put("common", "你本次{action}的验证码是：${captcha}, 用户名：${username}。");
         smsTemplates.put("register", "你本次注册的激活验证码是：${captcha}, 用户名：${username}。");
         smsTemplates.put("active", "你的会员账号：${username}已成功激活。");
-        smsTemplates.put("changePassword", "你的会员账号：${username}已成功激活。");
+        smsTemplates.put("changePassword", "你本次修改密码的验证码是：${captcha}, 用户名：${username}。");
 
         // 这里模板配置的是ftl的文件名，目录在 /resource/mail/*.ftl
         mailTemplates.put("common", "member_common");

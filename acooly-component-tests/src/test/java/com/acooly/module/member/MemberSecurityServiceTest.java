@@ -2,8 +2,9 @@ package com.acooly.module.member;
 
 import com.acooly.module.AbstractComponentsTest;
 import com.acooly.module.member.dto.MemberRegistryInfo;
-import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
+import com.acooly.module.member.enums.MemberTemplateEnum;
+import com.acooly.module.member.enums.SendTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.MemberSecurityService;
@@ -41,7 +42,7 @@ public class MemberSecurityServiceTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-        cleanMemberDatabase(TEST_USERNAME);
+//        cleanMemberDatabase(TEST_USERNAME);
         log.info("初始化数据完成。username:{}", TEST_USERNAME);
     }
 
@@ -52,11 +53,9 @@ public class MemberSecurityServiceTest extends AbstractComponentsTest {
     @Test
     public void testLogin() {
         // 1、注册激活
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, "13896177630");
-        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.auto);
-        Member member = memberService.register(memberRegistryInfo);
+        doRegister(true);
         // 2、登录认证
-        memberSecurityService.login(member.getUsername(), TEST_PASSWORD);
+        memberSecurityService.login(TEST_USERNAME, TEST_PASSWORD);
     }
 
     /**
@@ -66,32 +65,49 @@ public class MemberSecurityServiceTest extends AbstractComponentsTest {
     public void testLoginNoActive() {
 
         // 1、注册不激活
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, "13896177630");
-        Member member = memberService.register(memberRegistryInfo);
+        doRegister(false);
         // 2、登录认证
         try {
             memberSecurityService.login(TEST_USERNAME, TEST_PASSWORD);
         } catch (MemberOperationException e) {
             Assert.assertEquals(e.code(), MemberErrorEnum.LOGIN_VERIFY_FAIL.code());
         }
-
     }
 
 
     /**
      * 测试修改密码
      * <p>
+     * 假设逻辑为：先通过短信验证，然后再修改密码
+     *
+     * <p>
      * 第一步：发送验证短信
      */
     @Test
     public void testChangePasswordSend() {
-
+//        doRegister(true);
+        memberSendingService.captchaSend(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS);
     }
 
 
+    @Test
     public void testChangePasswordVerify() {
-
+        // 1、验证验证码
+        memberSendingService.captchaVerify(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS, "82f7ab");
+        // 2、验证老密码和修改密码
+        String newPassword = "CD123456";
+        memberSecurityService.changePassword(TEST_USERNAME, TEST_PASSWORD, newPassword);
+        // 3、验证新密码
+        memberSecurityService.login(TEST_USERNAME, newPassword);
     }
 
+
+    protected void doRegister(boolean actived) {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, "13896177630");
+        if (actived) {
+            memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.auto);
+        }
+        memberService.register(memberRegistryInfo);
+    }
 
 }

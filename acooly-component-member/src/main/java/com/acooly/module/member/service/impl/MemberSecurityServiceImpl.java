@@ -2,6 +2,7 @@ package com.acooly.module.member.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Strings;
+import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
@@ -58,6 +59,16 @@ public class MemberSecurityServiceImpl extends AbstractMemberService implements 
         doModifyPassword(username, null, newPassword);
     }
 
+
+    @Override
+    public void changeMobileNo(MemberInfo memberInfo, String newMobileNo) {
+        throw new UnsupportedOperationException("待实现和开发中...");
+    }
+
+    @Override
+    public void changeEmail(MemberInfo memberInfo, String newEmail) {
+        throw new UnsupportedOperationException("待实现和开发中...");
+    }
 
     protected void doModifyPassword(String username, String oldPassword, String newPassword) {
         Assert.notNull(username, "用户名不能为空");
