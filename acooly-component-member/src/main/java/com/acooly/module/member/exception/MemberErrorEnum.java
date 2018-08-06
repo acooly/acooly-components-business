@@ -40,7 +40,13 @@ public enum MemberErrorEnum implements Messageable {
      */
     LOGIN_VERIFY_FAIL("LOGIN_VERIFY_FAIL", "用户名或密码错误"),
 
-    LOGIN_PASSWORD_VERIFY_FAIL("LOGIN_PASSWORD_VERIFY_FAIL", "密码错误"),;
+    LOGIN_PASSWORD_VERIFY_FAIL("LOGIN_PASSWORD_VERIFY_FAIL", "密码错误"),
+
+    CAPTCHA_SEND_TARGET_EMPTY("CAPTCHA_SEND_TARGET_EMPTY", "验证码发送地址为空"),
+
+    CAPTCHA_SEND_ERROR("CAPTCHA_SEND_ERROR", "验证码发送失败"),
+
+    CAPTCHA_VERIFY_ERROR("CAPTCHA_SEND_ERROR", "验证码验证失败");
 
 
     private final String code;

@@ -1,12 +1,21 @@
 package com.acooly.module.member.service;
 
-import com.acooly.core.utils.enums.Messageable;
+import com.acooly.module.member.dto.MemberInfo;
 
 /**
  * @author zhangpu@acooly.cn
  * @date 2018-07-29 03:37
  */
 public interface MemberSecurityService {
+
+    /**
+     * 登录认证
+     *
+     * @param username
+     * @param password
+     */
+    void login(String username, String password);
+
 
     /**
      * 修改密码
@@ -31,22 +40,23 @@ public interface MemberSecurityService {
      */
     void resetPassword(String username, String newPassword);
 
-    /**
-     * 手机验证码发送
-     *
-     * @param action   业务动作(如：forgetPassword:找回密码)
-     * @param username
-     */
-    void mobileNoCaptchaSend(Messageable action, String username);
 
     /**
-     * 手机验证码验证
+     * 修改手机号码
      *
-     * @param action   业务动作
-     * @param username
-     * @param captcha
+     * @param memberInfo
+     * @param newMobileNo
      */
-    void mobileNoCaptchaVerify(Messageable action, String username, String captcha);
+    void changeMobileNo(MemberInfo memberInfo, String newMobileNo);
+
+
+    /**
+     * 修改邮箱
+     *
+     * @param memberInfo
+     * @param newEmail
+     */
+    void changeEmail(MemberInfo memberInfo, String newEmail);
 
 
 }

@@ -9,12 +9,13 @@
  */
 package com.acooly.module.member;
 
+import com.google.common.collect.Maps;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 /**
  * @author zhangpu
@@ -22,7 +23,7 @@ import javax.validation.constraints.NotNull;
  */
 @ConfigurationProperties(MemberProperties.PREFIX)
 @Data
-public class MemberProperties {
+public class MemberProperties implements InitializingBean {
 
     public static final String PREFIX = "acooly.member";
     /**
@@ -55,38 +56,45 @@ public class MemberProperties {
     @NotNull
     private boolean accountRegisty = false;
 
+    /**
+     * 验证码有效时长（秒）;短信和邮件公用
+     */
+    private long captchaTimeoutSeconds = 600;
 
-    private Active active = new Active();
+    /**
+     * 激活成功是否发短信
+     */
+    private boolean sendSmsOnActiveSuccess = true;
+
+    /**
+     * 激活成功是否发邮件
+     */
+    private boolean sendMailOnActiveSuccess = true;
 
 
     /**
-     * 激活相关配置
+     * 短信模板：默认情况下，可在此参数配置短信模板内容.
      */
-    @Getter
-    @Setter
-    public static class Active {
+    private Map<String, String> smsTemplates = Maps.newHashMap();
 
-        /**
-         * 激活验证码有效时长（秒）;短信和邮件公用
-         */
-        private long captchaTimeoutSeconds = 600;
+    /**
+     * 这里模板配置的是ftl的文件名，目录在 /resource/mail/*.ftl
+     */
+    private Map<String, String> mailTemplates = Maps.newHashMap();
 
-        /**
-         * 激活短信模板内容
-         */
-        private String smsTemplateContent = "你本次注册的激活验证码是：${captcha}, 用户名：${username}。";
+    @Override
+    public void afterPropertiesSet() {
+        smsTemplates.put("common", "你本次{action}的验证码是：${captcha}, 用户名：${username}。");
+        smsTemplates.put("register", "你本次注册的激活验证码是：${captcha}, 用户名：${username}。");
+        smsTemplates.put("active", "你的会员账号：${username}已成功激活。");
+        smsTemplates.put("changePassword", "你的会员账号：${username}已成功激活。");
 
-        /**
-         * 激活邮件主题
-         */
-        private String mailSubject = "注册激活邮件";
-
-        /**
-         * 激活邮件模板名称（/resources/mail/*.ftl的文件名）
-         */
-        private String mailTemplateName = "member_active_demo";
-
-
+        // 这里模板配置的是ftl的文件名，目录在 /resource/mail/*.ftl
+        mailTemplates.put("common", "member_common");
+        mailTemplates.put("register", "member_active_demo");
+        mailTemplates.put("active", "member_active_success");
+        mailTemplates.put("changePassword", "member_changePassword");
     }
+
 
 }

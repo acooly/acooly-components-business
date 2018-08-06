@@ -1,8 +1,10 @@
 package com.acooly.module.member.service;
 
+import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
+import com.acooly.module.member.enums.MemberStatusEnum;
 
 /**
  * 会员服务
@@ -21,11 +23,21 @@ public interface MemberService {
      */
     Member register(MemberRegistryInfo memberRegistryInfo);
 
+
+    /**
+     * 发送激活短信或邮件
+     *
+     * @param username
+     * @param memberActiveType
+     */
+    void activeSend(String username, MemberActiveTypeEnum memberActiveType);
+
     /**
      * 激活（ID）
      *
      * @param memberId
      * @param activeValue
+     * @param memberActiveType
      */
     void active(Long memberId, String activeValue, MemberActiveTypeEnum memberActiveType);
 
@@ -40,16 +52,12 @@ public interface MemberService {
 
 
     /**
-     * 登录认证
+     * 会员状态管理
      *
-     * @param username
-     * @param password
+     * @param memberInfo
+     * @param memberStatus
      */
-    void login(String username, String password);
-
-
-
-
+    void statusChange(MemberInfo memberInfo, MemberStatusEnum memberStatus);
 
 
 }

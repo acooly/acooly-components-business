@@ -11,7 +11,6 @@ package com.acooly.module.member.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.OrderCheckException;
-import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
@@ -20,6 +19,7 @@ import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.service.AccountManageService;
+import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberContact;
@@ -27,6 +27,8 @@ import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
+import com.acooly.module.member.enums.MemberTemplateEnum;
+import com.acooly.module.member.enums.SendTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.AbstractMemberService;
@@ -34,15 +36,12 @@ import com.acooly.module.member.service.MemberRealNameService;
 import com.acooly.module.member.service.MemberService;
 import com.acooly.module.member.service.interceptor.MemberRegistryData;
 import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
-import com.acooly.module.security.utils.Digests;
-import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import javax.transaction.Transactional;
 
 
 /**
@@ -53,9 +52,6 @@ import javax.transaction.Transactional;
 @Slf4j
 @Component
 public class MemberServiceImpl extends AbstractMemberService implements MemberService {
-
-    public static final int HASH_INTERATIONS = 512;
-    public static final int SALT_SIZE = 8;
 
     @Autowired
     private AccountManageService accountManageService;
@@ -71,7 +67,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     public Member register(MemberRegistryInfo memberRegistryInfo) {
         final Member member;
         final MemberRegistryData memberRegistryData = new MemberRegistryData();
@@ -97,7 +93,7 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 public void afterCommit() {
                     memberRegistryInterceptor.afterCommitRegistry(memberRegistryData);
                     eventBus.publish(memberRegistryData);
-                    doActiveSend(memberRegistryInfo, member);
+                    doActiveSend(member.getUsername(), memberRegistryInfo.getMemberActiveType());
                 }
             });
         } catch (OrderCheckException oe) {
@@ -118,10 +114,17 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
 
     @Override
+    public void activeSend(String username, MemberActiveTypeEnum memberActiveType) {
+        doActiveSend(username, memberActiveType);
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
     public void active(Long memberId, String activeValue, MemberActiveTypeEnum memberActiveType) {
         doActive(memberId, null, activeValue, memberActiveType);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public void active(String username, String activeValue, MemberActiveTypeEnum memberActiveType) {
         doActive(null, username, activeValue, memberActiveType);
@@ -129,28 +132,8 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
 
     @Override
-    public void login(String username, String password) {
-        Assert.notNull(username, "用户名不能为空");
-        Assert.notNull(password, "密码不能为空");
-        try {
-            Member member = loadMember(null, null, username);
-            if (member == null) {
-                log.warn("认证 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, username);
-                throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL, username);
-            }
-            if (member.getStatus() != MemberStatusEnum.enable) {
-                log.warn("认证 [失败] 原因:{}, username:{}", MemberErrorEnum.MEMEBER_STATUS_NOT_ENABLE, username);
-                throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL);
-            }
-            validatePassword(member, password);
-            log.info("认证 成功 username:{}", username);
-        } catch (BusinessException be) {
-            throw be;
-        } catch (Exception e) {
-            log.error("认证 失败 内部错误：{}", e);
-            throw new MemberOperationException(MemberErrorEnum.MEMBER_INTERNAL_ERROR, "注册内部错误");
-        }
-
+    public void statusChange(MemberInfo memberInfo, MemberStatusEnum memberStatus) {
+        throw new UnsupportedOperationException("待实现和开发中...");
     }
 
 
@@ -161,10 +144,25 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 log.warn("激活 失败 原因:{}, member:{}", MemberErrorEnum.MEMEBER_NOT_EXIST, member);
                 throw new MemberOperationException(MemberErrorEnum.MEMEBER_NOT_EXIST);
             }
-            if (memberActiveType == MemberActiveTypeEnum.mobileNo) {
-                doCaptchaVerify(member.getMobileNo(), activeValue);
-            } else if (memberActiveType == MemberActiveTypeEnum.email) {
-                doCaptchaVerify(member.getEmail(), activeValue);
+
+            if (memberActiveType == MemberActiveTypeEnum.mobileNo || memberActiveType == MemberActiveTypeEnum.email) {
+                SendTypeEnum sendType = memberActiveType == MemberActiveTypeEnum.mobileNo ? SendTypeEnum.SMS : SendTypeEnum.MAIL;
+                memberSendingService.captchaVerify(member.getUsername(), MemberTemplateEnum.register, sendType, activeValue);
+
+
+                if (memberProperties.isSendSmsOnActiveSuccess() || memberProperties.isSendMailOnActiveSuccess()) {
+                    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+                        @Override
+                        public void afterCommit() {
+                            if (memberProperties.isSendSmsOnActiveSuccess() && sendType == SendTypeEnum.SMS) {
+                                memberSendingService.send(username, MemberTemplateEnum.active, SendTypeEnum.SMS);
+                            }
+                            if (memberProperties.isSendMailOnActiveSuccess() && sendType == SendTypeEnum.MAIL) {
+                                memberSendingService.send(username, MemberTemplateEnum.active, SendTypeEnum.MAIL);
+                            }
+                        }
+                    });
+                }
             }
             member.setStatus(MemberStatusEnum.enable);
             memberEntityService.update(member);
@@ -184,14 +182,15 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
      * <p>
      * 可考虑设计为异步，注册成功后，异步发起
      *
-     * @param memberRegistryInfo
+     * @param username
+     * @param memberActiveType
      */
-    protected void doActiveSend(MemberRegistryInfo memberRegistryInfo, Member member) {
+    protected void doActiveSend(String username, MemberActiveTypeEnum memberActiveType) {
         // 只处理短信和邮件激活的验证发送
-        if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.mobileNo) {
-            doCaptchaSmsSend(member);
-        } else if (memberRegistryInfo.getMemberActiveType() == MemberActiveTypeEnum.email) {
-            doCaptchaMailSend(member);
+        if (memberActiveType == MemberActiveTypeEnum.mobileNo) {
+            memberSendingService.captchaSend(username, MemberTemplateEnum.register, SendTypeEnum.SMS);
+        } else if (memberActiveType == MemberActiveTypeEnum.email) {
+            memberSendingService.captchaSend(username, MemberTemplateEnum.register, SendTypeEnum.MAIL);
         }
     }
 
@@ -297,27 +296,6 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 log.warn("注册 失败 设置的parentId没有对应的会员存在。 memberInfo:{}", memberRegistryInfo.getLabel());
             }
         }
-    }
-
-
-    protected void validatePassword(Member member, String password) {
-        String dbSalt = member.getSalt();
-        String enPassword = digestPassword(password, dbSalt);
-        String dbPassword = member.getPassword();
-        if (!Strings.equals(enPassword, dbPassword)) {
-            log.warn("登录 [失败] 原因:{}, member:{}", MemberErrorEnum.LOGIN_PASSWORD_VERIFY_FAIL, member);
-            throw new MemberOperationException(MemberErrorEnum.LOGIN_VERIFY_FAIL);
-        }
-    }
-
-    protected void doDigestPassword(Member member) {
-        String salt = Encodes.encodeHex(Digests.generateSalt(SALT_SIZE));
-        member.setSalt(salt);
-        member.setPassword(digestPassword(member.getPassword(), salt));
-    }
-
-    protected String digestPassword(String plainPassword, String salt) {
-        return Encodes.encodeHex(Digests.sha1(plainPassword.getBytes(), Encodes.decodeHex(salt), HASH_INTERATIONS));
     }
 
 

@@ -226,7 +226,7 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
         try {
             certResult = certificationService.certification(realName, idcardNo);
         } catch (Exception e) {
-            log.warn("实名 [失败] 实名认证调用。 错误信息:{}", e.getMessage());
+            log.warn("实名 [失败] 实名认证调用。 错误信息:{}", e);
             throw new MemberOperationException(MemberErrorEnum.MEMEBER_REALNAME_FAIL, "调用认证组件异常");
         }
         // 认证调用成功后，certResult不会为空，不做空判断。

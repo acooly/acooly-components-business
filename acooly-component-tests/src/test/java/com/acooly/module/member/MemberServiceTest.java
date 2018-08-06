@@ -40,14 +40,14 @@ public class MemberServiceTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-        cleanMemberDatabase(TEST_USERNAME);
-        cleanMemberDatabase(TEST_BROKER_USERNAME);
-        log.info("清理测试数据完成。username:{}", TEST_USERNAME);
-        // 准备经纪人用户
-        jdbcTemplate.execute("INSERT INTO `acooly`.`b_member`(`id`, `parentid`, `parent_user_no`, `user_no`, `username`, `password`, " +
-                "`salt`, `mobile_no`, `email`, `real_name`, `cert_no`, `status`, `user_type`, `grade`, `create_time`, `update_time`, `comments`) " +
-                "VALUES (100000, NULL, NULL, '1807261924130212121', '" + TEST_BROKER_USERNAME + "', '3922ae2b81e89556aed380f8ea2bcfc3dcb34609', 'c7db2da4b504ee69'," +
-                " '13896177630', NULL, NULL, NULL, 'enable', 'personal', 0, '2018-07-26 19:24:13', '2018-07-26 19:27:10', NULL)");
+//        cleanMemberDatabase(TEST_USERNAME);
+//        cleanMemberDatabase(TEST_BROKER_USERNAME);
+//        log.info("清理测试数据完成。username:{}", TEST_USERNAME);
+//        // 准备经纪人用户
+//        jdbcTemplate.execute("INSERT INTO `acooly`.`b_member`(`id`, `parentid`, `parent_user_no`, `user_no`, `username`, `password`, " +
+//                "`salt`, `mobile_no`, `email`, `real_name`, `cert_no`, `status`, `user_type`, `grade`, `create_time`, `update_time`, `comments`) " +
+//                "VALUES (100000, NULL, NULL, '1807261924130212121', '" + TEST_BROKER_USERNAME + "', '3922ae2b81e89556aed380f8ea2bcfc3dcb34609', 'c7db2da4b504ee69'," +
+//                " '13896177630', NULL, NULL, NULL, 'enable', 'personal', 0, '2018-07-26 19:24:13', '2018-07-26 19:27:10', NULL)");
 
         log.info("初始化数据完成。username:{}", TEST_BROKER_USERNAME);
     }
@@ -123,46 +123,22 @@ public class MemberServiceTest extends AbstractComponentsTest {
         log.info("注册成功。member:{}", member);
     }
 
+    @Test
+    public void testActiveSendWithSms() {
+        memberService.activeSend(TEST_USERNAME, MemberActiveTypeEnum.mobileNo);
+    }
+
     /**
      * 使用手机验证码激活注册
      * 需要启动独立的redis服务
      */
     @Test
-    public void testActiveWithCaptcha() {
-        memberService.active(TEST_USERNAME, "kpa3bd", MemberActiveTypeEnum.email);
+    public void testActiveWithCaptcha1() {
+        memberService.active(TEST_USERNAME, "g7dyep", MemberActiveTypeEnum.mobileNo);
     }
 
 
-    /**
-     * 测试会员认证
-     */
-    @Test
-    public void testLogin() {
-        // 1、注册激活
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, "13896177630");
-        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.auto);
-        Member member = memberService.register(memberRegistryInfo);
-        // 2、登录认证
-        memberService.login(member.getUsername(), TEST_PASSWORD);
-    }
 
-    /**
-     * 测试为激活会员认证
-     */
-    @Test
-    public void testLoginNoActive() {
-
-        // 1、注册不激活
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, "13896177630");
-        Member member = memberService.register(memberRegistryInfo);
-        // 2、登录认证
-        try {
-            memberService.login(TEST_USERNAME, TEST_PASSWORD);
-        } catch (MemberOperationException e) {
-            Assert.assertEquals(e.code(), MemberErrorEnum.LOGIN_VERIFY_FAIL.code());
-        }
-
-    }
 
 
 }
