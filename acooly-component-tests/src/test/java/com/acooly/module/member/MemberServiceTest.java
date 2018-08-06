@@ -4,11 +4,8 @@ import com.acooly.module.AbstractComponentsTest;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
-import com.acooly.module.member.exception.MemberErrorEnum;
-import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +37,14 @@ public class MemberServiceTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-//        cleanMemberDatabase(TEST_USERNAME);
-//        cleanMemberDatabase(TEST_BROKER_USERNAME);
-//        log.info("清理测试数据完成。username:{}", TEST_USERNAME);
-//        // 准备经纪人用户
-//        jdbcTemplate.execute("INSERT INTO `acooly`.`b_member`(`id`, `parentid`, `parent_user_no`, `user_no`, `username`, `password`, " +
-//                "`salt`, `mobile_no`, `email`, `real_name`, `cert_no`, `status`, `user_type`, `grade`, `create_time`, `update_time`, `comments`) " +
-//                "VALUES (100000, NULL, NULL, '1807261924130212121', '" + TEST_BROKER_USERNAME + "', '3922ae2b81e89556aed380f8ea2bcfc3dcb34609', 'c7db2da4b504ee69'," +
-//                " '13896177630', NULL, NULL, NULL, 'enable', 'personal', 0, '2018-07-26 19:24:13', '2018-07-26 19:27:10', NULL)");
+        cleanMemberDatabase(TEST_USERNAME);
+        cleanMemberDatabase(TEST_BROKER_USERNAME);
+        log.info("清理测试数据完成。username:{}", TEST_USERNAME);
+        // 准备经纪人用户
+        jdbcTemplate.execute("INSERT INTO `acooly`.`b_member`(`id`, `parentid`, `parent_user_no`, `user_no`, `username`, `password`, " +
+                "`salt`, `mobile_no`, `email`, `real_name`, `cert_no`, `status`, `user_type`, `grade`, `create_time`, `update_time`, `comments`) " +
+                "VALUES (100000, NULL, NULL, '1807261924130212121', '" + TEST_BROKER_USERNAME + "', '3922ae2b81e89556aed380f8ea2bcfc3dcb34609', 'c7db2da4b504ee69'," +
+                " '13896177630', NULL, NULL, NULL, 'enable', 'personal', 0, '2018-07-26 19:24:13', '2018-07-26 19:27:10', NULL)");
 
         log.info("初始化数据完成。username:{}", TEST_BROKER_USERNAME);
     }
@@ -117,7 +114,10 @@ public class MemberServiceTest extends AbstractComponentsTest {
         memberRegistryInfo.setUsername(TEST_USERNAME);
         memberRegistryInfo.setPassword(TEST_PASSWORD);
         memberRegistryInfo.setEmail("zhangpu@acooly.cn");
+        memberRegistryInfo.setRealName("秦海贤");
+        memberRegistryInfo.setCertNo("360822198609284091");
         memberRegistryInfo.setAccountRegisty(false);
+        memberRegistryInfo.setRealNameOnRegisty(true);
         memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.email);
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);
@@ -125,7 +125,7 @@ public class MemberServiceTest extends AbstractComponentsTest {
 
     @Test
     public void testActiveSendWithSms() {
-        memberService.activeSend(TEST_USERNAME, MemberActiveTypeEnum.mobileNo);
+        memberService.activeSend(TEST_USERNAME, MemberActiveTypeEnum.email);
     }
 
     /**
@@ -134,11 +134,8 @@ public class MemberServiceTest extends AbstractComponentsTest {
      */
     @Test
     public void testActiveWithCaptcha1() {
-        memberService.active(TEST_USERNAME, "g7dyep", MemberActiveTypeEnum.mobileNo);
+        memberService.active(TEST_USERNAME, "6225fh", MemberActiveTypeEnum.email);
     }
-
-
-
 
 
 }

@@ -93,7 +93,7 @@ public class MemberSecurityServiceTest extends AbstractComponentsTest {
     @Test
     public void testChangePasswordVerify() {
         // 1、验证验证码
-        memberSendingService.captchaVerify(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS, "82f7ab");
+        memberSendingService.captchaVerify(TEST_USERNAME, MemberTemplateEnum.changePassword, SendTypeEnum.SMS, "fpycmy");
         // 2、验证老密码和修改密码
         String newPassword = "CD123456";
         memberSecurityService.changePassword(TEST_USERNAME, TEST_PASSWORD, newPassword);

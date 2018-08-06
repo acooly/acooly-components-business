@@ -42,7 +42,7 @@ public class MemberProperties implements InitializingBean {
      * 邀请人必须是会员（打开则会验证）
      */
     @NotNull
-    private boolean inviterMustBeMember = true;
+    private boolean inviterMustBeMember = false;
 
     /**
      * 注册时候同步实名认证

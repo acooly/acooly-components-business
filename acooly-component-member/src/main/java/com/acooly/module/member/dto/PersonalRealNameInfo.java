@@ -13,6 +13,7 @@ import com.acooly.core.common.facade.InfoBase;
 import com.acooly.module.member.enums.CertTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,18 +33,21 @@ public class PersonalRealNameInfo extends InfoBase {
     /**
      * 姓名
      */
+    @NotEmpty
     @Size(max = 32)
     private String realName;
 
     /**
      * 证件类型
      */
+    @NotEmpty
     @Enumerated(EnumType.STRING)
     private CertTypeEnum certType = CertTypeEnum.ID;
 
     /**
      * 证件号码
      */
+    @NotEmpty
     @Size(max = 64)
     private String certNo;
 
