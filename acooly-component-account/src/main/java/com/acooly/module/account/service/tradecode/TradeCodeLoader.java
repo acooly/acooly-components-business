@@ -1,5 +1,7 @@
 package com.acooly.module.account.service.tradecode;
 
+import com.acooly.module.account.TradeCode;
+
 import java.util.List;
 
 /**

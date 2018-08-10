@@ -1,5 +1,7 @@
 package com.acooly.module.account.service.tradecode;
 
+import com.acooly.module.account.TradeCode;
+import com.acooly.module.account.enums.CommonTradeCodeEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

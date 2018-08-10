@@ -1,5 +1,6 @@
 package com.acooly.module.account.service.tradecode;
 
+import com.acooly.module.account.TradeCode;
 import com.acooly.module.account.entity.AccountTradeCode;
 import com.acooly.module.account.manage.AccountTradeCodeService;
 import com.google.common.base.Function;

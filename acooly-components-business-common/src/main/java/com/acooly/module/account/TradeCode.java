@@ -1,4 +1,4 @@
-package com.acooly.module.account.service.tradecode;
+package com.acooly.module.account;
 
 import com.acooly.module.account.enums.DirectionEnum;
 

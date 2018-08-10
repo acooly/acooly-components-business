@@ -11,6 +11,13 @@
     <name>acooly-component-account</name>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-components-business-common</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common</artifactId>

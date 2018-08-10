@@ -1,6 +1,6 @@
-package com.acooly.module.account.service.tradecode;
+package com.acooly.module.account.enums;
 
-import com.acooly.module.account.enums.DirectionEnum;
+import com.acooly.module.account.TradeCode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;

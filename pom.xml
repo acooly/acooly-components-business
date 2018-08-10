@@ -34,6 +34,13 @@
                 <artifactId>acooly-component-lottery</artifactId>
                 <version>${parent.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-components-business-common</artifactId>
+                <version>${parent.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -75,5 +82,6 @@
         <module>acooly-component-account</module>
         <module>acooly-component-tests</module>
         <module>acooly-component-lottery</module>
+        <module>acooly-components-business-common</module>
     </modules>
 </project>

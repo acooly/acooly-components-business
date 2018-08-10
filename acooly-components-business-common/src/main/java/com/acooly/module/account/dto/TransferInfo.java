@@ -1,8 +1,8 @@
 package com.acooly.module.account.dto;
 
-import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
-import com.acooly.module.account.service.tradecode.TradeCode;
 import com.acooly.core.utils.Money;
+import com.acooly.module.account.TradeCode;
+import com.acooly.module.account.enums.CommonTradeCodeEnum;
 import lombok.Getter;
 import lombok.Setter;
 

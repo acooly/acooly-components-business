@@ -12,6 +12,12 @@
     <artifactId>acooly-component-lottery</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-components-business-common</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-security</artifactId>

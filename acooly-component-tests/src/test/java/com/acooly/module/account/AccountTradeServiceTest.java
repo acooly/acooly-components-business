@@ -6,7 +6,7 @@ import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.enums.DirectionEnum;
 import com.acooly.module.account.service.AccountTradeService;
-import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.account.enums.CommonTradeCodeEnum;
 import com.acooly.module.account.service.tradecode.DefaultTradeCode;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
@@ -74,7 +74,7 @@ public class AccountTradeServiceTest extends AbstractComponentsTest {
      */
     @Test
     public void testTransfer() {
-        TransferInfo transferInfo = new TransferInfo(TEST_FROM_ID, TEST_TO_ID, Money.amout("1000"));
+        TransferInfo transferInfo = new TransferInfo(TEST_FROM_ID, TEST_TO_ID, Money.amout("10"));
         accountTradeService.transfer(transferInfo);
     }
 

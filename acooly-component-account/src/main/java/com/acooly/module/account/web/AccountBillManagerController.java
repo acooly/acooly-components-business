@@ -13,7 +13,7 @@ import com.acooly.core.utils.enums.AbleStatus;
 import com.acooly.module.account.entity.AccountBill;
 import com.acooly.module.account.enums.DirectionEnum;
 import com.acooly.module.account.manage.AccountBillService;
-import com.acooly.module.account.service.tradecode.TradeCode;
+import com.acooly.module.account.TradeCode;
 import com.acooly.module.account.service.tradecode.TradeCodeLoader;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

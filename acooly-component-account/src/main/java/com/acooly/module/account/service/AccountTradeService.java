@@ -3,7 +3,7 @@ package com.acooly.module.account.service;
 import com.acooly.core.utils.Money;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
-import com.acooly.module.account.service.tradecode.TradeCode;
+import com.acooly.module.account.TradeCode;
 
 import javax.annotation.Nullable;
 import java.util.List;

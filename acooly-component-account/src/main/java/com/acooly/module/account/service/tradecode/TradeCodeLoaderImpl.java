@@ -1,6 +1,7 @@
 package com.acooly.module.account.service.tradecode;
 
 import com.acooly.core.utils.Collections3;
+import com.acooly.module.account.TradeCode;
 import com.google.common.collect.Lists;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;

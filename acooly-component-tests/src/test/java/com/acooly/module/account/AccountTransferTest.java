@@ -9,7 +9,7 @@ import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.account.service.AccountTradeService;
 import com.acooly.module.account.service.AccountVerifyService;
-import com.acooly.module.account.service.tradecode.CommonTradeCodeEnum;
+import com.acooly.module.account.enums.CommonTradeCodeEnum;
 import com.acooly.module.test.AppTestBase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
