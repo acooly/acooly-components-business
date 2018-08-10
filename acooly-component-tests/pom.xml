@@ -28,7 +28,10 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-lottery</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-point</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
