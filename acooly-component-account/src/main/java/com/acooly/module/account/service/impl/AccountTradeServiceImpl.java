@@ -199,17 +199,17 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.in) {
             account.setBalance(account.getBalance() + amount.getCent());
         } else if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.out) {
-            if (amount.getCent() > account.getAvalible()) {
+            if (amount.getCent() > account.getAvailable()) {
                 log.warn("记账 [{}] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{}, accountKeepInfo:{}", accountKeepInfo.getTradeCode().lable(),
-                        account.getLabel(), account.getAvalible(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE, accountKeepInfo.getLabel());
+                        account.getLabel(), account.getAvailable(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE, accountKeepInfo.getLabel());
                 throw new AccountOperationException(AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
             }
             account.setBalance(account.getBalance() - amount.getCent());
         } else if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.keep) {
             if (accountKeepInfo.getTradeCode().code().equals(CommonTradeCodeEnum.freeze.code())) {
-                if (amount.getCent() > account.getAvalible()) {
+                if (amount.getCent() > account.getAvailable()) {
                     log.warn("记账 [{}] 失败, 账户:{}, 可用余额：{}，记账金额: {}, 错误原因：{},accountKeepInfo:{}", accountKeepInfo.getTradeCode().lable(), account.getLabel(),
-                            account.getAvalible(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE, accountKeepInfo.getLabel());
+                            account.getAvailable(), amount.getCent(), AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE, accountKeepInfo.getLabel());
                     throw new AccountOperationException(AccountErrorEnum.ACCOUNT_INSUFFICIENT_BALANCE);
                 }
                 account.setFreeze(account.getFreeze() + amount.getCent());

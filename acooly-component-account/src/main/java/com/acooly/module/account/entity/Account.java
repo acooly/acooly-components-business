@@ -96,7 +96,7 @@ public class Account extends AbstractEntity {
 
 
     @Transient
-    public long getAvalible() {
+    public long getAvailable() {
         return this.balance - this.freeze;
     }
 

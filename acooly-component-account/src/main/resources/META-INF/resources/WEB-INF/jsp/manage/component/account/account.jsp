@@ -10,7 +10,7 @@ $(function() {
 
 
     function manage_account_datagrid_action_formatter(datagrid,value,row){
-        var html = "<a onclick=\"$.acooly.framework.edit({url:'/manage/component/account/account/edit.html',id:'{0}',entity:'account',width:500,height:400});\" href=\"#\" title=\"编辑\"><i class=\"fa fa-pencil fa-lg fa-fw fa-col\"></i></a>";
+        var html = "<a onclick=\"$.acooly.framework.edit({url:'/manage/component/account/account/edit.html',id:'"+row.id+"',entity:'account',width:500,height:400});\" href=\"#\" title=\"编辑\"><i class=\"fa fa-pencil fa-lg fa-fw fa-col\"></i></a>";
         if(row.status == 'disable'){
             return html;
         }
@@ -62,7 +62,7 @@ $(function() {
             <th field="username">用户名</th>
 			<th field="balance" sum="true" formatter="centMoneyFormatter">余额</th>
 			<th field="freeze" sum="true" formatter="centMoneyFormatter">冻结金额</th>
-            <th field="freeze" sum="true" data-options="formatter:function(v,i,r){ return centMoneyFormatter(r.balance - r.freeze); }">可用金额</th>
+            <th field="available" sum="true" formatter="centMoneyFormatter">可用金额</th>
             <th field="accountType" formatter="mappingFormatter">账户类型</th>
 			<th field="status" formatter="mappingFormatter">状态</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
