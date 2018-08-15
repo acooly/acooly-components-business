@@ -14,7 +14,7 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-components-business-common</artifactId>
+            <artifactId>acooly-component-business-common</artifactId>
         </dependency>
 
 
