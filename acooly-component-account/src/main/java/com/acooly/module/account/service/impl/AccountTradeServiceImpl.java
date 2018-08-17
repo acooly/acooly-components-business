@@ -5,17 +5,17 @@ import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Strings;
+import com.acooly.module.account.TradeCode;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.entity.AccountBill;
+import com.acooly.module.account.enums.CommonTradeCodeEnum;
 import com.acooly.module.account.enums.DirectionEnum;
 import com.acooly.module.account.exception.AccountErrorEnum;
 import com.acooly.module.account.exception.AccountOperationException;
 import com.acooly.module.account.manage.AccountBillService;
 import com.acooly.module.account.service.AccountTradeService;
-import com.acooly.module.account.enums.CommonTradeCodeEnum;
-import com.acooly.module.account.TradeCode;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,7 +153,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
 
     @Override
     public void deposit(Long accountId, Money amount) {
-        deposit(accountId, amount);
+        deposit(accountId, amount, CommonTradeCodeEnum.deposit, null);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
 
     @Override
     public void withdraw(Long accountId, Money amount) {
-        withdraw(accountId, amount);
+        withdraw(accountId, amount, CommonTradeCodeEnum.withdraw, null);
     }
 
 
