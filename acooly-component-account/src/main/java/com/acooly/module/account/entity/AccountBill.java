@@ -110,7 +110,7 @@ public class AccountBill extends AbstractEntity {
      * 交易码
      */
     @NotEmpty
-    @Size(max = 16)
+    @Size(max = 32)
     private String tradeCode;
 
     /**

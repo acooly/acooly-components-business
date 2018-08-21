@@ -32,7 +32,7 @@ CREATE TABLE `ac_account_bill` (
   `freeze_amount` bigint(20) NOT NULL COMMENT '冻结金额',
   `freeze_post` bigint(20) NOT NULL COMMENT '冻结后总额',
   `direction` varchar(16) NOT NULL COMMENT '资金流向 {in:入金,out:出金,keep:不变}',
-  `trade_code` varchar(16) NOT NULL COMMENT '交易码 (接口扩展点)',
+  `trade_code` varchar(32) NOT NULL COMMENT '交易码 (接口扩展点)',
   `busi_id` bigint(20) DEFAULT NULL COMMENT '相关业务ID',
   `busi_data` varchar(128) DEFAULT NULL COMMENT '相关业务数据',
   `batch_no` varchar(64) DEFAULT NULL COMMENT '批量交易号',
