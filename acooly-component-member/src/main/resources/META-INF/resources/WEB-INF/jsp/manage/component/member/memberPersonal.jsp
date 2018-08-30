@@ -17,16 +17,8 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					用户编码: <input type="text" class="text" size="15" name="search_LIKE_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
-				婚姻状况: <select style="width:80px;height:27px;" name="search_EQ_maritalStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allMaritalStatuss}"><option value="${e.key}" ${param.search_EQ_maritalStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				子女情况: <select style="width:80px;height:27px;" name="search_EQ_childrenCount" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allChildrenCounts}"><option value="${e.key}" ${param.search_EQ_childrenCount == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				教育背景: <select style="width:80px;height:27px;" name="search_EQ_educationLevel" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allEducationLevels}"><option value="${e.key}" ${param.search_EQ_educationLevel == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				月收入: <select style="width:80px;height:27px;" name="search_EQ_incomeMonth" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allIncomeMonths}"><option value="${e.key}" ${param.search_EQ_incomeMonth == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				社会保险: <select style="width:80px;height:27px;" name="search_EQ_socialInsurance" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allSocialInsurances}"><option value="${e.key}" ${param.search_EQ_socialInsurance == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				公积金: <select style="width:80px;height:27px;" name="search_EQ_houseFund" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allHouseFunds}"><option value="${e.key}" ${param.search_EQ_houseFund == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				住房情况: <select style="width:80px;height:27px;" name="search_EQ_houseStatue" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allHouseStatues}"><option value="${e.key}" ${param.search_EQ_houseStatue == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				是否购车: <select style="width:80px;height:27px;" name="search_EQ_carStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allCarStatuss}"><option value="${e.key}" ${param.search_EQ_carStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+					用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
 					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
@@ -69,13 +61,11 @@ $(function() {
     <div id="manage_memberPersonal_action" style="display: none;">
       <a onclick="$.acooly.framework.edit({url:'/manage/component/member/memberPersonal/edit.html',id:'{0}',entity:'memberPersonal',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/component/member/memberPersonal/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.remove('/manage/component/member/memberPersonal/deleteJson.html','{0}','manage_memberPersonal_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_memberPersonal_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/memberPersonal/create.html',entity:'memberPersonal',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/component/member/memberPersonal/deleteJson.html','manage_memberPersonal_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
       <a href="#" class="easyui-menubutton" data-options="menu:'#manage_memberPersonal_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
       <div id="manage_memberPersonal_exports_menu" style="width:150px;">
         <div onclick="$.acooly.framework.exports('/manage/component/member/memberPersonal/exportXls.html','manage_memberPersonal_searchform','会员个人信息')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
