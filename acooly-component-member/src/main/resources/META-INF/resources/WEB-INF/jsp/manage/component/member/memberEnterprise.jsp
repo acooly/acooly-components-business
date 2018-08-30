@@ -17,23 +17,13 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					用户编码: <input type="text" class="text" size="15" name="search_LIKE_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
-				企业类型: <select style="width:80px;height:27px;" name="search_EQ_entType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allEntTypes}"><option value="${e.key}" ${param.search_EQ_entType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+					用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
+				    企业类型: <select style="width:80px;height:27px;" name="search_EQ_entType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allEntTypes}"><option value="${e.key}" ${param.search_EQ_entType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 					企业名称: <input type="text" class="text" size="15" name="search_LIKE_entName"/>
-					社会统一信用代码: <input type="text" class="text" size="15" name="search_LIKE_licenceNo"/>
-					营业年限: <input type="text" class="text" size="15" name="search_EQ_businessLife"/>
-					法人姓名: <input type="text" class="text" size="15" name="search_LIKE_legalName"/>
-					法人证件类型: 默认身份证: <input type="text" class="text" size="15" name="search_LIKE_legalCertType"/>
-					法人证件号码: <input type="text" class="text" size="15" name="search_LIKE_legalCertNo"/>
-					法人证件到期时间: <input type="text" class="text" size="15" name="search_LIKE_legalCertValidTime"/>
-				实际控股人或企业类型: <select style="width:80px;height:27px;" name="search_EQ_holdingEnum" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allHoldingEnums}"><option value="${e.key}" ${param.search_EQ_holdingEnum == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					股东或实际控制人真实姓名: <input type="text" class="text" size="15" name="search_LIKE_holdingName"/>
-				股东或实际控制人证件类型: <select style="width:80px;height:27px;" name="search_EQ_holdingCertType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allHoldingCertTypes}"><option value="${e.key}" ${param.search_EQ_holdingCertType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					股东或实际控制人证件号: <input type="text" class="text" size="15" name="search_LIKE_holdingCertNo"/>
-					股东或实际控制人证件到期时间: <input type="text" class="text" size="15" name="search_LIKE_holdingCertValidTime"/>
-					开户许可证号码: <input type="text" class="text" size="15" name="search_LIKE_accountLicenseNo"/>
-					税务登记证号码: <input type="text" class="text" size="15" name="search_LIKE_taxAuthorityNo"/>
+					社会统一信用代码: <input type="text" class="text" size="15" name="search_EQ_licenceNo"/>
+					开户许可证号码: <input type="text" class="text" size="15" name="search_EQ_accountLicenseNo"/>
+					税务登记证号码: <input type="text" class="text" size="15" name="search_EQ_taxAuthorityNo"/>
 					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
@@ -92,13 +82,11 @@ $(function() {
     <div id="manage_memberEnterprise_action" style="display: none;">
       <a onclick="$.acooly.framework.edit({url:'/manage/component/member/memberEnterprise/edit.html',id:'{0}',entity:'memberEnterprise',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/component/member/memberEnterprise/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.remove('/manage/component/member/memberEnterprise/deleteJson.html','{0}','manage_memberEnterprise_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_memberEnterprise_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/memberEnterprise/create.html',entity:'memberEnterprise',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/component/member/memberEnterprise/deleteJson.html','manage_memberEnterprise_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
       <a href="#" class="easyui-menubutton" data-options="menu:'#manage_memberEnterprise_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
       <div id="manage_memberEnterprise_exports_menu" style="width:150px;">
         <div onclick="$.acooly.framework.exports('/manage/component/member/memberEnterprise/exportXls.html','manage_memberEnterprise_searchform','企业客户实名认证')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
