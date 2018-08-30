@@ -17,9 +17,9 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					父会员编码: <input type="text" class="text" size="15" name="search_LIKE_parentUserNo"/>
+					父会员编码: <input type="text" class="text" size="15" name="search_EQ_parentUserNo"/>
 					会员编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
+					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
 				    用户类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 					手机号码: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
 					姓名: <input type="text" class="text" size="15" name="search_EQ_realName"/>
