@@ -17,17 +17,15 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					父会员ID: <input type="text" class="text" size="15" name="search_EQ_parentid"/>
-					父会员编码: <input type="text" class="text" size="15" name="search_LIKE_parentUserNo"/>
-					会员编码: <input type="text" class="text" size="15" name="search_LIKE_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
-					密码盐: <input type="text" class="text" size="15" name="search_LIKE_salt"/>
-				用户类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					手机号码: <input type="text" class="text" size="15" name="search_LIKE_mobileNo"/>
-					姓名: <input type="text" class="text" size="15" name="search_LIKE_realName"/>
-					身份证号码: <input type="text" class="text" size="15" name="search_LIKE_idCardNo"/>
-				用户等级: <select style="width:80px;height:27px;" name="search_EQ_grade" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allGrades}"><option value="${e.key}" ${param.search_EQ_grade == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+					父会员编码: <input type="text" class="text" size="15" name="search_EQ_parentUserNo"/>
+					会员编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
+				    用户类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+					手机号码: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
+					姓名: <input type="text" class="text" size="15" name="search_EQ_realName"/>
+					身份证号码: <input type="text" class="text" size="15" name="search_EQ_idCardNo"/>
+				    用户等级: <select style="width:80px;height:27px;" name="search_EQ_grade" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allGrades}"><option value="${e.key}" ${param.search_EQ_grade == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+				    状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
@@ -52,8 +50,6 @@ $(function() {
 			<th field="parentUserNo">父会员编码</th>
 			<th field="userNo">会员编码</th>
 			<th field="username">用户名</th>
-			<th field="password">密码</th>
-			<th field="salt">密码盐</th>
 			<th field="userType" formatter="mappingFormatter">用户类型</th>
 			<th field="mobileNo">手机号码</th>
 			<th field="email">邮件</th>
@@ -73,13 +69,11 @@ $(function() {
     <div id="manage_member_action" style="display: none;">
       <a onclick="$.acooly.framework.edit({url:'/manage/component/member/member/edit.html',id:'{0}',entity:'member',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/component/member/member/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.remove('/manage/component/member/member/deleteJson.html','{0}','manage_member_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_member_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/component/member/member/deleteJson.html','manage_member_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
       <a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
       <div id="manage_member_exports_menu" style="width:150px;">
         <div onclick="$.acooly.framework.exports('/manage/component/member/member/exportXls.html','manage_member_searchform','会员信息')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
