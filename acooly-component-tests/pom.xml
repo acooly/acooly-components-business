@@ -1,63 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.acooly</groupId>
-        <artifactId>acooly-components-parent</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
-    </parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.acooly</groupId>
+		<artifactId>acooly-components-parent</artifactId>
+		<version>4.2.0-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>acooly-component-tests</artifactId>
-    <properties>
-        <deploy.skip>true</deploy.skip>
-    </properties>
+	<artifactId>acooly-component-tests</artifactId>
+	<properties>
+		<deploy.skip>true</deploy.skip>
+	</properties>
 
-    <dependencies>
+	<dependencies>
 
-        <!-- 业务组件 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-account</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-member</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-lottery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-point</artifactId>
-        </dependency>
+		<!-- 业务组件 -->
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-account</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-member</artifactId>
+		</dependency>
+		
+		<!-- 抽奖 -->
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-lottery</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-coder</artifactId>
-        </dependency>
+		<!-- 积分 -->
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-point</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-test</artifactId>
-        </dependency>
+		<!-- chat聊天 -->
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-chat</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-coder</artifactId>
+		</dependency>
 
-    <build>
-        <finalName>acooly-component</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-test</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>acooly-component</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

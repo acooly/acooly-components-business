@@ -12,9 +12,7 @@
 
 	<artifactId>acooly-component-point</artifactId>
 	<name>acooly-component-point</name>
-	<version>4.2.0-SNAPSHOT</version>
 	<dependencies>
-
 
 		<!-- 基础组件依赖 -->
 		<dependency>
