@@ -20,5 +20,10 @@ public class MemberComponentInitializer implements ComponentInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member_contact[0].columnName", "company_name");
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member_contact[0].patchSql", "ALTER TABLE `b_member_contact` ADD COLUMN `company_name` VARCHAR(255) NULL COMMENT '公司名';");
+
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member_contact[1].columnName", "career");
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member_contact[1].patchSql", "ALTER TABLE `b_member_contact` ADD COLUMN `career` VARCHAR(255) NULL COMMENT '职业';");
     }
 }
