@@ -17,6 +17,7 @@ import com.acooly.module.chat.jchat.message.order.PasswordModifyOrder;
 import com.acooly.module.chat.jchat.message.order.UserRegisterOrder;
 import com.acooly.module.chat.jchat.message.order.UserStatusModifyOrder;
 import com.acooly.module.chat.jchat.service.JChatService;
+import com.google.common.collect.Lists;
 
 /**
  * 极光 IM 服务
@@ -57,7 +58,7 @@ public class JChatServiceImpl implements JChatService {
 
 	@Override
 	public List<String> batchUsersStatus(BatchUsersStatusOrder order) {
-		List<String> userOnlineList = null;
+		List<String> userOnlineList = Lists.newArrayList();
 		JChatBaseResult result = jChatSendService.request(order, HttpRequestMethodEnum.METHOD_POST);
 		if (result.isSuccess()) {
 			String resultBody = result.getBody();

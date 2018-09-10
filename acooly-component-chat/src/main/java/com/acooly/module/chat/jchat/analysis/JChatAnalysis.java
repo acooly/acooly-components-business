@@ -1,5 +1,6 @@
 package com.acooly.module.chat.jchat.analysis;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.acooly.core.utils.mapper.JsonMapper;
@@ -35,4 +36,16 @@ public class JChatAnalysis {
 		}
 		return userOnline;
 	}
+	
+	
+	public static void main(String[] args) {
+		String body = "[{\"devices\":[],\"username\":\"kefu002\"},{\"devices\":[{\"login\":false,\"online\":false,\"platform\":\"j\"}],\"username\":\"liaotian001\"},{\"devices\":[{\"login\":true,\"online\":true,\"platform\":\"j\"}],\"username\":\"wlf001\"},{\"devices\":[{\"login\":false,\"online\":false,\"platform\":\"j\"}],\"username\":\"kefu001\"}]";
+		JChatAnalysis j=new JChatAnalysis();
+		List<String> userName = j.userOnline(body);
+		for (String s : userName) {
+			System.out.println(s);
+		}
+		
+	}
+	
 }

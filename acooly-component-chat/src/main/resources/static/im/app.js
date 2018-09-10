@@ -1411,16 +1411,32 @@ exports.ApiService = ApiService;
  * 建议在生产环境中使用服务端生成签名，否则masterSecret有暴露的风险
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
 // randomStr : 随机字符串, 作为签名加 salt 使用
 var randomStr = '404';
 // appkey : 开发者在极光平台注册的 IM 应用 appkey
-var appkey = 'f0c5f57dd1733b00f5a36957';
+var appkey = '1111';
 // masterSecret : 密钥，由前端生成签名时需要填写，有暴露的风险
-var masterSecret = 'ce1f57ecef53e776b54d985a';
+var masterSecret = '2222';
 // isFrontSignature : 是否由前端生成签名，值为true则由前端自动生成签名，值为false则由服务端生成签名，开发者需要在服务端提供post类型接口
 var isFrontSignature = true;
 // signatureApiUrl : 由服务端生成签名时，前端调用服务端post类型接口的url，仅在isFrontSignature为false时可用
-var signatureApiUrl = '/portal/im/signature.htm';
+var signatureApiUrl = '/portal/chat/im/signature.json';
+
+//创建异步对象  
+var xhr = new XMLHttpRequest();
+xhr.open('POST', '/portal/chat/im/signature.json',false);
+//需要设置请求报文
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.send();
+
+if (xhr.readyState == 4 && xhr.status == 200) {
+  var obj = JSON.parse(xhr.responseText); 
+  appkey= obj.data.appKey;
+  masterSecret= obj.data.masterSecret;
+} ;
+
 // JIM 应用配置
 exports.authPayload = {
     appkey: appkey,
@@ -1431,6 +1447,8 @@ exports.authPayload = {
     isFrontSignature: isFrontSignature,
     signatureApiUrl: signatureApiUrl
 };
+
+
 exports.PERFECT_SCROLLBAR_CONFIG = {
     suppressScrollX: true,
     minScrollbarLength: 40
@@ -1464,6 +1482,8 @@ var SignatureService = /** @class */ (function () {
     function SignatureService(http) {
         this.http = http;
     }
+    
+    //获取服务器的验签规则
     SignatureService.prototype.requestSignature = function (url, data) {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
@@ -14334,6 +14354,7 @@ var Util = /** @class */ (function () {
     Util.deepCopyObj = function (obj) {
         return JSON.parse(JSON.stringify(obj));
     };
+    
     /**
      * 生成JIM初始化的签名
      * @param {number} timestamp - 当前的时间毫秒数
