@@ -132,5 +132,17 @@ public class MemberContact extends AbstractEntity {
     @Size(max = 128)
     private String comments;
 
+    /**
+     * 公司名
+     */
+    @Size(max = 255)
+    private String companyName;
+
+
+    /**
+     * 职业
+     */
+    @Size(max = 255)
+    private String career;
 
 }

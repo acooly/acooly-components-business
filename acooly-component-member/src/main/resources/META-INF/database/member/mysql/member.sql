@@ -41,6 +41,8 @@ CREATE TABLE `b_member_contact` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
+  `company_name` varchar(255) DEFAULT NULL COMMENT '公司名',
+  `career` varchar(255) DEFAULT NULL COMMENT '职业',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员联系信息';
 
