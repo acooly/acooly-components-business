@@ -13,11 +13,14 @@
 			</c:if>
 			<tr>
 				<th width="25%">账户类型：</th>
-				<td><select name="accountType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" data-options="required:true">
-					<c:forEach items="${allAccountTypes}" var="e">
-						<option value="${e.key}">${e.value}</option>
-					</c:forEach>
-				</select></td>
+				<%--<td><select name="accountType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" data-options="required:true">--%>
+					<%--<c:forEach items="${allAccountTypes}" var="e">--%>
+						<%--<option value="${e.key}">${e.value}</option>--%>
+					<%--</c:forEach>--%>
+				<%--</select></td>--%>
+				<td>
+					<input type="text" name="accountType" size="48" placeholder="请输入账户类型" style="height: 27px;line-height: 27px;" class="easyui-validatebox text" data-options="required:true"/>
+				</td>
 			</tr>
 			<tr>
 				<th>用户ID：</th>
@@ -50,7 +53,7 @@
 			<tr>
 				<th>备注：</th>
 				<td><input type="text" name="comments" size="48" placeholder="请输入备注..." class="easyui-validatebox text" data-options="validType:['length[1,128]']"/></td>
-			</tr>					
+			</tr>
         </table>
       </jodd:form>
     </form>

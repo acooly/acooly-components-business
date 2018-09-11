@@ -21,6 +21,8 @@ import com.acooly.module.account.manage.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 账户信息 Service实现
  * <p>
@@ -53,14 +55,14 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
         }
         // 3、用户ID+账户类型加载
         if (accountInfo.getUserId() != null && accountInfo.getAccountType() != null) {
-            account = getEntityDao().findByUserIdAndAccountType(accountInfo.getUserId(), accountInfo.getAccountType().code());
+            account = getEntityDao().findByUserIdAndAccountType(accountInfo.getUserId(), accountInfo.getAccountType());
             if (account != null) {
                 return account;
             }
         }
         // 4、用户编码+账户类型加载
         if (Strings.isNotBlank(accountInfo.getUserNo()) && accountInfo.getAccountType() != null) {
-            account = getEntityDao().findByUserNoAndAccountType(accountInfo.getUserNo(), accountInfo.getAccountType().code());
+            account = getEntityDao().findByUserNoAndAccountType(accountInfo.getUserNo(), accountInfo.getAccountType());
             if (account != null) {
                 return account;
             }
@@ -78,7 +80,7 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
         }
         account = BeanCopier.copy(accountInfo, Account.class);
         account.setId(accountInfo.getAccountId());
-        account.setAccountType(accountInfo.getAccountType().code());
+        account.setAccountType(accountInfo.getAccountType());
 
         if (Strings.isNotBlank(account.getUserNo())) {
             // UserNo不为空，AccountNo为空，则设置UserNo为默认的AccountNo
@@ -133,5 +135,10 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
             throw new BusinessException(AccountErrorEnum.ACCOUNT_INTERNAL_ERROR);
         }
 
+    }
+
+    @Override
+    public List<String> getAllaccountType() {
+        return getEntityDao().getAllaccountType();
     }
 }

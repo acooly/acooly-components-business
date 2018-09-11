@@ -16,11 +16,12 @@ import java.util.Map;
 
 /**
  * 账户信息 AccountTypeEnum 枚举定义
+ * 方便扩展已经改为string
  *
  * @author acooly
  * Date: 2018-06-06 10:40:46
  */
-// TODO: 改造服务层依赖为code字符串，便于外部扩展账务类型
+@Deprecated
 public enum AccountTypeEnum implements Messageable {
 
     main("main", "主账户"),;
@@ -81,7 +82,7 @@ public enum AccountTypeEnum implements Messageable {
      * @return 全部枚举值。
      */
     public static List<AccountTypeEnum> getAll() {
-        List<AccountTypeEnum> list = new ArrayList<AccountTypeEnum>();
+        List<AccountTypeEnum> list = new ArrayList<>();
         for (AccountTypeEnum status : values()) {
             list.add(status);
         }

@@ -9,7 +9,6 @@ package com.acooly.module.account.entity;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.enums.SimpleStatus;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -66,7 +65,7 @@ public class Account extends AbstractEntity {
      * 账户类型
      */
     @NotEmpty
-    private String accountType = AccountTypeEnum.main.getCode();
+    private String accountType;
 
 
     /**

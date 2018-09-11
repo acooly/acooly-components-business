@@ -11,6 +11,8 @@ import com.acooly.module.mybatis.EntityMybatisDao;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 账户信息 Mybatis Dao
  * <p>
@@ -35,5 +37,8 @@ public interface AccountDao extends EntityMybatisDao<Account> {
 
     @Select("select * from ac_account where id = #{id} for update")
     Account findAndLockById(@Param("id") Long id);
+
+    @Select("SELECT DISTINCT(account_type) FROM ac_account")
+    List<String> getAllaccountType();
 
 }

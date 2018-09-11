@@ -3,11 +3,10 @@ package com.acooly.module.account.dto;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.DtoBase;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.enums.Messageable;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Size;
@@ -43,8 +42,8 @@ public class AccountInfo extends DtoBase {
     @Size(max = 64)
     private String userNo;
 
-    @NonNull
-    private Messageable accountType = AccountTypeEnum.main;
+    @NotEmpty
+    private String accountType;
 
     @Size(max = 32)
     private String username;
@@ -114,7 +113,7 @@ public class AccountInfo extends DtoBase {
      * @param userNo
      * @param accountType
      */
-    public AccountInfo(@Nullable Long accountId, @Nullable String accountNo, Long userId, String userNo, AccountTypeEnum accountType) {
+    public AccountInfo(@Nullable Long accountId, @Nullable String accountNo, Long userId, String userNo, String accountType) {
         this.accountId = accountId;
         this.accountNo = accountNo;
         this.userId = userId;

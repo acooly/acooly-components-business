@@ -12,6 +12,8 @@ import com.acooly.module.account.entity.Account;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.enums.SimpleStatus;
 
+import java.util.List;
+
 /**
  * 账户信息 Service接口
  * <p>
@@ -48,5 +50,7 @@ public interface AccountService extends EntityService<Account> {
      * @param status
      */
     void statusChange(Long id, SimpleStatus status);
+
+    List<String> getAllaccountType();
 
 }

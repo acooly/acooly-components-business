@@ -6,7 +6,6 @@ import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.module.AbstractComponentsTest;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.account.service.AccountManageService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -72,7 +71,7 @@ public class AccountManageServiceTest extends AbstractComponentsTest {
     public void testOpenAccountByUserId() {
 
         try {
-            AccountInfo accountInfo = new AccountInfo(null, null, 1000L, Ids.getDid(), AccountTypeEnum.main);
+            AccountInfo accountInfo = new AccountInfo(null, null, 1000L, Ids.getDid(), "main");
             accountInfo.setUsername("zhangpu");
             accountInfo.setComments("开户");
             Account account = accountManageService.openAccount(accountInfo);
