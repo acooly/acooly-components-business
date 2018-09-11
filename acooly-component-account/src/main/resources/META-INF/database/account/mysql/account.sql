@@ -3,7 +3,7 @@ CREATE TABLE `ac_account` (
   `account_no` varchar(64) NOT NULL COMMENT '账户编码',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID，外部集成环境用户/客户标志，可选提高性能',
   `user_no` varchar(64) NOT NULL DEFAULT '' COMMENT '用户编码',
-  `account_type` varchar(16) NOT NULL COMMENT '账户类型 {main:主账户}',
+  `account_type` varchar(32) NOT NULL COMMENT '账户类型',
   `username` varchar(255) DEFAULT NULL COMMENT '用户名',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额',
   `freeze` bigint(20) NOT NULL DEFAULT '0' COMMENT '冻结金额',

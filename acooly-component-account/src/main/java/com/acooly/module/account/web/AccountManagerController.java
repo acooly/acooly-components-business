@@ -6,30 +6,27 @@
  */
 package com.acooly.module.account.web;
 
+import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.MappingMethod;
+import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.account.manage.AccountService;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.account.service.AccountTradeService;
 import com.acooly.module.account.service.tradecode.TradeCodeLoader;
-import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.core.common.web.MappingMethod;
-import com.acooly.core.common.web.support.JsonEntityResult;
-import com.acooly.core.utils.Ids;
-import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.enums.SimpleStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -74,6 +71,8 @@ public class AccountManagerController extends AbstractJQueryEntityController<Acc
             AccountInfo accountInfo = new AccountInfo(Long.valueOf(userId), userNo);
             accountInfo.setComments(request.getParameter("comments"));
             accountInfo.setUsername(request.getParameter("username"));
+            accountInfo.setAccountType(request.getParameter("accountType"));
+
             Account account = accountManageService.openAccount(accountInfo);
             result.setEntity(account);
             result.setMessage("新增成功");
@@ -120,7 +119,7 @@ public class AccountManagerController extends AbstractJQueryEntityController<Acc
 
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-        model.put("allAccountTypes", AccountTypeEnum.mapping());
+        //model.put("allAccountTypes", AccountTypeEnum.mapping());
         model.put("allStatuss", SimpleStatus.mapping());
     }
 
