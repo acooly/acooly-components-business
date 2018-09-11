@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.acooly.module.member.enums.MemberGradeEnum;
+import com.acooly.module.member.enums.MemberUserTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,17 +32,6 @@ import com.google.common.collect.Maps;
 @Controller
 @RequestMapping(value = "/manage/component/member/member")
 public class MemberManagerController extends AbstractJQueryEntityController<Member, MemberEntityService> {
-	
-	private static Map<Integer, String> allUserTypes = Maps.newLinkedHashMap();
-	static {
-		allUserTypes.put(1, "个人用户");
-		allUserTypes.put(2, "企业用户");
-	}
-	private static Map<Integer, String> allGrades = Maps.newLinkedHashMap();
-	static {
-		allGrades.put(1, "普通");
-		allGrades.put(2, "VIP");
-	}
 
 	{
 		allowMapping = "*";
@@ -53,8 +44,8 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
 	
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-		model.put("allUserTypes", allUserTypes);
-		model.put("allGrades", allGrades);
+		model.put("allUserTypes", MemberUserTypeEnum.mapping());
+		model.put("allGrades", MemberGradeEnum.mapping());
 		model.put("allStatuss", MemberStatusEnum.mapping());
 	}
 
