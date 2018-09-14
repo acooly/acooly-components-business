@@ -18,6 +18,7 @@ import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
+import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.dto.MemberRegistryInfo;
@@ -201,7 +202,10 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         if (!registry) {
             return;
         }
-        Account account = accountManageService.openAccount(new AccountInfo(member.getId(), member.getUserNo(), member.getUsername()));
+        //账务开户，增加默认main帐号类型
+        AccountInfo accountInfo = new AccountInfo(member.getId(), member.getUserNo(), member.getUsername());
+        accountInfo.setAccountType(AccountTypeEnum.main.code());
+        Account account = accountManageService.openAccount(accountInfo);
         log.info("注册 同步开账户成功 account:{}", account.getLabel());
     }
 

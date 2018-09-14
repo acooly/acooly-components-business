@@ -55,6 +55,8 @@ CREATE TABLE `b_member_enterprise` (
   `licence_no` varchar(64) DEFAULT NULL COMMENT '社会统一信用代码',
   `licence_path` varchar(512) DEFAULT NULL COMMENT '营业执照图片地址',
   `licence_address` varchar(128) DEFAULT NULL COMMENT '营业执照地址',
+  `licence_expire_time` varchar(128) DEFAULT NULL COMMENT '营业执照截止日期',
+  `ent_address` varchar(128) DEFAULT NULL COMMENT '企业地址',
   `business_life` int(11) DEFAULT NULL COMMENT '营业年限',
   `legal_name` varchar(64) DEFAULT NULL COMMENT '法人姓名',
   `legal_cert_type` varchar(64) DEFAULT 'ID' COMMENT '法人证件类型: 默认身份证',
