@@ -83,6 +83,16 @@ public class MemberEnterprise extends AbstractEntity {
     private Integer businessLife;
 
     /**
+     * 营业执照截止日期
+     */
+    private String licenceExpireTime;
+
+    /**
+     * 企业地址
+     */
+    private String entAddress;
+
+    /**
      * 法人姓名
      */
     @Size(max = 64)
@@ -220,5 +230,7 @@ public class MemberEnterprise extends AbstractEntity {
      */
     @Size(max = 512)
     private String comments;
+
+
 
 }
