@@ -97,6 +97,5 @@
 		<module>acooly-component-lottery</module>
 		<module>acooly-component-business-common</module>
 		<module>acooly-component-point</module>
-		<module>acooly-component-chat</module>
 	</modules>
 </project>

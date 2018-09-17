@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author qiubo
  */
 @BootApp(sysName = "acooly-components-test", httpPort = 8080)
-@ComponentScan({"com.acooly.module.chat"})
+@ComponentScan({"com.acooly.module.member"})
 public class Main {
     public static void main(String[] args) {
         Apps.setProfileIfNotExists("sdev");

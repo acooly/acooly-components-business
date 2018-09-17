@@ -25,7 +25,7 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-member</artifactId>
 		</dependency>
-		
+
 		<!-- 抽奖 -->
 		<dependency>
 			<groupId>com.acooly</groupId>
@@ -36,12 +36,6 @@
 		<dependency>
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-point</artifactId>
-		</dependency>
-
-		<!-- chat聊天 -->
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>acooly-component-chat</artifactId>
 		</dependency>
 
 		<dependency>
