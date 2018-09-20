@@ -1,3 +1,6 @@
+<!-- title:抽奖组件 -->
+<!-- type: business -->
+<!-- author: zhangpu -->
 通用抽奖组件
 ====
 
