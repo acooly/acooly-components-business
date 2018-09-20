@@ -144,4 +144,9 @@ public class AccountBill extends AbstractEntity {
     private String comments;
 
 
+    /**
+     * 账务用户类型，默认账户类型为main。userId/userNo+accountType可唯一确定一个账户
+     */
+    @Size(max = 64)
+    private String accountType;
 }
