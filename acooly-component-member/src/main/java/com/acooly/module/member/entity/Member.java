@@ -13,14 +13,13 @@ import com.acooly.core.utils.ToString;
 import com.acooly.module.member.enums.MemberGradeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -70,6 +69,7 @@ public class Member extends AbstractEntity {
      * 密码
      */
     @ToString.Invisible
+    @JsonIgnore
     @NotEmpty
     @Size(max = 256)
     private String password;
@@ -78,6 +78,7 @@ public class Member extends AbstractEntity {
      * 密码盐
      */
     @ToString.Invisible
+    @JsonIgnore
     @NotEmpty
     @Size(max = 64)
     private String salt;
@@ -107,7 +108,9 @@ public class Member extends AbstractEntity {
      * 企业：公司名称
      */
     @Size(max = 16)
+    @ToString.Maskable
     private String realName;
+
 
     /**
      * 证件号码
@@ -115,7 +118,10 @@ public class Member extends AbstractEntity {
      * 企业：社会统一代码
      */
     @Size(max = 64)
+    @JsonIgnore
+    @ToString.Maskable
     private String certNo;
+
 
     /**
      * 用户等级
@@ -135,6 +141,10 @@ public class Member extends AbstractEntity {
     @Size(max = 128)
     private String comments;
 
+    @Transient
+    public String getCertNoMask() {
+        return Strings.isBlank(this.certNo)?this.certNo:Strings.maskBankCardNo(this.certNo);
+    }
 
     @Override
     public String toString() {
