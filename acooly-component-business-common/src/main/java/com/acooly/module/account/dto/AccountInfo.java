@@ -42,7 +42,6 @@ public class AccountInfo extends DtoBase {
     @Size(max = 64)
     private String userNo;
 
-    @NotEmpty
     private String accountType;
 
     @Size(max = 32)

@@ -202,9 +202,10 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         if (!registry) {
             return;
         }
-        //账务开户，增加默认main帐号类型
+        //账务开户类型，由会员注册传入
         AccountInfo accountInfo = new AccountInfo(member.getId(), member.getUserNo(), member.getUsername());
-        accountInfo.setAccountType(AccountTypeEnum.main.code());
+        accountInfo.setAccountType(memberRegistryInfo.getAccountType());
+
         Account account = accountManageService.openAccount(accountInfo);
         log.info("注册 同步开账户成功 account:{}", account.getLabel());
     }

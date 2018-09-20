@@ -40,6 +40,7 @@ CREATE TABLE `ac_account_bill` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
+  `account_type` varchar(64) DEFAULT NULL COMMENT '账务用户类型',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户进出账';
 

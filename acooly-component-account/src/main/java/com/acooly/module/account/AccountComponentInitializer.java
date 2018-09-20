@@ -24,5 +24,6 @@ public class AccountComponentInitializer implements ComponentInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing("acooly.ds.dbPatchs.ac_account_bill[0].patchSql", "ALTER TABLE `ac_account_bill` ADD COLUMN `account_type` VARCHAR(64) NULL COMMENT '账务用户类型';");
     }
 }

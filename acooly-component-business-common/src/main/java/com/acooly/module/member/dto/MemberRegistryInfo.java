@@ -10,6 +10,7 @@
 package com.acooly.module.member.dto;
 
 import com.acooly.core.utils.Strings;
+import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import lombok.Getter;
@@ -69,6 +70,11 @@ public class MemberRegistryInfo extends MemberInfo {
      */
     private String inviter;
 
+
+    /**
+     * 账务用户类型，默认账户类型为main。userId/userNo+accountType可唯一确定一个账户
+     */
+    private String accountType = AccountTypeEnum.main.code();
 
     public MemberRegistryInfo() {
     }

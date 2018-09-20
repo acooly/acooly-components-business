@@ -64,7 +64,6 @@ public class Account extends AbstractEntity {
     /**
      * 账户类型
      */
-    @NotEmpty
     private String accountType;
 
 
