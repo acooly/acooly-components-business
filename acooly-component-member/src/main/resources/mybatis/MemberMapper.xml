@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.acooly.module.member.dao.MemberDao">
+
+
+    <resultMap id="memberResultMap" type="com.acooly.module.member.entity.Member">
+        <id property="id" column="member_id"/>
+        <result property="parentid" column="member_parentid"/>
+        <result property="parentUserNo" column="member_parent_user_no"/>
+        <result property="userNo" column="member_user_no"/>
+        <result property="username" column="member_username"/>
+        <result property="password" column="member_password"/>
+        <result property="salt" column="member_salt"/>
+        <result property="mobileNo" column="member_mobile_no"/>
+        <result property="email" column="member_email"/>
+        <result property="realName" column="member_real_name"/>
+        <result property="certNo" column="member_cert_no"/>
+        <result property="status" column="member_status"/>
+        <result property="userType" column="member_user_type"/>
+        <result property="grade" column="member_grade"/>
+        <result property="createTime" column="member_create_time"/>
+        <result property="updateTime" column="member_update_time"/>
+        <result property="comments" column="member_comments"/>
+
+        <association property="memberProfile" javaType="com.acooly.module.member.entity.MemberProfile">
+            <id property="id" column="memberProfile_id"/>
+            <result property="userNo" column="memberProfile_user_no"/>
+            <result property="username" column="memberProfile_username"/>
+            <result property="nickname" column="memberProfile_nickname"/>
+            <result property="dailyWords" column="memberProfile_daily_words"/>
+            <result property="profilePhotoType" column="memberProfile_profile_photo_type"/>
+            <result property="profilePhoto" column="memberProfile_profile_photo"/>
+            <result property="emailStatus" column="memberProfile_email_status"/>
+            <result property="mobileNoStatus" column="memberProfile_mobile_no_status"/>
+            <result property="realNameStatus" column="memberProfile_real_name_status"/>
+            <result property="secretQaStatus" column="memberProfile_secret_qa_status"/>
+            <result property="smsSendStatus" column="memberProfile_sms_send_status"/>
+            <result property="manager" column="memberProfile_manager"/>
+            <result property="broker" column="memberProfile_broker"/>
+            <result property="inviter" column="memberProfile_inviter"/>
+            <result property="createTime" column="memberProfile_create_time"/>
+            <result property="updateTime" column="memberProfile_update_time"/>
+            <result property="comments" column="memberProfile_comments"/>
+        </association>
+    </resultMap>
+
+
+    <sql id="memberSelectSql">
+            member.id as member_id,
+            member.parentid as member_parentid,
+            member.parent_user_no as member_parent_user_no,
+            member.user_no as member_user_no,
+            member.username as member_username,
+            member.password as member_password,
+            member.salt as member_salt,
+            member.mobile_no as member_mobile_no,
+            member.email as member_email,
+            member.real_name as member_real_name,
+            member.cert_no as member_cert_no,
+            member.status as member_status,
+            member.user_type as member_user_type,
+            member.grade as member_grade,
+            member.create_time as member_create_time,
+            member.update_time as member_update_time,
+            member.comments as member_comments
+    </sql>
+
+    <sql id="memberProfileSelectSql">
+            memberProfile.id as memberProfile_id,
+            memberProfile.user_no as memberProfile_user_no,
+            memberProfile.username as memberProfile_username,
+            memberProfile.nickname as memberProfile_nickname,
+            memberProfile.daily_words as memberProfile_daily_words,
+            memberProfile.profile_photo_type as memberProfile_profile_photo_type,
+            memberProfile.profile_photo as memberProfile_profile_photo,
+            memberProfile.email_status as memberProfile_email_status,
+            memberProfile.mobile_no_status as memberProfile_mobile_no_status,
+            memberProfile.real_name_status as memberProfile_real_name_status,
+            memberProfile.secret_qa_status as memberProfile_secret_qa_status,
+            memberProfile.sms_send_status as memberProfile_sms_send_status,
+            memberProfile.manager as memberProfile_manager,
+            memberProfile.broker as memberProfile_broker,
+            memberProfile.inviter as memberProfile_inviter,
+            memberProfile.create_time as memberProfile_create_time,
+            memberProfile.update_time as memberProfile_update_time,
+            memberProfile.comments as memberProfile_comments
+    </sql>
+
+
+
+    <select id="queryPage" resultMap="memberResultMap">
+        select
+        <include refid="memberSelectSql"/>,
+        <include refid="memberProfileSelectSql"/>
+        from b_member member, b_member_profile memberProfile
+        where member.id = memberProfile.id
+        <if test="map != null">
+        <if test="map.EQ_userNo != null and map.EQ_userNo != ''"> AND member.user_no = #{map.EQ_userNo}</if>
+        <if test="map.EQ_username != null and map.EQ_username != ''"> AND member.username = #{map.EQ_username}</if>
+        <if test="map.EQ_mobileNo != null and map.EQ_mobileNo != ''"> AND member.mobile_no = #{map.EQ_mobileNo}</if>
+        <if test="map.EQ_userType != null and map.EQ_userType != ''"> AND member.user_type = #{map.EQ_userType}</if>
+        <if test="map.EQ_grade != null and map.EQ_grade != ''"> AND member.grade = #{map.EQ_grade}</if>
+        <if test="map.EQ_realName != null and map.EQ_realName != ''"> AND member.real_name = #{map.EQ_realName}</if>
+        <if test="map.EQ_status != null and map.EQ_status != ''"> AND member.status = #{map.EQ_status}</if>
+        <if test="map.GTE_createTime != null and map.GTE_createTime != ''"> AND member.create_time &gt;= #{map.GTE_createTime}</if>
+        <if test="map.LTE_createTime != null and map.LTE_createTime != ''"> AND member.create_time &lt;= #{map.LTE_createTime}</if>
+        </if>
+        <if test="sortMap == null">
+            ORDER BY member.id DESC
+        </if>
+
+
+    </select>
+
+</mapper>

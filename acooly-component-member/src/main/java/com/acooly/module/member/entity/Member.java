@@ -14,7 +14,6 @@ import com.acooly.module.member.enums.MemberGradeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -143,8 +142,13 @@ public class Member extends AbstractEntity {
 
     @Transient
     public String getCertNoMask() {
-        return Strings.isBlank(this.certNo)?this.certNo:Strings.maskBankCardNo(this.certNo);
+        return Strings.isBlank(this.certNo) ? this.certNo : Strings.maskBankCardNo(this.certNo);
     }
+
+
+    @Transient
+    private MemberProfile memberProfile;
+
 
     @Override
     public String toString() {

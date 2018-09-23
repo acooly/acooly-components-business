@@ -24,6 +24,10 @@ public interface MemberService {
     Member register(MemberRegistryInfo memberRegistryInfo);
 
 
+
+
+
+
     /**
      * 发送激活短信或邮件
      *

@@ -17,12 +17,8 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+				用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_memberPersonal_searchform','manage_memberPersonal_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>

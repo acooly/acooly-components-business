@@ -14,23 +14,23 @@ public enum MemberGradeEnum {
 
     normal(0, "普通"),
 
-    VIP1(1, "VIP"),
+    VIP1(1, "VIP1"),
 
-    VIP2(2, "VIP"),
+    VIP2(2, "VIP2"),
 
-    VIP3(3, "VIP"),
+    VIP3(3, "VIP3"),
 
-    VIP4(4, "VIP"),
+    VIP4(4, "VIP4"),
 
-    VIP5(5, "VIP"),
+    VIP5(5, "VIP5"),
 
-    VIP6(6, "VIP"),
+    VIP6(6, "VIP6"),
 
-    VIP7(7, "VIP"),
+    VIP7(7, "VIP7"),
 
-    VIP8(8, "VIP"),
+    VIP8(8, "VIP8"),
 
-    VIP9(9, "VIP");
+    VIP9(9, "VIP9");
 
 
     private final int code;
