@@ -82,6 +82,11 @@ public class MemberProperties implements InitializingBean {
      */
     private Map<String, String> mailTemplates = Maps.newHashMap();
 
+    /**
+     * memeber profile default avatar path
+     */
+    private String defaultAvatar = "/assets/default_avatar@64.png";
+
     @Override
     public void afterPropertiesSet() {
         smsTemplates.put("common", "你本次{action}的验证码是：${captcha}, 用户名：${username}。");

@@ -260,6 +260,8 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         memberProfile.setManager(memberRegistryInfo.getManager());
         memberProfile.setBroker(memberRegistryInfo.getBroker());
         memberProfile.setInviter(memberRegistryInfo.getInviter());
+        memberProfile.setProfilePhotoType(ProfilePhotoTypeEnum.builtIn);
+        memberProfile.setProfilePhoto(memberProperties.getDefaultAvatar());
         memberProfileEntityService.save(memberProfile);
 
 
