@@ -18,7 +18,6 @@ function manage_member_profile_edit(){
 }
 
 
-
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
   <!-- 查询条件 -->
@@ -35,8 +34,8 @@ function manage_member_profile_edit(){
                     类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
                     等级: <select style="width:80px;height:27px;" name="search_EQ_grade" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allGrades}"><option value="${e.key}" ${param.search_EQ_grade == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 				    状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					注册时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					注册时间: <input size="10" type="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="10" type="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_member_searchform','manage_member_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -85,7 +84,7 @@ function manage_member_profile_edit(){
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:500,height:600})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>会员配置信息</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick=""><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>实名认证</a>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_auth_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>认证</a>
+      <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_auth_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>认证</a>--%>
       <%--<div id="manage_member_auth_menu" style="width:150px;">--%>
             <%--<div onclick=""><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>实名认证</div>--%>
             <%--<div onclick=""><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>设置手机认证</div>--%>
