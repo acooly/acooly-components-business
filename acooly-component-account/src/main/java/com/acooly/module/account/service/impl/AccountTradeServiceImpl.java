@@ -252,6 +252,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         accountBill.setBusiId(accountKeepInfo.getBusiId());
         accountBill.setBusiData(accountKeepInfo.getBusiData());
         accountBill.setBatchNo(accountKeepInfo.getBatchNo());
+        accountBill.setAccountType(account.getAccountType());
         accountBillService.save(accountBill);
         log.debug("记账 [流水] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
                 accountKeepInfo.getTradeCode().message(), accountKeepInfo.getTradeCode().direction(),
