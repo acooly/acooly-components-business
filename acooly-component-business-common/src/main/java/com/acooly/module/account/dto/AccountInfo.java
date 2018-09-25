@@ -78,7 +78,7 @@ public class AccountInfo extends DtoBase {
 
     /**
      * 用于创建默认账户
-     *
+     * <p>
      * <p>
      * accountId = userId
      * accountNo = userNo
@@ -94,7 +94,7 @@ public class AccountInfo extends DtoBase {
     public AccountInfo(Long userId, String userNo, String username) {
         this.userId = userId;
         this.userNo = userNo;
-        this.accountId = this.userId;
+        //this.accountId = this.userId;
         this.accountNo = userNo;
         this.username = username;
     }
@@ -151,7 +151,7 @@ public class AccountInfo extends DtoBase {
             return;
         }
 
-        if (userId != null && accountType != null) {
+        if ((userId != null && accountType != null) || (userNo != null && accountType != null)) {
             return;
         }
         throw new OrderCheckException("Account唯一标志不能为空", "accountId,accountNo或(userId+accountType)字少一个不能为空");

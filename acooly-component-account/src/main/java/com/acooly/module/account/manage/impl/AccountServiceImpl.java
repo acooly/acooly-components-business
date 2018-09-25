@@ -40,12 +40,12 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
 
         Account account = null;
         // 1、优先ID加载
-        if (accountInfo.getAccountId() != null) {
-            account = getEntityDao().findById(accountInfo.getAccountId());
-            if (account != null) {
-                return account;
-            }
-        }
+//        if (accountInfo.getAccountId() != null) {
+//            account = getEntityDao().findById(accountInfo.getAccountId());
+//            if (account != null) {
+//                return account;
+//            }
+//        }
         // 2、accountNo加载
         if (Strings.isNoneBlank(accountInfo.getAccountNo())) {
             account = getEntityDao().findByAccountNo(accountInfo.getAccountNo());
@@ -79,13 +79,15 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
             throw new AccountOperationException(AccountErrorEnum.ACCOUNT_ALREADT_EXISTED);
         }
         account = BeanCopier.copy(accountInfo, Account.class);
-        account.setId(accountInfo.getAccountId());
+        //account.setId(accountInfo.getAccountId());
         account.setAccountType(accountInfo.getAccountType());
 
         if (Strings.isNotBlank(account.getUserNo())) {
-            // UserNo不为空，AccountNo为空，则设置UserNo为默认的AccountNo
+            //
             if (Strings.isBlank(account.getAccountNo())) {
-                account.setAccountNo(account.getUserNo());
+                //account.setAccountNo(account.getUserNo());
+                //AccountNo为空 生产一个，不关联UserNo，多账户模式
+                account.setAccountNo(Ids.getDid());
             }
         } else {
             // UserNo和AccountNo都为空，则生成并设置为一致

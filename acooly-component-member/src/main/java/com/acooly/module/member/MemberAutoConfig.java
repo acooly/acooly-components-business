@@ -40,7 +40,7 @@ public class MemberAutoConfig extends WebMvcConfigurerAdapter {
      * @return
      */
     @Bean
-    public StandardDatabaseScriptIniter PortletScriptIniter() {
+    public StandardDatabaseScriptIniter memberScriptIniter() {
 
         return new StandardDatabaseScriptIniter() {
             @Override
