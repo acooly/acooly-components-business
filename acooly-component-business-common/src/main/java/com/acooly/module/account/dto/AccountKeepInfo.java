@@ -71,6 +71,7 @@ public class AccountKeepInfo extends AccountInfo {
         this.setAccountNo(accountInfo.getAccountNo());
         this.setUserId(accountInfo.getUserId());
         this.setUserNo(accountInfo.getUserNo());
+        this.setAccountType(accountInfo.getAccountType());
         this.tradeCode = tradeCode;
         this.amount = amount;
         setComments(comments);
