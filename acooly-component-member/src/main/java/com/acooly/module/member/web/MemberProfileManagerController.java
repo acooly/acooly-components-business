@@ -41,10 +41,7 @@ public class MemberProfileManagerController extends AbstractJQueryEntityControll
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
         model.put("allProfilePhotoTypes", ProfilePhotoTypeEnum.mapping());
-        model.put("allRealNameStatuss", WhetherStatus.mapping());
-        model.put("allMobileNoStatuss", WhetherStatus.mapping());
-        model.put("allEmailStatuss", WhetherStatus.mapping());
-        model.put("allSmsSendStatuss", WhetherStatus.mapping());
+        model.put("allWhtherStatuss",WhetherStatus.mapping());
     }
 
 }

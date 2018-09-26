@@ -11,11 +11,13 @@ package com.acooly.module.member.dto;
 
 import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
 import com.acooly.module.member.enums.CertTypeEnum;
 import com.acooly.module.member.enums.MemberGradeEnum;
 import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
@@ -60,6 +62,8 @@ public class MemberInfo extends InfoBase {
     /**
      * 密码
      */
+    @JsonIgnore
+    @ToString.Invisible
     @NotEmpty
     @Size(max = 256)
     private String password;

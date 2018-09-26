@@ -7,9 +7,12 @@
  */
 package com.acooly.module.member.manage;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.member.entity.Member;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Map;
 
 /**
  * 会员信息 Service接口
@@ -24,5 +27,7 @@ public interface MemberEntityService extends EntityService<Member> {
 
 
     Member findUniqueByUsername(String username);
+
+    PageInfo<Member> queryMapper(PageInfo<Member> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap);
 
 }
