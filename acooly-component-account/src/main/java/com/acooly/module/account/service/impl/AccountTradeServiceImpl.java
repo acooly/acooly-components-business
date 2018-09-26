@@ -6,6 +6,7 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.account.TradeCode;
+import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.entity.Account;
@@ -149,6 +150,18 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
             tradeCode = CommonTradeCodeEnum.deposit;
         }
         keepAccount(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+    }
+
+    @Override
+    public void deposit(String userNo, String accountType, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+        if (tradeCode == null) {
+            tradeCode = CommonTradeCodeEnum.deposit;
+        }
+        AccountInfo accountInfo = new AccountInfo();
+        accountInfo.setAccountType(accountType);
+        accountInfo.setUserNo(userNo);
+
+        keepAccount(new AccountKeepInfo(accountInfo, tradeCode, amount, comments));
     }
 
     @Override

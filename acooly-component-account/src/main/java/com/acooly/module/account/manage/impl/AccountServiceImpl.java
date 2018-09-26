@@ -40,12 +40,12 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
 
         Account account = null;
         // 1、优先ID加载
-//        if (accountInfo.getAccountId() != null) {
-//            account = getEntityDao().findById(accountInfo.getAccountId());
-//            if (account != null) {
-//                return account;
-//            }
-//        }
+        if (accountInfo.getAccountId() != null) {
+            account = getEntityDao().findById(accountInfo.getAccountId());
+            if (account != null) {
+                return account;
+            }
+        }
         // 2、accountNo加载
         if (Strings.isNoneBlank(accountInfo.getAccountNo())) {
             account = getEntityDao().findByAccountNo(accountInfo.getAccountNo());

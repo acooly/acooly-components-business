@@ -98,6 +98,17 @@ public interface AccountTradeService {
 
 
     /**
+     * 充值记账 包装接口
+     *
+     * @param userNo      用户编号
+     * @param accountType 账户类型
+     * @param amount      金额
+     * @param tradeCode   充值特殊交易码
+     * @param comments    备注
+     */
+    void deposit(String userNo, String accountType, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
+
+    /**
      * 充值记账
      *
      * @param accountId 账户ID
