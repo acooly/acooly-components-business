@@ -8,7 +8,6 @@ package com.acooly.module.member.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.core.common.enums.Gender;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.module.member.enums.CertTypeEnum;
@@ -104,8 +103,7 @@ public class MemberPersonal extends AbstractEntity {
     /**
      * 性别
      */
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private String gender;
 
 
     /**

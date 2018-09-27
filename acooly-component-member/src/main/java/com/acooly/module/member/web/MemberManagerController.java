@@ -22,6 +22,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +56,7 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
 
         if (isCreate) {
             MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
-            bindNotValidator(request, memberRegistryInfo);
+            //bindNotValidator(request, memberRegistryInfo);
             if (Strings.isBlank(memberRegistryInfo.getPassword())) {
                 // 初始化一个谁都不知道的密码
                 memberRegistryInfo.setPassword(RandomStringUtils.randomAlphanumeric(8));
@@ -65,6 +66,8 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
 
         return super.doSave(request, response, model, isCreate);
     }
+
+
 
 
     @Override

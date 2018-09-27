@@ -6,6 +6,7 @@ import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.module.captcha.Captcha;
+import com.acooly.module.captcha.CaptchaServiceImpl;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
@@ -20,7 +21,12 @@ import com.acooly.module.sms.SmsContext;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,16 +45,22 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
             Map<String, Object> map = Maps.newHashMap();
             map.put("action", action.message());
             map.put("username", username);
+
+            Map<String,String> mailMap=Maps.newHashMap();
+            mailMap.put("action", action.message());
+            mailMap.put("username", username);
+
             if (includeCaptcha) {
                 Captcha captcha = doGetCaptcha(target, action.code());
                 map.put("captcha", captcha.getValue());
+                mailMap.put("captcha", (String) captcha.getValue());
             }
             if (sendType == SendTypeEnum.SMS) {
                 String templateName = memberCaptchaInterceptor.onCaptchaSMS(null, action.code(), map);
                 doSendSms(target, action, templateName, map);
             } else {
                 MailSendInfo mailSendInfo = memberCaptchaInterceptor.onCaptchaMail(null, action.code(), map);
-                doSendMail(target, action, mailSendInfo, map);
+                doSendMail(target, action, mailSendInfo, mailMap);
             }
             log.info("发送 [{}] 成功。", action.message());
         } catch (BusinessException be) {
@@ -62,7 +74,8 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
     @Override
     public void captchaVerify(String username, String target, Messageable action, SendTypeEnum sendType, String captchaValue) {
         try {
-            captchaService.validateCaptcha(target, action.code(), captchaValue);
+            captchaService.validateCaptcha(CaptchaServiceImpl.mergeKey(target, action.code()), captchaValue);
+            // captchaService.validateCaptcha(target, action.code(), captchaValue);
             log.info("验证码验证 [成功] username:{},action:{},sendType:{}", username, action.code(), sendType.code());
         } catch (BusinessException be) {
             throw be;
@@ -82,9 +95,14 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
             map.put("username", username);
             map.put("member", member);
 
+            Map<String, String> mailMap = Maps.newHashMap();
+            mailMap.put("action", action.message());
+            mailMap.put("username", username);
+
             if (includeCaptcha) {
                 Captcha captcha = doGetCaptcha(target, action.code());
                 map.put("captcha", captcha.getValue());
+                mailMap.put("captcha", (String) captcha.getValue());
             }
 
             if (sendType == SendTypeEnum.SMS) {
@@ -92,7 +110,7 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
                 doSendSms(target, action, templateName, map);
             } else {
                 MailSendInfo mailSendInfo = memberCaptchaInterceptor.onCaptchaMail(member, action.code(), map);
-                doSendMail(target, action, mailSendInfo, map);
+                doSendMail(target, action, mailSendInfo, mailMap);
             }
             log.info("发送 [{}] 成功。", action.message());
         } catch (BusinessException be) {
@@ -108,7 +126,7 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
         try {
             Member member = loadCheckExistMember(MemberInfo.of(username));
             String target = getTarget(member, action, sendType);
-            captchaService.validateCaptcha(target, action.code(), captchaValue);
+            captchaService.validateCaptcha(CaptchaServiceImpl.mergeKey(target, action.code()), captchaValue);
             log.info("验证码验证 [成功] username:{},action:{},sendType:{}", username, action.code(), sendType.code());
         } catch (BusinessException be) {
             throw be;
@@ -121,9 +139,9 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
 
     protected void doSendSms(String mobileNo, Messageable action, String templateName, Map<String, Object> map) {
         SmsContext smsContext = new SmsContext();
-        if (Servlets.getRequest() != null) {
+        if (getRequest() != null) {
             //如果是Web请求，则保存IP
-            smsContext.setClientIp(Servlets.getRequest().getRemoteAddr());
+            smsContext.setClientIp(getRequest().getRemoteAddr());
         }
         smsContext.setComments(action.code() + "/" + action.message());
         if (Strings.isNotBlank(templateName)) {
@@ -135,7 +153,7 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
     }
 
 
-    protected void doSendMail(String mail, Messageable action, MailSendInfo mailSendInfo, Map<String, Object> map) {
+    protected void doSendMail(String mail, Messageable action, MailSendInfo mailSendInfo, Map<String, String> map) {
         MailDto mailDto = new MailDto();
         String title = "会员" + action.message();
         String templateName = getConfigMailTempate(action);
@@ -181,6 +199,14 @@ public class MemberSendingServiceImpl extends AbstractMemberService implements M
             templateContent = memberProperties.getMailTemplates().get(MemberTemplateEnum.common);
         }
         return templateContent;
+    }
+
+    public static HttpServletRequest getRequest() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes == null) {
+            return null;
+        }
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
 }

@@ -30,7 +30,7 @@ public class MemberRealNameTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-        cleanMemberDatabase(TEST_USERNAME);
+        //cleanMemberDatabase(TEST_USERNAME);
     }
 
 
@@ -43,8 +43,8 @@ public class MemberRealNameTest extends AbstractComponentsTest {
      */
     @Test
     public void testRegisterAndAutoPersonalRealName() {
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, "Ab123456", "13896177630",
-                "秦海贤", "360822198609284091");
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo("aaa", "Ab123456", "13896177638",
+                "王琳嵛", "500225199009264473");
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);
     }
@@ -61,7 +61,7 @@ public class MemberRealNameTest extends AbstractComponentsTest {
                 null, null);
         Member member = memberService.register(memberRegistryInfo);
         //实名
-        memberRealNameService.verify(new MemberRealNameInfo(member.getId(), "秦海贤", "360822198609284091"));
+        memberRealNameService.verify(new MemberRealNameInfo(member.getId(), "王琳嵛", "500225199009264473"));
     }
 
 

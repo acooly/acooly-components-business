@@ -9,7 +9,6 @@
  */
 package com.acooly.module.member.service.impl;
 
-import com.acooly.core.common.enums.Gender;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Dates;
@@ -163,9 +162,9 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
 
         MemberContact memberContact = memberContactEntityService.get(id);
         if (memberContact != null) {
-            memberContact.setProvince(idCardInfo.getProvince());
-            memberContact.setCity(idCardInfo.getCity());
-            memberContact.setDistrict(idCardInfo.getArea());
+//            memberContact.setProvince(idCardInfo.getProvince());
+//            memberContact.setCity(idCardInfo.getCity());
+//            memberContact.setDistrict(idCardInfo.getArea());
             memberContactEntityService.update(memberContact);
         }
 
@@ -192,20 +191,20 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
     private IdCards.IdCardInfo convertToIdCardInfo(CertResult certResult) {
         IdCards.IdCardInfo idCardInfo = new IdCards.IdCardInfo();
         idCardInfo.setBirthday(certResult.getBirthday());
-        idCardInfo.setGender(Gender.find(certResult.getSex()));
+        idCardInfo.setGender(certResult.getSex());
         if (Strings.contains(certResult.getAddress(), "-")) {
             String[] addresses = Strings.split(certResult.getAddress(), '-');
-            if (addresses != null && addresses.length >= 1) {
-                idCardInfo.setProvince(addresses[0]);
-            }
-
-            if (addresses != null && addresses.length >= 2) {
-                idCardInfo.setCity(addresses[1]);
-            }
-
-            if (addresses != null && addresses.length >= 3) {
-                idCardInfo.setArea(addresses[2]);
-            }
+//            if (addresses != null && addresses.length >= 1) {
+//                idCardInfo.setProvince(addresses[0]);
+//            }
+//
+//            if (addresses != null && addresses.length >= 2) {
+//                idCardInfo.setCity(addresses[1]);
+//            }
+//
+//            if (addresses != null && addresses.length >= 3) {
+//                idCardInfo.setArea(addresses[2]);
+//            }
         }
         return idCardInfo;
     }

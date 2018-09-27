@@ -44,16 +44,16 @@ public class MemberServiceTest extends AbstractComponentsTest {
 
     @Before
     public void before() {
-        cleanMemberDatabase(TEST_USERNAME);
-        cleanMemberDatabase(TEST_BROKER_USERNAME);
-        log.info("清理测试数据完成。username:{}", TEST_USERNAME);
-        // 准备经纪人用户
-        jdbcTemplate.execute("INSERT INTO `acooly`.`b_member`(`id`, `parentid`, `parent_user_no`, `user_no`, `username`, `password`, " +
-                "`salt`, `mobile_no`, `email`, `real_name`, `cert_no`, `status`, `user_type`, `grade`, `create_time`, `update_time`, `comments`) " +
-                "VALUES (100000, NULL, NULL, '1807261924130212121', '" + TEST_BROKER_USERNAME + "', '3922ae2b81e89556aed380f8ea2bcfc3dcb34609', 'c7db2da4b504ee69'," +
-                " '13896177630', NULL, NULL, NULL, 'enable', 'personal', 0, '2018-07-26 19:24:13', '2018-07-26 19:27:10', NULL)");
-
-        log.info("初始化数据完成。username:{}", TEST_BROKER_USERNAME);
+        //cleanMemberDatabase(TEST_USERNAME);
+        //cleanMemberDatabase(TEST_BROKER_USERNAME);
+//        log.info("清理测试数据完成。username:{}", TEST_USERNAME);
+//        // 准备经纪人用户
+//        jdbcTemplate.execute("INSERT INTO `b_member`(`id`, `parentid`, `parent_user_no`, `user_no`, `username`, `password`, " +
+//                "`salt`, `mobile_no`, `email`, `real_name`, `cert_no`, `status`, `user_type`, `grade`, `create_time`, `update_time`, `comments`) " +
+//                "VALUES (100000, NULL, NULL, '1807261924130212121', '" + TEST_BROKER_USERNAME + "', '3922ae2b81e89556aed380f8ea2bcfc3dcb34609', 'c7db2da4b504ee69'," +
+//                " '18612299409', NULL, NULL, NULL, 'enable', 'personal', 0, '2018-07-26 19:24:13', '2018-07-26 19:27:10', NULL)");
+//
+//        log.info("初始化数据完成。username:{}", TEST_BROKER_USERNAME);
     }
 
 
@@ -151,7 +151,7 @@ public class MemberServiceTest extends AbstractComponentsTest {
      */
     @Test
     public void testActiveSendWithSms() {
-        memberService.activeSend(TEST_USERNAME, MemberActiveTypeEnum.email);
+        memberService.activeSend(TEST_BROKER_USERNAME, MemberActiveTypeEnum.email);
     }
 
     /**
@@ -170,7 +170,7 @@ public class MemberServiceTest extends AbstractComponentsTest {
      */
     @Test
     public void testAppRegisterCaptchaSend() {
-        memberSendingService.send(TEST_USERNAME, TEST_MOBILE_NO, MemberTemplateEnum.registerQuick, SendTypeEnum.SMS, true);
+        memberSendingService.send(TEST_USERNAME, TEST_MOBILE_NO, MemberTemplateEnum.registerQuick, SendTypeEnum.MAIL, true);
     }
 
     /**
