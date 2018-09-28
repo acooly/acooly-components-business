@@ -105,6 +105,16 @@ public interface AccountTradeService {
      */
     void deposit(Long accountId, Money amount);
 
+    /**
+     * 充值记账
+     *
+     * @param userNo 用户名
+     * @param accountType 账户类型
+     * @param bizOrderNo 业务订单号
+     * @param amount    金额
+     */
+    void deposit(String userNo,String accountType,String bizOrderNo,Money amount,String comments);
+
 
     /**
      * 提现包装

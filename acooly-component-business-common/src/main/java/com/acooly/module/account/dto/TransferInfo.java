@@ -37,6 +37,11 @@ public class TransferInfo {
     private Money amount;
 
     /**
+     * 业务订单号
+     */
+    private String bizOrderNo;
+
+    /**
      * 出记账类型
      */
     private TradeCode tradeCodeFrom;
