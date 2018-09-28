@@ -157,6 +157,18 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
     }
 
     @Override
+    public void deposit(String userNo, String accountType, String bizOrderNo, Money amount,String comments) {
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo();
+        accountKeepInfo.setAccountType(accountType);
+        accountKeepInfo.setUserNo(userNo);
+        accountKeepInfo.setBizOrderNo(bizOrderNo);
+        accountKeepInfo.setAmount(amount);
+        accountKeepInfo.setTradeCode(CommonTradeCodeEnum.deposit);
+        accountKeepInfo.setComments(comments    );
+        keepAccount(accountKeepInfo);
+    }
+
+    @Override
     public void withdraw(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
         if (tradeCode == null) {
             tradeCode = CommonTradeCodeEnum.withdraw;
@@ -184,12 +196,14 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
     }
 
     protected List<AccountKeepInfo> convertTransferToAccountKeepInfos(TransferInfo transferInfo) {
-        AccountKeepInfo from = new AccountKeepInfo(transferInfo.getFrom(),
+            AccountKeepInfo from = new AccountKeepInfo(transferInfo.getFrom(),
                 transferInfo.getTradeCodeFrom(), transferInfo.getAmount(), transferInfo.getComments());
         from.setBatchNo(transferInfo.getBatchNo());
+        from.setBizOrderNo(transferInfo.getBizOrderNo());
         AccountKeepInfo to = new AccountKeepInfo(transferInfo.getTo(),
                 transferInfo.getTradeCodeTo(), transferInfo.getAmount(), transferInfo.getComments());
         to.setBatchNo(transferInfo.getBatchNo());
+        to.setBizOrderNo(transferInfo.getBizOrderNo());
         return Lists.newArrayList(from, to);
     }
 

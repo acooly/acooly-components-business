@@ -120,6 +120,10 @@ public class AccountInfo extends DtoBase {
         this.accountType = accountType;
     }
 
+    public AccountInfo(String userNo, String accountType) {
+        this.userNo = userNo;
+        this.accountType = accountType;
+    }
 
     public String getLabel() {
         StringBuilder sb = new StringBuilder();
