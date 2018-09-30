@@ -69,6 +69,11 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
 
     @Override
     protected PageInfo<Member> doList(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+        Map<String, Boolean> sorts = this.getSortMap(request);
+        if(sorts.isEmpty()){
+            sorts.put("id",false);
+        }
+
         return getEntityService().queryMapper(this.getPageInfo(request), this.getSearchParams(request), this.getSortMap(request));
     }
 
