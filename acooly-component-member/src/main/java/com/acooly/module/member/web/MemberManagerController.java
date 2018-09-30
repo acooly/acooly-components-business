@@ -18,7 +18,6 @@ import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.MemberService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
