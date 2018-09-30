@@ -18,6 +18,7 @@ import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.MemberService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,6 +70,11 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
 
     @Override
     protected PageInfo<Member> doList(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+        Map<String, Boolean> sorts = this.getSortMap(request);
+        if(sorts.isEmpty()){
+            sorts.put("id",false);
+        }
+
         return getEntityService().queryMapper(this.getPageInfo(request), this.getSearchParams(request), this.getSortMap(request));
     }
 
