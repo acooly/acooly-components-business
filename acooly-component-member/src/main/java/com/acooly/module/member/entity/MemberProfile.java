@@ -102,7 +102,7 @@ public class MemberProfile extends AbstractEntity {
     /**
      * 安全问题设置状态
      */
-    @Size(max = 16)
+    @Enumerated(EnumType.STRING)
     private WhetherStatus secretQaStatus = WhetherStatus.no;
 
 

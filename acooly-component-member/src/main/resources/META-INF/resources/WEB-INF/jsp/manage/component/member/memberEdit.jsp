@@ -23,7 +23,8 @@
                     </tr>
                     <tr>
                         <th>会员类型</th>
-                        <td><select name="memberUserType" id="manage_member_editform_userType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" data-options="required:true">
+                        <td><select name="memberUserType" id="manage_member_editform_userType" editable="false" style="height:27px;width:200px;" panelHeight="auto" class="easyui-combobox"
+                                    data-options="required:true">
                             <c:forEach items="${allUserTypes}" var="e">
                                 <option value="${e.key}">${e.value}</option>
                             </c:forEach>
@@ -32,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>激活方式</th>
-                        <td><select name="memberActiveType" id="manage_member_editform_activeType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox"
+                        <td><select name="memberActiveType" id="manage_member_editform_activeType" editable="false" style="height:27px;min-width:200px;" panelHeight="auto" class="easyui-combobox"
                                     data-options="required:true">
                             <c:forEach items="${allActiveTypes}" var="e">
                                 <option value="${e.key}">${e.value}</option>
@@ -96,7 +97,7 @@
                     </tr>
                     <tr>
                         <th>状态：</th>
-                        <td><select name="status" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox">
+                        <td><select name="status" editable="false" style="height:27px;min-width:200px;" panelHeight="auto" class="easyui-combobox">
                             <c:forEach items="${allStatuss}" var="e">
                                 <option value="${e.key}">${e.value}</option>
                             </c:forEach>
@@ -114,7 +115,7 @@
                 </tr>
                 <tr>
                     <th>用户等级：</th>
-                    <td><select name="grade" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox">
+                    <td><select name="grade" editable="false" style="height:27px;min-width:200px;" panelHeight="auto" class="easyui-combobox">
                         <c:forEach items="${allGrades}" var="e">
                             <option value="${e.key}">${e.value}</option>
                         </c:forEach>

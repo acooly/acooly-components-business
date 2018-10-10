@@ -13,7 +13,13 @@ $(function() {
  */
 function manage_member_profile_edit(){
     $.acooly.framework.fireSelectRow("manage_member_datagrid",function(row){
-        $.acooly.framework.edit({url:'/manage/component/member/memberProfile/edit.html',id:row.id,entity:'memberPersonal',width:500,height:500});
+        $.acooly.framework.edit({
+            url:'/manage/component/member/memberProfile/edit.html',
+            id:row.id,
+            form:'manage_memberProfile_editform',
+            datagrid:'manage_member_datagrid',
+            width:500,height:500
+        });
     });
 }
 
@@ -52,8 +58,8 @@ function manage_member_profile_edit(){
       <thead>
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
-			<th field="id" sum="true">会员ID</th>
-			<th field="userNo">会员编码</th>
+			<th field="id" sortable="true">会员ID</th>
+			<th field="userNo" sortable="true">会员编码</th>
 			<th field="username">用户名</th>
             <th field="userType" formatter="mappingFormatter">类型</th>
             <th field="realName">真名</th>
@@ -74,28 +80,26 @@ function manage_member_profile_edit(){
 
     <!-- 每行的Action动作模板 -->
     <div id="manage_member_action" style="display: none;">
-      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/member/edit.html',id:'{0}',entity:'member',width:500,height:600});" href="#" title="编辑"><i
-              class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.show('/manage/component/member/member/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
+      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/member/edit.html',id:'{0}',entity:'member',width:500,height:600});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
+      <%--<a onclick="$.acooly.framework.show('/manage/component/member/member/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>--%>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_member_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:500,height:600})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>会员配置信息</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick=""><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>实名认证</a>
       <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_auth_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>认证</a>--%>
       <%--<div id="manage_member_auth_menu" style="width:150px;">--%>
             <%--<div onclick=""><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>实名认证</div>--%>
             <%--<div onclick=""><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>设置手机认证</div>--%>
             <%--<div onclick=""><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>设置邮箱认证</div>--%>
       <%--</div>--%>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
-      <div id="manage_member_exports_menu" style="width:150px;">
-        <div onclick="$.acooly.framework.exports('/manage/component/member/member/exportXls.html','manage_member_searchform','会员信息')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
-        <div onclick="$.acooly.framework.exports('/manage/component/member/member/exportCsv.html','manage_member_searchform','会员信息')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>
-      </div>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/component/member/member/importView.html',uploader:'manage_member_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
+      <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>--%>
+      <%--<div id="manage_member_exports_menu" style="width:150px;">--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/component/member/member/exportXls.html','manage_member_searchform','会员信息')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/component/member/member/exportCsv.html','manage_member_searchform','会员信息')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>--%>
+      <%--</div>--%>
+      <%--<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/component/member/member/importView.html',uploader:'manage_member_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>--%>
     </div>
   </div>
 
