@@ -23,6 +23,9 @@ function manage_member_profile_edit(){
     });
 }
 
+function manage_memeber_profile_formatter(v,r,i,d,property) {
+    if(!r.memberProfile || !r.memberProfile[property]){return null;} return d['data'].allWhtherStatuss[r.memberProfile[property]];
+}
 
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
@@ -63,11 +66,13 @@ function manage_member_profile_edit(){
 			<th field="username">用户名</th>
             <th field="userType" formatter="mappingFormatter">类型</th>
             <th field="realName">真名</th>
-            <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return d['data'].allWhtherStatuss[r.memberProfile.realNameStatus];}">实名</th>
+                <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'realNameStatus');}">实名
+            </th>
 			<th field="mobileNo">手机</th>
-            <th field="memberProfile.mobileNoStatus" data-options="formatter:function(v,r,i,d){return d['data'].allWhtherStatuss[r.memberProfile.mobileNoStatus];}">手机认证</th>
+            <th field="memberProfile.mobileNoStatus"
+                data-options="formatter:function(v,r,i,d){if(!r.memberProfile || !r.memberProfile.mobileNoStatus){return null;} return d['data'].allWhtherStatuss[r.memberProfile.mobileNoStatus];}">手机认证</th>
 			<th field="email">邮件</th>
-            <th field="memberProfile.emailStatus" data-options="formatter:function(v,r,i,d){return d['data'].allWhtherStatuss[r.memberProfile.emailStatus];}">邮件认证</th>
+            <th field="memberProfile.emailStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'emailStatus');}">邮件认证</th>
             <th field="memberProfile.broker" data-options="formatter:function(v,r,i,d){return r.memberProfile.broker;}">经纪人</th>
             <th field="memberProfile.inviter" data-options="formatter:function(v,r,i,d){return r.memberProfile.inviter;}">介绍人</th>
 			<th field="grade" formatter="mappingFormatter">等级</th>
@@ -80,7 +85,8 @@ function manage_member_profile_edit(){
 
     <!-- 每行的Action动作模板 -->
     <div id="manage_member_action" style="display: none;">
-      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/member/edit.html',id:'{0}',entity:'member',width:500,height:600});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
+      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/member/edit.html',id:'{0}',entity:'member',width:500,height:600,reload:true});" href="#" title="编辑"><i
+              class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <%--<a onclick="$.acooly.framework.show('/manage/component/member/member/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>--%>
     </div>
 

@@ -19,6 +19,9 @@ $(function() {
           	<div>
                 用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
 				用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
+                姓名: <input type="text" class="text" size="15" name="search_RLIKE_realName"/>
+                状态: <select style="width:120px;height:27px;" name="search_EQ_certStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
+                <c:forEach var="e" items="${allCertStatuss}"><option value="${e.key}" ${param.search_EQ_certStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_memberPersonal_searchform','manage_memberPersonal_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -37,17 +40,13 @@ $(function() {
 			<th field="id" sum="true">ID</th>
 			<th field="userNo">用户编码</th>
 			<th field="username">用户名</th>
-			<th field="maritalStatus" formatter="mappingFormatter">婚姻状况</th>
-			<th field="childrenCount" formatter="mappingFormatter">子女情况</th>
-			<th field="educationLevel" formatter="mappingFormatter">教育背景</th>
-			<th field="incomeMonth" formatter="mappingFormatter">月收入</th>
-			<th field="socialInsurance" formatter="mappingFormatter">社会保险</th>
-			<th field="houseFund" formatter="mappingFormatter">公积金</th>
-			<th field="houseStatue" formatter="mappingFormatter">住房情况</th>
-			<th field="carStatus" formatter="mappingFormatter">是否购车</th>
+            <th field="realName">姓名</th>
+            <th field="certType" formatter="mappingFormatter">证件类型</th>
+            <th field="certNo">证件号码</th>
+            <th field="certValidityDate" formatter="dateFormatter">有效期</th>
+            <th field="certStatus" formatter="mappingFormatter">实名状态</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
-			<th field="comments">备注</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_memberPersonal_action',value,row)}">动作</th>
         </tr>
       </thead>
@@ -55,20 +54,47 @@ $(function() {
 
     <!-- 每行的Action动作模板 -->
     <div id="manage_memberPersonal_action" style="display: none;">
-      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/memberPersonal/edit.html',id:'{0}',entity:'memberPersonal',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.show('/manage/component/member/memberPersonal/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
+      <a onclick="$.acooly.framework.show('/manage/component/member/memberPersonal/show.html?id={0}',600,600);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_memberPersonal_toolbar">
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/memberPersonal/create.html',entity:'memberPersonal',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_memberPersonal_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
-      <div id="manage_memberPersonal_exports_menu" style="width:150px;">
-        <div onclick="$.acooly.framework.exports('/manage/component/member/memberPersonal/exportXls.html','manage_memberPersonal_searchform','会员个人信息')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
-        <div onclick="$.acooly.framework.exports('/manage/component/member/memberPersonal/exportCsv.html','manage_memberPersonal_searchform','会员个人信息')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>
-      </div>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/component/member/memberPersonal/importView.html',uploader:'manage_memberPersonal_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_memberPersonal_verify()"><i class="fa fa-shield fa-lg fa-fw fa-col"></i>实名认证</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_memberPersonal_info()"><i class="fa fa-user fa-lg fa-fw fa-col"></i>设置个人信息</a>
+      <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_memberPersonal_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>--%>
+      <%--<div id="manage_memberPersonal_exports_menu" style="width:150px;">--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/component/member/memberPersonal/exportXls.html','manage_memberPersonal_searchform','会员个人信息')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/component/member/memberPersonal/exportCsv.html','manage_memberPersonal_searchform','会员个人信息')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>--%>
+      <%--</div>--%>
+      <%--<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/component/member/memberPersonal/importView.html',uploader:'manage_memberPersonal_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>--%>
     </div>
   </div>
 
 </div>
+<script>
+    //个人实名认证
+    function manage_memberPersonal_verify(){
+        $.acooly.framework.fireSelectRow("manage_memberPersonal_datagrid",function(row){
+            $.acooly.framework.edit({
+                url:'/manage/component/member/memberPersonal/verify.html',
+                id:row.id,
+                entity:'memberPersonal',
+                width:600,height:600,
+                reload:true,
+                editButton:'认证',
+                title:'实名认证'
+            });
+        });
+    }
+    // 设置个人信息
+    function manage_memberPersonal_info(){
+        $.acooly.framework.fireSelectRow("manage_memberPersonal_datagrid",function(row){
+            $.acooly.framework.edit({url:'/manage/component/member/memberPersonal/edit.html',
+                id:row.id,entity:'memberPersonal',
+                width:600,height:600,
+                editButton:'设置',
+                title:'设置个人信息'
+            });
+        });
+    }
+</script>
