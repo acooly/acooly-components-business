@@ -11,10 +11,7 @@ import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.enums.Gender;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.enums.WhetherStatus;
-import com.acooly.module.member.enums.CertTypeEnum;
-import com.acooly.module.member.enums.EducationLevelEnum;
-import com.acooly.module.member.enums.HouseStatueEnum;
-import com.acooly.module.member.enums.IncomeMonthEnum;
+import com.acooly.module.member.enums.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -95,6 +92,11 @@ public class MemberPersonal extends AbstractEntity {
      * 证件手持照片
      */
     private String certHoldPath;
+
+    /**
+     * 认证状态
+     */
+    private CertStatusEnum certStatus = CertStatusEnum.no;
 
     /**
      * 生日

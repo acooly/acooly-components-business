@@ -25,6 +25,7 @@ import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberContact;
 import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
+import com.acooly.module.member.enums.CertStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.exception.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
@@ -155,9 +156,11 @@ public class MemberRealNameServiceImpl extends AbstractMemberService implements 
             memberPersonal.setRealName(realName);
             memberPersonal.setCertType(personalRealNameInfo.getCertType());
             memberPersonal.setCertNo(personalRealNameInfo.getCertNo());
+            memberPersonal.setCertValidityDate(personalRealNameInfo.getCertValidityDate());
             memberPersonal.setCertFrontPath(personalRealNameInfo.getCertFrontPath());
             memberPersonal.setCertBackPath(personalRealNameInfo.getCertBackPath());
             memberPersonal.setCertHoldPath(personalRealNameInfo.getCertHoldPath());
+            memberPersonal.setCertStatus(CertStatusEnum.yes);
             memberPersonalEntityService.update(memberPersonal);
         }
 
