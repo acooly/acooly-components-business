@@ -55,7 +55,7 @@ public class MemberAutoConfig extends WebMvcConfigurerAdapter {
 
             @Override
             public List<String> getInitSqlFile() {
-                return Lists.newArrayList("member");
+                return Lists.newArrayList("member","member_urls");
             }
         };
     }
