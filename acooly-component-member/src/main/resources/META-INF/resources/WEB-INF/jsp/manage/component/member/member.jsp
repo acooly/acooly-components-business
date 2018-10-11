@@ -23,6 +23,20 @@ function manage_member_profile_edit(){
     });
 }
 
+/**
+ * 编辑会员联系信息
+ */
+function manage_member_contact_edit(){
+    $.acooly.framework.fireSelectRow("manage_member_datagrid",function(row){
+        $.acooly.framework.edit({
+            url:'/manage/component/member/memberContact/edit.html',
+            id:row.id,
+            entity:'memberContact',
+            width:600,height:500
+        });
+    });
+}
+
 function manage_memeber_profile_formatter(v,r,i,d,property) {
     if(!r.memberProfile || !r.memberProfile[property]){return null;} return d['data'].allWhtherStatuss[r.memberProfile[property]];
 }
@@ -92,8 +106,11 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
 
     <!-- 表格的工具栏 -->
     <div id="manage_member_toolbar">
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:500,height:600})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>会员配置信息</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:600,height:600,reload:true})"><i
+              class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>会员配置信息</a>
+        <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_contact_edit()"><i class="fa fa-address-book fa-lg fa-fw fa-col"></i>会员联系信息</a>
+
       <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_auth_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>认证</a>--%>
       <%--<div id="manage_member_auth_menu" style="width:150px;">--%>
             <%--<div onclick=""><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>实名认证</div>--%>

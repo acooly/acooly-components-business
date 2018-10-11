@@ -28,7 +28,7 @@
                             <c:forEach items="${allUserTypes}" var="e">
                                 <option value="${e.key}">${e.value}</option>
                             </c:forEach>
-                        </select> 个人/个体可填写姓名和身份证号码快速认证
+                        </select> <span class="acooly-comment">个人/个体可填写身份证认证</span>
                         </td>
                     </tr>
                     <tr>
@@ -38,7 +38,7 @@
                             <c:forEach items="${allActiveTypes}" var="e">
                                 <option value="${e.key}">${e.value}</option>
                             </c:forEach>
-                        </select> <span id="manage_member_editform_activeType_comment"></span></td>
+                        </select> <span class="acooly-comment" id="manage_member_editform_activeType_comment"></span></td>
                     </tr>
                     <tr>
                         <th>手机号码：</th>

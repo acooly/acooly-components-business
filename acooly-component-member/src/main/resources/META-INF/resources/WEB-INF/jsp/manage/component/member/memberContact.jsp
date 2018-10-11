@@ -17,24 +17,11 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					会员编码: <input type="text" class="text" size="15" name="search_LIKE_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
-					手机号码: <input type="text" class="text" size="15" name="search_LIKE_mobileNo"/>
-					电话号码: <input type="text" class="text" size="15" name="search_LIKE_phoneNo"/>
-					居住地 省: <input type="text" class="text" size="15" name="search_LIKE_province"/>
-					居住地 市: <input type="text" class="text" size="15" name="search_LIKE_city"/>
-					居住地 县/区: <input type="text" class="text" size="15" name="search_LIKE_district"/>
-					邮政编码: <input type="text" class="text" size="15" name="search_LIKE_zip"/>
-					QQ: <input type="text" class="text" size="15" name="search_LIKE_qq"/>
-					MSN: <input type="text" class="text" size="15" name="search_LIKE_wechat"/>
-					旺旺: <input type="text" class="text" size="15" name="search_LIKE_wangwang"/>
-					备注: <input type="text" class="text" size="15" name="search_LIKE_google"/>
-					facebeek: <input type="text" class="text" size="15" name="search_LIKE_facebeek"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-          	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_memberContact_searchform','manage_memberContact_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+                会员编码: <input type="text" class="text" size="15" name="search_LIKE_userNo"/>
+                用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
+                手机号码: <input type="text" class="text" size="15" name="search_LIKE_mobileNo"/>
+                电话号码: <input type="text" class="text" size="15" name="search_LIKE_phoneNo"/>
+                <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_memberContact_searchform','manage_memberContact_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
         </tr>
@@ -52,22 +39,18 @@ $(function() {
 			<th field="id" sum="true">主键</th>
 			<th field="userNo">会员编码</th>
 			<th field="username">用户名</th>
-			<th field="mobileNo">手机号码</th>
-			<th field="phoneNo">电话号码</th>
-			<th field="province">居住地 省</th>
-			<th field="city">居住地 市</th>
-			<th field="district">居住地 县/区</th>
-			<th field="address">详细地址</th>
-			<th field="zip">邮政编码</th>
+			<th field="mobileNo">手机</th>
+			<th field="phoneNo">电话</th>
+            <th field="email">邮件</th>
+			<th field="province">省</th>
+			<th field="city">市</th>
+			<th field="district">县/区</th>
+			<th field="zip">邮编</th>
 			<th field="qq">QQ</th>
 			<th field="wechat">MSN</th>
 			<th field="wangwang">旺旺</th>
-			<th field="google">备注</th>
-			<th field="facebeek">facebeek</th>
-			<th field="email">email</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
-			<th field="comments">备注</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_memberContact_action',value,row)}">动作</th>
         </tr>
       </thead>
@@ -75,7 +58,8 @@ $(function() {
 
     <!-- 每行的Action动作模板 -->
     <div id="manage_memberContact_action" style="display: none;">
-      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/memberContact/edit.html',id:'{0}',entity:'memberContact',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
+      <a onclick="$.acooly.framework.edit({url:'/manage/component/member/memberContact/edit.html',id:'{0}',entity:'memberContact',width:600,height:500});" href="#" title="编辑"><i
+			  class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/component/member/memberContact/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.remove('/manage/component/member/memberContact/deleteJson.html','{0}','manage_memberContact_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
