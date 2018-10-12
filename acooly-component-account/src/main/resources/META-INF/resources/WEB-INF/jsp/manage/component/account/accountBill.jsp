@@ -46,10 +46,10 @@ $(function() {
             <th field="userNo">用户编码</th>
             <th field="userId">用户ID</th>
 			<th field="username">用户名</th>
-			<th field="amount" sum="true" formatter="centMoneyFormatter">交易金额</th>
-			<th field="balancePost" sum="true" formatter="centMoneyFormatter">变动后余额</th>
-            <th field="freeze" sum="true" formatter="centMoneyFormatter">冻结金额</th>
-            <th field="freezePost" sum="true" formatter="centMoneyFormatter">冻结后总额</th>
+			<th field="amount" sum="true" formatter="centMoneyFormatter">交易金额(元)</th>
+			<th field="balancePost" sum="true" formatter="centMoneyFormatter">变动后余额(元)</th>
+            <th field="freezeAmount" sum="true" formatter="centMoneyFormatter">冻结金额(元)</th>
+            <th field="freezePost" sum="true" formatter="centMoneyFormatter">冻结后总额(元)</th>
 			<th field="direction" formatter="mappingFormatter">资金流向</th>
             <th field="tradeCodeField" data-options="formatter:function(v,r,i){return r.tradeCode;}">交易码</th>
 			<th field="tradeCode" formatter="mappingFormatter">交易名称</th>
