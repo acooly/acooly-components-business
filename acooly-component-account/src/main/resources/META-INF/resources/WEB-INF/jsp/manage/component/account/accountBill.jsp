@@ -19,10 +19,11 @@ $(function() {
           	<div>
                 账户编码: <input type="text" class="text" size="15" name="search_EQ_accountNo"/>
                 用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+                订单号: <input type="text" class="text" size="15" name="search_LIKE_bizOrderNo"/>
                 用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
 				资金流向: <select style="width:80px;height:27px;" name="search_EQ_direction" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allDirections}"><option value="${e.key}" ${param.search_EQ_direction == e.key?'selected':''}>${e.value}</option></c:forEach></select>
                 交易码: <input type="text" class="text" size="15" name="search_LIKE_tradeCode"/>
-                交易时间: <input size="10" type="text" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                时间: <input size="10" type="text" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
                 至<input size="10" type="text" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_accountBill_searchform','manage_accountBill_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
