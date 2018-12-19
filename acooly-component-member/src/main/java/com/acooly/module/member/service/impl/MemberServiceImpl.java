@@ -18,13 +18,12 @@ import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.*;
 import com.acooly.module.member.enums.*;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.AbstractMemberService;
 import com.acooly.module.member.service.MemberRealNameService;
@@ -208,6 +207,11 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
 
         Account account = accountManageService.openAccount(accountInfo);
         log.info("注册 同步开账户成功 account:{}", account.getLabel());
+    }
+
+    @Override
+    protected Member loadMember(Long id, String userNo, String username) {
+        return super.loadMember(id, userNo, username);
     }
 
     /**

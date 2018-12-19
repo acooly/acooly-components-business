@@ -13,17 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2018-07-01 18:19
  */
 @Slf4j
-public class AccountVerifyServiceTest extends AppTestBase {
-
-    public static final String PROFILE = "sdev";
-
-    //设置环境
-    static {
-        Apps.setProfileIfNotExists(PROFILE);
-    }
-
-    static final long TEST_FROM_ID = 100;
-    static final long TEST_TO_ID = 101;
+public class AccountVerifyServiceTest extends AbstractAccountTest {
 
     @Autowired
     private AccountVerifyService accountVerifyService;
@@ -34,7 +24,7 @@ public class AccountVerifyServiceTest extends AppTestBase {
      */
     @Test
     public void testVerifyAccount() {
-        accountVerifyService.verifyAccount(new AccountInfo(TEST_FROM_ID));
+        accountVerifyService.verifyAccount(AccountInfo.withNo(USER_FROM.getUserNo()));
     }
 
 }

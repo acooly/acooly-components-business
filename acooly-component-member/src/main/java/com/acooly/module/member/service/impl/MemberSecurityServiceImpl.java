@@ -5,7 +5,7 @@ import com.acooly.core.utils.Strings;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberStatusEnum;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.AbstractMemberService;
 import com.acooly.module.member.service.MemberSecurityService;

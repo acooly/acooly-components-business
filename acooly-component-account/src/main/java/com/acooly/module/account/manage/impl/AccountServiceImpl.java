@@ -40,12 +40,12 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
 
         Account account = null;
         // 1、优先ID加载
-//        if (accountInfo.getAccountId() != null) {
-//            account = getEntityDao().findById(accountInfo.getAccountId());
-//            if (account != null) {
-//                return account;
-//            }
-//        }
+        if (accountInfo.getAccountId() != null) {
+            account = getEntityDao().findById(accountInfo.getAccountId());
+            if (account != null) {
+                return account;
+            }
+        }
         // 2、accountNo加载
         if (Strings.isNoneBlank(accountInfo.getAccountNo())) {
             account = getEntityDao().findByAccountNo(accountInfo.getAccountNo());
@@ -78,14 +78,13 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
             log.info("开户 失败 {},accountInfo:{}", AccountErrorEnum.ACCOUNT_ALREADT_EXISTED, accountInfo);
             throw new AccountOperationException(AccountErrorEnum.ACCOUNT_ALREADT_EXISTED);
         }
+
         account = BeanCopier.copy(accountInfo, Account.class);
-        //account.setId(accountInfo.getAccountId());
         account.setAccountType(accountInfo.getAccountType());
 
         if (Strings.isNotBlank(account.getUserNo())) {
             //
             if (Strings.isBlank(account.getAccountNo())) {
-                //account.setAccountNo(account.getUserNo());
                 //AccountNo为空 生产一个，不关联UserNo，多账户模式
                 account.setAccountNo(Ids.getDid());
             }
@@ -110,12 +109,26 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
 
     @Override
     public void statusChange(Long id, SimpleStatus status) {
+        doStatusChange(new AccountInfo(id), status);
+    }
 
+    @Override
+    public void statusChange(String accountNo, SimpleStatus status) {
+        doStatusChange(new AccountInfo(accountNo), status);
+    }
+
+    @Override
+    public List<String> getAllaccountType() {
+        return getEntityDao().getAllaccountType();
+    }
+
+
+    protected void doStatusChange(AccountInfo accountInfo, SimpleStatus status) {
         try {
-            Account account = loadAccount(new AccountInfo(id));
+            Account account = loadAccount(accountInfo);
             if (account == null) {
-                log.warn("状态变更 [失败] accountId:{},原因：{}", id, AccountErrorEnum.ACCOUNT_NOT_EXIST);
-                throw new AccountOperationException(AccountErrorEnum.ACCOUNT_NOT_EXIST, "accountId:" + id);
+                log.warn("状态变更 [失败] account key:{},原因：{}", accountInfo.getLabel(), AccountErrorEnum.ACCOUNT_NOT_EXIST);
+                throw new AccountOperationException(AccountErrorEnum.ACCOUNT_NOT_EXIST, "account key:" + accountInfo.getLabel());
             }
 
             if (account.getStatus() == SimpleStatus.disable) {
@@ -136,11 +149,6 @@ public class AccountServiceImpl extends EntityServiceImpl<Account, AccountDao> i
         } catch (Exception e) {
             throw new BusinessException(AccountErrorEnum.ACCOUNT_INTERNAL_ERROR);
         }
-
     }
 
-    @Override
-    public List<String> getAllaccountType() {
-        return getEntityDao().getAllaccountType();
-    }
 }

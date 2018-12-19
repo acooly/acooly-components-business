@@ -1,4 +1,4 @@
-package com.acooly.module.member.exception;
+package com.acooly.module.member.error;
 
 import com.acooly.core.utils.enums.Messageable;
 
@@ -13,6 +13,10 @@ import java.util.Map;
  */
 public enum MemberErrorEnum implements Messageable {
 
+
+    PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
+
+    MEMBER_PARAMS_ERROR("MEMBER_PARAMS_ERROR", "会员参数错误"),
 
     MEMBER_INTERNAL_ERROR("MEMBER_INTERNAL_ERROR", "账务内部错误"),
 
@@ -46,8 +50,24 @@ public enum MemberErrorEnum implements Messageable {
 
     CAPTCHA_SEND_ERROR("CAPTCHA_SEND_ERROR", "验证码发送失败"),
 
-    CAPTCHA_VERIFY_ERROR("CAPTCHA_SEND_ERROR", "验证码验证失败");
+    CAPTCHA_VERIFY_ERROR("CAPTCHA_SEND_ERROR", "验证码验证失败"),
 
+
+    AUTH_ADMIN_NOT_UNIQUE("AUTH_ADMIN_OPT_NOT_UNIQUE", "会员主账号不唯一"),
+
+    AUTH_LOGINID_NOT_UNIQUE("AUTH_LOGINID_NOT_UNIQUE", "会员子账号登录名不唯一"),
+
+    AUTH_OPERATOR_NOT_EXIST("AUTH_OPERATOR_NOT_EXIST", "账号不存在"),
+
+    AUTH_STATUS_NOT_ENABLE("AUTH_STATUS_NOT_ENABLE", "账号状态不可用"),
+
+    AUTH_KEY_EXPIRED("AUTH_KEY_EXPIRED", "账号密码/Key已过期"),
+
+    AUTH_OPERATOR_LOCKED("AUTH_OPERATOR_LOCKED", "账号已锁定"),
+
+    AUTH_UNSUPPORT_OPERATE("AUTH_UNSUPPORT_OPERATE", "不支持的操作"),
+
+    AUTH_VERIFY_FAIL("AUTH_VERIFY_FAIL", "用户名或密码错误"),;
 
     private final String code;
     private final String message;

@@ -3,10 +3,9 @@ package com.acooly.module.account.dto;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.DtoBase;
 import com.acooly.core.utils.Strings;
+import com.acooly.module.account.enums.AccountTypeEnum;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Size;
@@ -42,7 +41,7 @@ public class AccountInfo extends DtoBase {
     @Size(max = 64)
     private String userNo;
 
-    private String accountType;
+    private String accountType = AccountTypeEnum.main.getCode();
 
     @Size(max = 32)
     private String username;
@@ -77,11 +76,20 @@ public class AccountInfo extends DtoBase {
     }
 
     /**
-     * 用于创建默认账户
+     * 定位账户 with userNo+accountType
+     *
+     * @param userNo
+     * @param accountType
+     */
+    public AccountInfo(String userNo, String accountType) {
+        this.userNo = userNo;
+        this.accountType = accountType;
+    }
+
+    /**
+     * 快速创建会员子账户
      * <p>
-     * <p>
-     * accountId = userId
-     * accountNo = userNo
+     * accountNo != userNo, accountNo为空，则自动生成
      * accountType = main
      *
      * @param userId
@@ -92,26 +100,41 @@ public class AccountInfo extends DtoBase {
     }
 
     public AccountInfo(Long userId, String userNo, String username) {
-        this.userId = userId;
-        this.userNo = userNo;
-        //this.accountId = this.userId;
-        this.accountNo = userNo;
-        this.username = username;
+        this(userNo, userId, userNo, username, AccountTypeEnum.main.code());
     }
 
+    public AccountInfo(Long userId, String userNo, String username, String accountType) {
+        this(userNo, userId, userNo, username, accountType);
+    }
 
     /**
      * 用户创建账户：指定所有核心参数
      * <p>
-     * 如果不传入accountId则系统生成
      * 如果不传入accountNo则系统生成
      *
+     * @param accountNo
+     * @param userId
+     * @param userNo
+     * @param username
+     * @param accountType
+     */
+    public AccountInfo(@Nullable String accountNo, Long userId, String userNo, String username, String accountType) {
+        this.accountNo = accountNo;
+        this.userId = userId;
+        this.userNo = userNo;
+        this.username = username;
+        this.accountType = accountType;
+    }
+
+    /**
+     * 暂时保留用于兼容原有接口
      * @param accountId
      * @param accountNo
      * @param userId
      * @param userNo
      * @param accountType
      */
+    @Deprecated
     public AccountInfo(@Nullable Long accountId, @Nullable String accountNo, Long userId, String userNo, String accountType) {
         this.accountId = accountId;
         this.accountNo = accountNo;
@@ -120,10 +143,14 @@ public class AccountInfo extends DtoBase {
         this.accountType = accountType;
     }
 
-    public AccountInfo(String userNo, String accountType) {
-        this.userNo = userNo;
-        this.accountType = accountType;
+    public static AccountInfo withId(Long id) {
+        return new AccountInfo(id);
     }
+
+    public static AccountInfo withNo(String accountNo) {
+        return new AccountInfo(accountNo);
+    }
+
 
     public String getLabel() {
         StringBuilder sb = new StringBuilder();

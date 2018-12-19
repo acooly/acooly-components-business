@@ -11,6 +11,8 @@ package com.acooly.module.member;
 
 import com.google.common.collect.Maps;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -86,6 +88,59 @@ public class MemberProperties implements InitializingBean {
      * memeber profile default avatar path
      */
     private String defaultAvatar = "/assets/default_avatar@64.png";
+
+
+    private Auth auth = new Auth();
+
+    /**
+     * 账号认证参数
+     */
+    @Getter
+    @Setter
+    public static class Auth {
+
+        /**
+         * 是否开启同名用户登录互斥 开关 [未实现]
+         */
+        private boolean conflict = false;
+
+        /**
+         * 密码错误次数锁定 开关
+         */
+        private boolean lock = true;
+
+        /**
+         * 锁定：失败次数
+         */
+        private long lockFailTimes = 5;
+        /**
+         * 锁定：分钟数
+         */
+        private long lockMinutes = 60;
+
+
+        /**
+         * 是否开启密码过期处理 开关
+         */
+        private boolean passwordExpire = true;
+
+        /**
+         * 账号有效期, 默认90天
+         */
+        private int passwordExpireDays = 90;
+        /**
+         * 密码格式组成规则
+         * <p>
+         * [a-zA-Z]{1}[\\\\w]{7,15}  密码必须以字母开头，由字母、数字、下划线组成，长度8-16字节。
+         */
+        private String passwordRegex = "[\\\\w]{6,16}";
+        /**
+         * 密码格式错误提示
+         */
+        private String passwordError = "密码由任意字母、数字、下划线组成，长度6-16字节";
+
+    }
+
 
     @Override
     public void afterPropertiesSet() {

@@ -49,20 +49,61 @@ public class AccountKeepInfo extends AccountInfo {
     public AccountKeepInfo() {
     }
 
+    /**
+     * 以ID方式操作账户
+     *
+     * @param accountId
+     * @param tradeCode
+     * @param amount
+     * @param busiId
+     * @param busiData
+     */
+    @Deprecated
     public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount, Long busiId, String busiData) {
-        super(accountId, null, null, null, null);
+        this.setAccountId(accountId);
+        this.tradeCode = tradeCode;
+        this.amount = amount;
+        this.busiId = busiId;
+        this.busiData = busiData;
+    }
+    @Deprecated
+    public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount) {
+        this.setAccountId(accountId);
+        this.setTradeCode(tradeCode);
+        this.setAmount(amount);
+    }
+    @Deprecated
+    public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount, String comments) {
+        this.setAccountId(accountId);
+        this.setTradeCode(tradeCode);
+        this.setAmount(amount);
+        setComments(comments);
+    }
+
+
+    /**
+     * 以accountNo编码方式操作账户
+     *
+     * @param accountNo
+     * @param tradeCode
+     * @param amount
+     * @param busiId
+     * @param busiData
+     */
+    public AccountKeepInfo(String accountNo, TradeCode tradeCode, Money amount, Long busiId, String busiData) {
+        super(accountNo, null, null, null, null);
         this.tradeCode = tradeCode;
         this.amount = amount;
         this.busiId = busiId;
         this.busiData = busiData;
     }
 
-    public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount) {
-        this(accountId, tradeCode, amount, null, null);
+    public AccountKeepInfo(String accountNo, TradeCode tradeCode, Money amount) {
+        this(accountNo, tradeCode, amount, null, null);
     }
 
-    public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount, String comments) {
-        this(accountId, tradeCode, amount, null, null);
+    public AccountKeepInfo(String accountNo, TradeCode tradeCode, Money amount, String comments) {
+        this(accountNo, tradeCode, amount, null, null);
         setComments(comments);
     }
 

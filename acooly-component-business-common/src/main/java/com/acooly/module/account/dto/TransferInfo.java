@@ -87,6 +87,15 @@ public class TransferInfo {
         this.amount = amount;
     }
 
+
+    public TransferInfo(String accountNoFrom, String accountNoTo, TradeCode tradeCodeFrom, TradeCode tradeCodeTo, Money amount) {
+        this.from = new AccountInfo(accountNoFrom);
+        this.to = new AccountInfo(accountNoTo);
+        this.tradeCodeFrom = tradeCodeFrom;
+        this.tradeCodeTo = tradeCodeTo;
+        this.amount = amount;
+    }
+
     /**
      * 快捷 通用单笔转账
      * <p>
@@ -100,5 +109,7 @@ public class TransferInfo {
         this(accountIdFrom, accountIdTo, CommonTradeCodeEnum.transfer_out, CommonTradeCodeEnum.transfer_in, amount);
     }
 
-
+    public TransferInfo(String accountNoFrom, String accountNoTo, Money amount) {
+        this(accountNoFrom, accountNoTo, CommonTradeCodeEnum.transfer_out, CommonTradeCodeEnum.transfer_in, amount);
+    }
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.acooly.module.member.dao.MemberAuthDao">
+
+    <resultMap id="memberAuthResultMap" type="com.acooly.module.member.entity.MemberAuth">
+        <id property="id" column="memberAuth_id"/>
+        <result property="userId" column="memberAuth_user_id"/>
+        <result property="userNo" column="memberAuth_user_no"/>
+        <result property="username" column="memberAuth_username"/>
+        <result property="authType" column="memberAuth_auth_type"/>
+        <result property="authRole" column="memberAuth_auth_role"/>
+        <result property="loginId" column="memberAuth_login_id"/>
+        <result property="loginKey" column="memberAuth_login_key"/>
+        <result property="loginSalt" column="memberAuth_login_salt"/>
+        <result property="expireTime" column="memberAuth_expire_time"/>
+        <result property="unlockTime" column="memberAuth_unlock_time"/>
+        <result property="loginFailTimes" column="memberAuth_login_fail_times"/>
+        <result property="lastLoginTime" column="memberAuth_last_login_time"/>
+        <result property="loginStatus" column="memberAuth_login_status"/>
+        <result property="authStatus" column="memberAuth_auth_status"/>
+        <result property="createTime" column="memberAuth_create_time"/>
+        <result property="updateTime" column="memberAuth_update_time"/>
+        <result property="comments" column="memberAuth_comments"/>
+    </resultMap>
+
+    <sql id="memberAuthSqlSelect">
+            memberAuth.id as memberAuth_id,
+            memberAuth.user_id as memberAuth_user_id,
+            memberAuth.user_no as memberAuth_user_no,
+            memberAuth.username as memberAuth_username,
+            memberAuth.auth_type as memberAuth_auth_type,
+            memberAuth.auth_role as memberAuth_auth_role,
+            memberAuth.login_id as memberAuth_login_id,
+            memberAuth.login_key as memberAuth_login_key,
+            memberAuth.login_salt as memberAuth_login_salt,
+            memberAuth.expire_time as memberAuth_expire_time,
+            memberAuth.unlock_time as memberAuth_unlock_time,
+            memberAuth.login_fail_times as memberAuth_login_fail_times,
+            memberAuth.last_login_time as memberAuth_last_login_time,
+            memberAuth.login_status as memberAuth_login_status,
+            memberAuth.auth_status as memberAuth_auth_status,
+            memberAuth.create_time as memberAuth_create_time,
+            memberAuth.update_time as memberAuth_update_time,
+            memberAuth.comments as memberAuth_comments
+    </sql>
+
+</mapper>

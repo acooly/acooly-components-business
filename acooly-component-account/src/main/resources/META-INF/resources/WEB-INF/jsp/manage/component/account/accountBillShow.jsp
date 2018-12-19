@@ -5,51 +5,56 @@
 	<tr>
 		<th>ID:</th>
 		<td>${accountBill.id}</td>
-	</tr>					
+	</tr>
+	<tr>
+		<th>流水编码:</th>
+		<td>${accountBill.billNo}</td>
+	</tr>
 	<tr>
 		<th width="25%">账户:</th>
 		<td>${accountBill.accountId}/${accountBill.accountNo}</td>
 	</tr>
 	<tr>
 		<th>用户:</th>
-		<td>${accountBill.userId}/${accountBill.userNo}</td>
+		<td>${accountBill.userId}/${accountBill.userNo}/${accountBill.username}</td>
 	</tr>
 	<tr>
-		<th>用户名:</th>
-		<td>${accountBill.username}</td>
-	</tr>					
-	<tr>
-		<th>交易金额:</th>
-		<td>${accountBill.amount}</td>
-	</tr>					
-	<tr>
-		<th>变动后余额:</th>
-		<td>${accountBill.balancePost}</td>
-	</tr>					
-	<tr>
-		<th>资金流向:</th>
-		<td>${accountBill.direction.message}</td>
-	</tr>					
+		<th>交易时间:</th>
+		<td><fmt:formatDate value="${accountBill.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+	</tr>
 	<tr>
 		<th>交易码:</th>
 		<td>${accountBill.tradeCode}/${allTradeCodes[accountBill.tradeCode]}</td>
 	</tr>
 	<tr>
-		<th>相关业务ID:</th>
+		<th>资金流向:</th>
+		<td>${accountBill.direction.code}/${accountBill.direction.message}</td>
+	</tr>
+	<tr>
+		<th>交易金额:</th>
+		<td>${accountBill.amount}</td>
+	</tr>					
+	<tr>
+		<th>交易后余额:</th>
+		<td>${accountBill.balancePost}</td>
+	</tr>
+	<tr>
+		<th>订单号:</th>
+		<td>${accountBill.bizOrderNo}</td>
+	</tr>
+	<tr>
+		<th>业务ID:</th>
 		<td>${accountBill.busiId}</td>
 	</tr>					
 	<tr>
-		<th>相关业务数据:</th>
+		<th>业务数据:</th>
 		<td>${accountBill.busiData}</td>
 	</tr>					
 	<tr>
 		<th>状态:</th>
 		<td>${accountBill.status.message}</td>
 	</tr>					
-	<tr>
-		<th>交易时间:</th>
-		<td><fmt:formatDate value="${accountBill.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-	</tr>
+
 	<tr>
 		<th>备注:</th>
 		<td>${accountBill.comments}</td>

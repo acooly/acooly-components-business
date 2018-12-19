@@ -1,9 +1,10 @@
 package com.acooly.module.account.service;
 
 import com.acooly.core.utils.Money;
+import com.acooly.module.account.TradeCode;
+import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
-import com.acooly.module.account.TradeCode;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -57,6 +58,8 @@ public interface AccountTradeService {
      */
     void freeze(Long accountId, Money amount, @Nullable String comments);
 
+    void freeze(AccountInfo accountInfo, Money amount, @Nullable String comments);
+
     /**
      * 批量冻结
      *
@@ -66,6 +69,8 @@ public interface AccountTradeService {
      */
     String freeze(List<Long> accountIds, Money amount, @Nullable String comments);
 
+    String freezes(List<AccountInfo> accountInfos, Money amount, @Nullable String comments);
+
     /**
      * 解冻
      *
@@ -74,6 +79,8 @@ public interface AccountTradeService {
      * @param comments  可为空
      */
     void unfreeze(Long accountId, Money amount, @Nullable String comments);
+
+    void unfreeze(AccountInfo accountInfo, Money amount, @Nullable String comments);
 
     /**
      * 批量解冻
@@ -85,6 +92,7 @@ public interface AccountTradeService {
      */
     String unfreeze(List<Long> accountIds, Money amount, @Nullable String comments);
 
+    String unfreezes(List<AccountInfo> accountInfos, Money amount, @Nullable String comments);
 
     /**
      * 充值记账 包装接口
@@ -96,6 +104,7 @@ public interface AccountTradeService {
      */
     void deposit(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
 
+    void deposit(AccountInfo accountInfo, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
 
     /**
      * 充值记账
@@ -105,15 +114,17 @@ public interface AccountTradeService {
      */
     void deposit(Long accountId, Money amount);
 
+    void deposit(AccountInfo accountInfo, Money amount);
+
     /**
      * 充值记账
      *
-     * @param userNo 用户名
+     * @param userNo      用户名
      * @param accountType 账户类型
-     * @param bizOrderNo 业务订单号
-     * @param amount    金额
+     * @param bizOrderNo  业务订单号
+     * @param amount      金额
      */
-    void deposit(String userNo,String accountType,String bizOrderNo,Money amount,String comments);
+    void deposit(String userNo, String accountType, String bizOrderNo, Money amount, String comments);
 
 
     /**
@@ -126,6 +137,8 @@ public interface AccountTradeService {
      */
     void withdraw(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
 
+    void withdraw(AccountInfo accountInfo, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments);
+
     /**
      * 提现包装
      *
@@ -133,6 +146,8 @@ public interface AccountTradeService {
      * @param amount
      */
     void withdraw(Long accountId, Money amount);
+
+    void withdraw(AccountInfo accountInfo, Money amount);
 
     /**
      * 单笔转账

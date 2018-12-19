@@ -7,7 +7,7 @@
  * 修订记录:
  * zhangpu@acooly.cn 2018-07-27 13:53 创建
  */
-package com.acooly.module;
+package com.acooly.module.account;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Money;
@@ -28,7 +28,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
         webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
 @Slf4j
-public abstract class AbstractComponentsTest extends AppTestBase {
+public abstract class AbstractAccountTest extends AppTestBase {
 
     public static final String PROFILE = "sdev";
 
@@ -40,16 +40,10 @@ public abstract class AbstractComponentsTest extends AppTestBase {
     @Autowired
     protected JdbcTemplate jdbcTemplate;
 
+    static final UserInfo USER_FROM = new UserInfo(1L, "20180000000000000001", "zhangpu");
+    static final UserInfo USER_DEST = new UserInfo(2L, "20180000000000000002", "acooly");
 
-    protected void cleanMemberDatabase(String username) {
-        jdbcTemplate.execute("delete from b_member where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_profile where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_contact where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_personal where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_enterprise where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_auth where username = '" + username + "'");
-        jdbcTemplate.execute("delete from ac_account where username = '" + username + "'");
-    }
+
 
     protected void cleanAccountDatabase(String accountNo) {
         jdbcTemplate.execute("delete from ac_account where account_no = '" + accountNo + "'");
