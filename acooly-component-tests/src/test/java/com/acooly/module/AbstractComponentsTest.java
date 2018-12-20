@@ -39,23 +39,7 @@ public abstract class AbstractComponentsTest extends AppTestBase {
 
     @Autowired
     protected JdbcTemplate jdbcTemplate;
-
-
-    protected void cleanMemberDatabase(String username) {
-        jdbcTemplate.execute("delete from b_member where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_profile where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_contact where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_personal where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_enterprise where username = '" + username + "'");
-        jdbcTemplate.execute("delete from b_member_auth where username = '" + username + "'");
-        jdbcTemplate.execute("delete from ac_account where username = '" + username + "'");
-    }
-
-    protected void cleanAccountDatabase(String accountNo) {
-        jdbcTemplate.execute("delete from ac_account where account_no = '" + accountNo + "'");
-        jdbcTemplate.execute("delete from ac_account_bill where account_no = '" + accountNo + "'");
-    }
-
+    
 
     protected static Money getRandomAmount() {
         return Money.cent(RandomUtils.nextLong(1, 20));

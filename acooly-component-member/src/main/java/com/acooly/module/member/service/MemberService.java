@@ -26,8 +26,6 @@ public interface MemberService {
 
 
 
-
-
     /**
      * 发送激活短信或邮件
      *

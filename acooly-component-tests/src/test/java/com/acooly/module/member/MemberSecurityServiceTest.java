@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2018-08-06 16:19
  */
 @Slf4j
-public class MemberSecurityServiceTest extends AbstractComponentsTest {
+public class MemberSecurityServiceTest extends AbstractMemberTest {
     /**
      * 测试用户
      */

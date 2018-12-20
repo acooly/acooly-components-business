@@ -1,6 +1,5 @@
 package com.acooly.module.member;
 
-import com.acooly.module.AbstractComponentsTest;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
@@ -23,13 +22,19 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2018-07-01 18:19
  */
 @Slf4j
-public class MemberServiceTest extends AbstractComponentsTest {
+public class MemberServiceTest extends AbstractMemberTest {
     /**
      * 测试用户
      */
-    static final String TEST_USERNAME = "zhangpu";
+    static final String TEST_USERNAME = "user";
     static final String TEST_PASSWORD = "Ab123456";
     static final String TEST_MOBILE_NO = "13896177630";
+
+    /**
+     * 测试父用户
+     */
+    static final String TEST_PARENT_USERNAME = "user_parent";
+    static final String TEST_CHILD_USERNAME = "user_child";
     /**
      * 测试的经纪人用户
      */
@@ -75,7 +80,7 @@ public class MemberServiceTest extends AbstractComponentsTest {
         // 1、激活，选择自动激活，手机或邮箱必填其一
         memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.auto);
         // 3、账户：同步开户
-        memberRegistryInfo.setAccountRegisty(true);
+        memberRegistryInfo.setAccountRegisty(false);
 
         // 4、营销
         // 设置客户经理（后台sys_user或其他任意ID或标志）
@@ -108,6 +113,7 @@ public class MemberServiceTest extends AbstractComponentsTest {
         memberRegistryInfo.setRealName("秦海贤");
         memberRegistryInfo.setCertNo("360822198609284091");
         memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.mobileNo);
+        memberRegistryInfo.setParentid(100057L);
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);
     }
@@ -117,6 +123,44 @@ public class MemberServiceTest extends AbstractComponentsTest {
      */
     @Test
     public void testRegisterActiveWithMail() {
+        // 创建父会员
+        MemberRegistryInfo parentRegistryInfo = new MemberRegistryInfo(TEST_PARENT_USERNAME, TEST_PASSWORD, TEST_MOBILE_NO);
+        Member parent = memberService.register(parentRegistryInfo);
+
+        // 创建会员 (通过parentId指定父节点)
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, TEST_MOBILE_NO);
+        memberRegistryInfo.setParentid(parent.getId());
+        Member member = memberService.register(memberRegistryInfo);
+
+        // 创建子会员 (通过parentNo指定父节点)
+        MemberRegistryInfo childRegistryInfo = new MemberRegistryInfo(TEST_CHILD_USERNAME, TEST_PASSWORD, TEST_MOBILE_NO);
+        childRegistryInfo.setParentUserNo(member.getUserNo());
+        Member child = memberService.register(childRegistryInfo);
+
+
+    }
+
+    /**
+     * 注册待手机验证码激活
+     */
+    @Test
+    public void testRegisterEnterpriseActiveWithMobile() {
+        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME, TEST_PASSWORD, TEST_MOBILE_NO);
+        memberRegistryInfo.setMobileNo("13896177630");
+        memberRegistryInfo.setRealName("普易软件（上海）有限公司重庆分公司");
+        memberRegistryInfo.setCertNo("91500000MA5UHELY6Q");
+        memberRegistryInfo.setMemberUserType(MemberUserTypeEnum.enterprise);
+        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.mobileNo);
+        Member member = memberService.register(memberRegistryInfo);
+        log.info("注册成功。member:{}", member);
+    }
+
+
+    /**
+     * 注册父子关系
+     */
+    @Test
+    public void testRegisterWithParent() {
         MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo();
         memberRegistryInfo.setUsername(TEST_USERNAME);
         memberRegistryInfo.setPassword(TEST_PASSWORD);
@@ -126,21 +170,6 @@ public class MemberServiceTest extends AbstractComponentsTest {
         memberRegistryInfo.setAccountRegisty(false);
         memberRegistryInfo.setRealNameOnRegisty(true);
         memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.email);
-        Member member = memberService.register(memberRegistryInfo);
-        log.info("注册成功。member:{}", member);
-    }
-
-    /**
-     * 注册待手机验证码激活
-     */
-    @Test
-    public void testRegisterEnterpriseActiveWithMobile() {
-        MemberRegistryInfo memberRegistryInfo = new MemberRegistryInfo(TEST_USERNAME,TEST_PASSWORD,TEST_MOBILE_NO);
-        memberRegistryInfo.setMobileNo("13896177630");
-        memberRegistryInfo.setRealName("普易软件（上海）有限公司重庆分公司");
-        memberRegistryInfo.setCertNo("91500000MA5UHELY6Q");
-        memberRegistryInfo.setMemberUserType(MemberUserTypeEnum.enterprise);
-        memberRegistryInfo.setMemberActiveType(MemberActiveTypeEnum.mobileNo);
         Member member = memberService.register(memberRegistryInfo);
         log.info("注册成功。member:{}", member);
     }

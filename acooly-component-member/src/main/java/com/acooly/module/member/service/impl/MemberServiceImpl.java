@@ -307,9 +307,17 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             if (parent != null) {
                 member.setParentid(parent.getId());
                 member.setParentUserNo(parent.getUserNo());
+                String parentPath = parent.getPath();
+                if (Strings.isBlank(parentPath)) {
+                    parentPath = "/";
+                }
+                member.setPath(parentPath + parent.getId() + "/");
             } else {
+                member.setPath("/");
                 log.warn("注册 失败 设置的parentId没有对应的会员存在。 memberInfo:{}", memberRegistryInfo.getLabel());
             }
+        }else{
+            member.setPath("/");
         }
     }
 

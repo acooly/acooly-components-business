@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2018-08-01 12:19
  */
 @Slf4j
-public class MemberRealNameTest extends AbstractComponentsTest {
+public class MemberRealNameTest extends AbstractMemberTest {
 
     static final String TEST_USERNAME = "zhangpu";
 
