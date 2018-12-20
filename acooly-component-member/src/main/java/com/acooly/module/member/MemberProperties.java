@@ -90,6 +90,25 @@ public class MemberProperties implements InitializingBean {
     private String defaultAvatar = "/assets/default_avatar@64.png";
 
 
+    /**
+     * 管理相关参数
+     */
+    private Manage manage = new Manage();
+
+    /**
+     * 管理功能参数控制
+     */
+    @Getter
+    @Setter
+    public static class Manage {
+        /**
+         * 允许后台创建会员
+         */
+        private boolean allowCreate = true;
+
+    }
+
+
     private Auth auth = new Auth();
 
     /**

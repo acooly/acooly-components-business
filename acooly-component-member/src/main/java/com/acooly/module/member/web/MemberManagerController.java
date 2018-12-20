@@ -10,6 +10,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.WhetherStatus;
+import com.acooly.module.member.MemberProperties;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
@@ -49,6 +50,8 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private MemberProperties memberProperties;
 
     @Override
     protected Member doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
@@ -70,8 +73,8 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
     @Override
     protected PageInfo<Member> doList(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
         Map<String, Boolean> sorts = this.getSortMap(request);
-        if(sorts.isEmpty()){
-            sorts.put("id",false);
+        if (sorts.isEmpty()) {
+            sorts.put("id", false);
         }
 
         return getEntityService().queryMapper(this.getPageInfo(request), this.getSearchParams(request), this.getSortMap(request));
@@ -83,7 +86,8 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
         model.put("allGrades", MemberGradeEnum.mapping());
         model.put("allStatuss", MemberStatusEnum.mapping());
         model.put("allActiveTypes", MemberActiveTypeEnum.mapping());
-        model.put("allWhtherStatuss",WhetherStatus.mapping());
+        model.put("allWhtherStatuss", WhetherStatus.mapping());
+        model.put("manage", memberProperties.getManage());
     }
 
 }

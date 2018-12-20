@@ -106,8 +106,10 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
 
     <!-- 表格的工具栏 -->
     <div id="manage_member_toolbar">
+      <c:if test="${manage.allowCreate}">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:600,height:600,reload:true})"><i
               class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+      </c:if>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>会员配置信息</a>
         <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_contact_edit()"><i class="fa fa-address-book fa-lg fa-fw fa-col"></i>会员联系信息</a>
 
