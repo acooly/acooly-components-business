@@ -10,13 +10,10 @@
 package com.acooly.module.member.service.interceptor.impl;
 
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.service.interceptor.MemberRegistryData;
 import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * @author zhangpu 2018-07-26 18:05
@@ -46,13 +43,4 @@ public class EmptyMemberRegistryInterceptor implements MemberRegistryInterceptor
         log.debug("Empty exceptionRegistry");
     }
 
-    @Override
-    public void onCaptchaSms(Member member, Map<String, Object> data) {
-        log.debug("Empty onCaptchaSms");
-    }
-
-    @Override
-    public void onCaptchaMail(Member member, Map<String, String> data) {
-        log.debug("Empty onCaptchaMail");
-    }
 }
