@@ -9,6 +9,7 @@
  */
 package com.acooly.module.member;
 
+import com.acooly.module.member.enums.MemberTemplateEnum;
 import com.google.common.collect.Maps;
 import lombok.Data;
 import lombok.Getter;
@@ -163,18 +164,29 @@ public class MemberProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        smsTemplates.put("common", "你本次{action}的验证码是：${captcha}, 用户名：${username}。");
-        smsTemplates.put("register", "你本次注册的激活验证码是：${captcha}, 用户名：${username}。");
-        smsTemplates.put("registerQuick", "你本次注册的验证码是：${captcha}, 用户名：${username}。");
-        smsTemplates.put("active", "你的会员账号：${username}已成功激活。");
-        smsTemplates.put("changePassword", "你本次修改密码的验证码是：${captcha}, 用户名：${username}。");
+        smsTemplateDefValue(MemberTemplateEnum.common, "您本次{action}的验证码是：${captcha}, 用户名：${username}。");
+        smsTemplateDefValue(MemberTemplateEnum.register, "您注册的激活验证码是：${captcha}, 用户名：${username}。");
+        smsTemplateDefValue(MemberTemplateEnum.registerQuick, "您注册的激活验证码是：${captcha}, 用户名：${username}。");
+        smsTemplateDefValue(MemberTemplateEnum.active, "您的会员账号：${username}已成功激活。");
+        smsTemplateDefValue(MemberTemplateEnum.changePassword, "您本次修改密码的验证码是：${captcha}, 用户名：${username}。");
 
         // 这里模板配置的是ftl的文件名，目录在 /resource/mail/*.ftl
-        mailTemplates.put("common", "member_common");
-        mailTemplates.put("register", "member_active_demo");
-        mailTemplates.put("active", "member_active_success");
-        mailTemplates.put("changePassword", "member_changePassword");
+        mailTemplateDefValue(MemberTemplateEnum.common, "member_common");
+        mailTemplateDefValue(MemberTemplateEnum.register, "member_active_demo");
+        mailTemplateDefValue(MemberTemplateEnum.active, "member_active_success");
+        mailTemplateDefValue(MemberTemplateEnum.changePassword, "member_changePassword");
     }
 
+    private void smsTemplateDefValue(MemberTemplateEnum key, String defaultValue) {
+        if (smsTemplates.get(key.code()) == null) {
+            smsTemplates.put(key.code(), defaultValue);
+        }
+    }
+
+    private void mailTemplateDefValue(MemberTemplateEnum key, String defaultValue) {
+        if (mailTemplates.get(key.code()) == null) {
+            mailTemplates.put(key.code(), defaultValue);
+        }
+    }
 
 }
