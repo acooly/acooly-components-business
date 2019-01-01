@@ -97,15 +97,20 @@
         from b_member member, b_member_profile memberProfile
         where member.id = memberProfile.id
         <if test="map != null">
-        <if test="map.EQ_userNo != null and map.EQ_userNo != ''"> AND member.user_no = #{map.EQ_userNo}</if>
-        <if test="map.EQ_username != null and map.EQ_username != ''"> AND member.username = #{map.EQ_username}</if>
-        <if test="map.EQ_mobileNo != null and map.EQ_mobileNo != ''"> AND member.mobile_no = #{map.EQ_mobileNo}</if>
-        <if test="map.EQ_userType != null and map.EQ_userType != ''"> AND member.user_type = #{map.EQ_userType}</if>
-        <if test="map.EQ_grade != null and map.EQ_grade != ''"> AND member.grade = #{map.EQ_grade}</if>
-        <if test="map.EQ_realName != null and map.EQ_realName != ''"> AND member.real_name = #{map.EQ_realName}</if>
-        <if test="map.EQ_status != null and map.EQ_status != ''"> AND member.status = #{map.EQ_status}</if>
-        <if test="map.GTE_createTime != null and map.GTE_createTime != ''"> AND member.create_time &gt;= #{map.GTE_createTime}</if>
-        <if test="map.LTE_createTime != null and map.LTE_createTime != ''"> AND member.create_time &lt;= #{map.LTE_createTime}</if>
+          <if test="map.EQ_userNo != null and map.EQ_userNo != ''"> AND member.user_no = #{map.EQ_userNo}</if>
+          <if test="map.EQ_username != null and map.EQ_username != ''"> AND member.username = #{map.EQ_username}</if>
+          <if test="map.EQ_mobileNo != null and map.EQ_mobileNo != ''"> AND member.mobile_no = #{map.EQ_mobileNo}</if>
+          <if test="map.EQ_userType != null and map.EQ_userType != ''"> AND member.user_type = #{map.EQ_userType}</if>
+          <if test="map.EQ_grade != null and map.EQ_grade != ''"> AND member.grade = #{map.EQ_grade}</if>
+          <if test="map.EQ_realName != null and map.EQ_realName != ''"> AND member.real_name = #{map.EQ_realName}</if>
+          <if test="map.EQ_status != null and map.EQ_status != ''"> AND member.status = #{map.EQ_status}</if>
+          <if test="map.GTE_createTime != null and map.GTE_createTime != ''"> AND member.create_time &gt;= #{map.GTE_createTime}</if>
+          <if test="map.LTE_createTime != null and map.LTE_createTime != ''"> AND member.create_time &lt;= #{map.LTE_createTime}</if>
+          <if test="map.EQ_manager != null and map.EQ_manager != ''"> AND memberProfile.manager = #{map.EQ_manager}</if>
+          <if test="map.EQ_broker != null and map.EQ_broker != ''"> AND memberProfile.broker = #{map.EQ_broker}</if>
+          <if test="map.EQ_inviter != null and map.EQ_inviter != ''"> AND memberProfile.inviter = #{map.EQ_inviter}</if>
+            <!--<if test="map.EQ_path != null and map.EQ_path != ''"> AND member.path = #{map.EQ_path}</if>-->
+            <!--<if test="map.RLIKE_path != null and map.RLIKE_path != ''"> AND member.path = '#{map.RLIKE_path}%'</if>-->
         </if>
         <if test="sortMap == null">
             ORDER BY member.id DESC

@@ -8,6 +8,7 @@ package com.acooly.module.member.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.module.member.MemberProperties;
@@ -76,8 +77,12 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
         if (sorts.isEmpty()) {
             sorts.put("id", false);
         }
-
-        return getEntityService().queryMapper(this.getPageInfo(request), this.getSearchParams(request), this.getSortMap(request));
+        Map<String,Object> params = getSearchParams(request);
+        String memberPath = Servlets.getParameter(request,"memberPath");
+        if(Strings.isNotBlank(memberPath)){
+            params.put(memberPath + "_path","");
+        }
+        return getEntityService().queryMapper(this.getPageInfo(request), params, this.getSortMap(request));
     }
 
     @Override
