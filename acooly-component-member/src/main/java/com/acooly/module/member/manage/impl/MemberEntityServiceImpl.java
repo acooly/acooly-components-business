@@ -8,6 +8,8 @@ package com.acooly.module.member.manage.impl;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.core.utils.BeanUtils;
+import com.acooly.core.utils.Collections3;
 import com.acooly.module.member.dao.MemberDao;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.manage.MemberEntityService;
@@ -41,6 +43,9 @@ public class MemberEntityServiceImpl extends EntityServiceImpl<Member, MemberDao
     public PageInfo<Member> queryMapper(PageInfo<Member> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap) {
         return getEntityDao().queryPage(pageInfo,map,sortMap);
     }
+
+
+
 }
 
 

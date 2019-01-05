@@ -77,12 +77,17 @@ public class MemberManagerController extends AbstractJQueryEntityController<Memb
         if (sorts.isEmpty()) {
             sorts.put("id", false);
         }
-        Map<String,Object> params = getSearchParams(request);
-        String memberPath = Servlets.getParameter(request,"memberPath");
-        if(Strings.isNotBlank(memberPath)){
-            params.put(memberPath + "_path","");
+        Map<String, Object> params = getSearchParams(request);
+        String memberPath = Servlets.getParameter(request, "memberPath");
+        if (Strings.isNotBlank(memberPath)) {
+            params.put(memberPath + "_path", "");
         }
-        return getEntityService().queryMapper(this.getPageInfo(request), params, this.getSortMap(request));
+        Map<String, Boolean> sortMap = getSortMap(request);
+        if (sortMap != null && sortMap.get("id") != null) {
+            sortMap.put("member.id", sortMap.get("id"));
+            sortMap.remove("id");
+        }
+        return getEntityService().queryMapper(this.getPageInfo(request), params, sortMap);
     }
 
     @Override
