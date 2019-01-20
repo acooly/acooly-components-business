@@ -1,6 +1,6 @@
 <!-- title:积分组件 -->
 <!-- type: business -->
-<!-- author: zhangpu -->
+<!-- author: cuifuqiang -->
 acooly-component-point(积分组件)
 ====
 
