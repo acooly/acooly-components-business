@@ -104,6 +104,7 @@
         <if test="map.EQ_grade != null and map.EQ_grade != ''"> AND member.grade = #{map.EQ_grade}</if>
         <if test="map.EQ_realName != null and map.EQ_realName != ''"> AND member.real_name = #{map.EQ_realName}</if>
         <if test="map.EQ_status != null and map.EQ_status != ''"> AND member.status = #{map.EQ_status}</if>
+        <if test="map.EQ_realNameStatus != null and map.EQ_realNameStatus != ''"> AND memberProfile.real_name_status = #{map.EQ_realNameStatus}</if>
         <if test="map.GTE_createTime != null and map.GTE_createTime != ''"> AND member.create_time &gt;= #{map.GTE_createTime}</if>
         <if test="map.LTE_createTime != null and map.LTE_createTime != ''"> AND member.create_time &lt;= #{map.LTE_createTime}</if>
         </if>
