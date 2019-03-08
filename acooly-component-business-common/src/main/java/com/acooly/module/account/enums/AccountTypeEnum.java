@@ -21,7 +21,6 @@ import java.util.Map;
  * @author acooly
  * Date: 2018-06-06 10:40:46
  */
-@Deprecated
 public enum AccountTypeEnum implements Messageable {
 
     main("main", "主账户"),;

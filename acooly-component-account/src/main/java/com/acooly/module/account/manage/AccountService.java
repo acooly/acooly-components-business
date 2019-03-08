@@ -51,6 +51,8 @@ public interface AccountService extends EntityService<Account> {
      */
     void statusChange(Long id, SimpleStatus status);
 
+    void statusChange(String accountNo, SimpleStatus status);
+
     List<String> getAllaccountType();
 
 }

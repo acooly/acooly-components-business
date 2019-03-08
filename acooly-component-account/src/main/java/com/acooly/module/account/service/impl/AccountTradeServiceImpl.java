@@ -6,6 +6,7 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.account.TradeCode;
+import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.dto.AccountKeepInfo;
 import com.acooly.module.account.dto.TransferInfo;
 import com.acooly.module.account.entity.Account;
@@ -54,7 +55,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
             log.error("记账 [失败] AccountKeepInfo: {}, 错误:{}", accountKeepInfo, e.getMessage());
             throw new BusinessException(AccountErrorEnum.ACCOUNT_INTERNAL_ERROR);
         }
-        log.info("记账 成功：{} - {} - {}{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().lable(),
+        log.info("记账 成功：{}  {}  {}{}  {}", account.getLabel(), accountKeepInfo.getTradeCode().lable(),
                 accountKeepInfo.getTradeCode().symbol(),
                 accountKeepInfo.getAmount().getCent(),
                 (accountBill != null ? (accountKeepInfo.getTradeCode().direction() == DirectionEnum.keep ? accountBill.getFreezePost()
@@ -124,31 +125,60 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
 
     @Override
     public void freeze(Long accountId, Money amount, @Nullable String comments) {
-        doFreeze(accountId, amount, CommonTradeCodeEnum.freeze, comments);
+        doFreeze(AccountInfo.withId(accountId), amount, CommonTradeCodeEnum.freeze, comments);
+    }
+
+    @Override
+    public void freeze(AccountInfo accountInfo, Money amount, @Nullable String comments) {
+        doFreeze(accountInfo, amount, CommonTradeCodeEnum.freeze, comments);
     }
 
     @Override
     public String freeze(List<Long> accountIds, Money amount, @Nullable String comments) {
-        return doFreeze(accountIds, amount, CommonTradeCodeEnum.freeze, comments);
+        List<AccountInfo> accountInfos = Lists.newArrayList();
+        for (Long id : accountIds) {
+            accountInfos.add(AccountInfo.withId(id));
+        }
+        return doFreeze(accountInfos, amount, CommonTradeCodeEnum.freeze, comments);
     }
 
     @Override
     public void unfreeze(Long accountId, Money amount, @Nullable String comments) {
-        doFreeze(accountId, amount, CommonTradeCodeEnum.unfreeze, comments);
+        doFreeze(AccountInfo.withId(accountId), amount, CommonTradeCodeEnum.unfreeze, comments);
     }
 
     @Override
     public String unfreeze(List<Long> accountIds, Money amount, @Nullable String comments) {
-        return doFreeze(accountIds, amount, CommonTradeCodeEnum.unfreeze, comments);
+        List<AccountInfo> accountInfos = Lists.newArrayList();
+        for (Long id : accountIds) {
+            accountInfos.add(AccountInfo.withId(id));
+        }
+        return doFreeze(accountInfos, amount, CommonTradeCodeEnum.unfreeze, comments);
+    }
+
+    @Override
+    public void unfreeze(AccountInfo accountInfo, Money amount, @Nullable String comments) {
+        doFreeze(accountInfo, amount, CommonTradeCodeEnum.unfreeze, comments);
+    }
+
+    @Override
+    public String freezes(List<AccountInfo> accountInfos, Money amount, @Nullable String comments) {
+        return doFreeze(accountInfos, amount, CommonTradeCodeEnum.freeze, comments);
     }
 
 
     @Override
+    public String unfreezes(List<AccountInfo> accountInfos, Money amount, @Nullable String comments) {
+        return doFreeze(accountInfos, amount, CommonTradeCodeEnum.unfreeze, comments);
+    }
+
+
+    /**
+     * 充值实现组
+     */
+    @Override
     public void deposit(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
-        if (tradeCode == null) {
-            tradeCode = CommonTradeCodeEnum.deposit;
-        }
-        keepAccount(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+        doDeposit(AccountInfo.withId(accountId), tradeCode, null, amount, null);
     }
 
     @Override
@@ -157,23 +187,35 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
     }
 
     @Override
-    public void deposit(String userNo, String accountType, String bizOrderNo, Money amount,String comments) {
-        AccountKeepInfo accountKeepInfo = new AccountKeepInfo();
-        accountKeepInfo.setAccountType(accountType);
-        accountKeepInfo.setUserNo(userNo);
-        accountKeepInfo.setBizOrderNo(bizOrderNo);
-        accountKeepInfo.setAmount(amount);
-        accountKeepInfo.setTradeCode(CommonTradeCodeEnum.deposit);
-        accountKeepInfo.setComments(comments    );
-        keepAccount(accountKeepInfo);
+    public void deposit(AccountInfo accountInfo, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+        doDeposit(accountInfo, tradeCode, null, amount, null);
     }
 
     @Override
-    public void withdraw(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+    public void deposit(AccountInfo accountInfo, Money amount) {
+        doDeposit(accountInfo, CommonTradeCodeEnum.deposit, null, amount, null);
+    }
+
+    @Override
+    public void deposit(String userNo, String accountType, String bizOrderNo, Money amount, String comments) {
+        AccountInfo accountInfo = new AccountInfo(userNo, accountType);
+        doDeposit(accountInfo, CommonTradeCodeEnum.deposit, bizOrderNo, amount, comments);
+    }
+
+
+    protected void doDeposit(AccountInfo accountInfo, @Nullable TradeCode tradeCode, String bizOrderNo, Money amount, String comments) {
         if (tradeCode == null) {
-            tradeCode = CommonTradeCodeEnum.withdraw;
+            tradeCode = CommonTradeCodeEnum.deposit;
         }
-        keepAccount(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(accountInfo, tradeCode, amount, comments);
+        accountKeepInfo.setBizOrderNo(bizOrderNo);
+        keepAccount(accountKeepInfo);
+    }
+
+
+    @Override
+    public void withdraw(Long accountId, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+        doWithdraw(AccountInfo.withId(accountId), tradeCode, null, amount, comments);
     }
 
     @Override
@@ -182,21 +224,58 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
     }
 
 
-    protected void doFreeze(Long accountId, Money amount, TradeCode tradeCode, @Nullable String comments) {
-        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(accountId, tradeCode, amount, comments);
+    @Override
+    public void withdraw(AccountInfo accountInfo, Money amount, @Nullable TradeCode tradeCode, @Nullable String comments) {
+        doWithdraw(accountInfo, tradeCode, null, amount, comments);
+    }
+
+    @Override
+    public void withdraw(AccountInfo accountInfo, Money amount) {
+        doWithdraw(accountInfo, CommonTradeCodeEnum.withdraw, null, amount, null);
+    }
+
+    protected void doWithdraw(AccountInfo accountInfo, @Nullable TradeCode tradeCode, String bizOrderNo, Money amount, String comments) {
+        if (tradeCode == null) {
+            tradeCode = CommonTradeCodeEnum.withdraw;
+        }
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(accountInfo, tradeCode, amount, comments);
+        accountKeepInfo.setBizOrderNo(bizOrderNo);
         keepAccount(accountKeepInfo);
     }
 
-    protected String doFreeze(List<Long> accountIds, Money amount, TradeCode tradeCode, @Nullable String comments) {
+    /**
+     * 单笔冻结/解冻实现
+     *
+     * @param accountInfo
+     * @param amount
+     * @param tradeCode
+     * @param comments
+     */
+    protected void doFreeze(AccountInfo accountInfo, Money amount, TradeCode tradeCode, @Nullable String comments) {
+        AccountKeepInfo accountKeepInfo = new AccountKeepInfo(accountInfo, tradeCode, amount, comments);
+        keepAccount(accountKeepInfo);
+    }
+
+
+    /**
+     * 批量冻结/解冻实现
+     *
+     * @param accountInfos
+     * @param amount
+     * @param tradeCode
+     * @param comments
+     * @return
+     */
+    protected String doFreeze(List<AccountInfo> accountInfos, Money amount, TradeCode tradeCode, @Nullable String comments) {
         List<AccountKeepInfo> accountKeepInfos = Lists.newArrayList();
-        for (Long accountId : accountIds) {
-            accountKeepInfos.add(new AccountKeepInfo(accountId, tradeCode, amount, comments));
+        for (AccountInfo accountInfo : accountInfos) {
+            accountKeepInfos.add(new AccountKeepInfo(accountInfo, tradeCode, amount, comments));
         }
         return keepAccounts(accountKeepInfos, comments);
     }
 
     protected List<AccountKeepInfo> convertTransferToAccountKeepInfos(TransferInfo transferInfo) {
-            AccountKeepInfo from = new AccountKeepInfo(transferInfo.getFrom(),
+        AccountKeepInfo from = new AccountKeepInfo(transferInfo.getFrom(),
                 transferInfo.getTradeCodeFrom(), transferInfo.getAmount(), transferInfo.getComments());
         from.setBatchNo(transferInfo.getBatchNo());
         from.setBizOrderNo(transferInfo.getBizOrderNo());
@@ -254,9 +333,13 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         if (accountKeepInfo.getTradeCode().direction() == DirectionEnum.keep) {
             accountBill.setFreezeAmount(accountKeepInfo.getAmount().getCent());
             accountBill.setFreezePost(account.getFreeze());
+            // 冗余记录当前余额
+            accountBill.setBalancePost(account.getBalance());
         } else {
             accountBill.setAmount(accountKeepInfo.getAmount().getCent());
             accountBill.setBalancePost(account.getBalance());
+            // 冗余记录当前冻结总额
+            accountBill.setFreezePost(account.getFreeze());
         }
 
         accountBill.setDirection(accountKeepInfo.getTradeCode().direction());

@@ -18,13 +18,12 @@ import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
-import com.acooly.module.account.enums.AccountTypeEnum;
 import com.acooly.module.account.service.AccountManageService;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.entity.*;
 import com.acooly.module.member.enums.*;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.AbstractMemberService;
 import com.acooly.module.member.service.MemberRealNameService;
@@ -210,6 +209,11 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
         log.info("注册 同步开账户成功 account:{}", account.getLabel());
     }
 
+    @Override
+    protected Member loadMember(Long id, String userNo, String username) {
+        return super.loadMember(id, userNo, username);
+    }
+
     /**
      * 注册会员主体信息
      *
@@ -303,9 +307,17 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
             if (parent != null) {
                 member.setParentid(parent.getId());
                 member.setParentUserNo(parent.getUserNo());
+                String parentPath = parent.getPath();
+                if (Strings.isBlank(parentPath)) {
+                    parentPath = "/";
+                }
+                member.setPath(parentPath + parent.getId() + "/");
             } else {
+                member.setPath("/");
                 log.warn("注册 失败 设置的parentId没有对应的会员存在。 memberInfo:{}", memberRegistryInfo.getLabel());
             }
+        }else{
+            member.setPath("/");
         }
     }
 

@@ -9,6 +9,7 @@
  */
 package com.acooly.module.member.dto;
 
+import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.ToString;
@@ -147,6 +148,26 @@ public class MemberInfo extends InfoBase {
 
     public static MemberInfo of(String username) {
         return new MemberInfo(null, null, username);
+    }
+
+    public static MemberInfo of(Long id, String userNo, String username) {
+        return new MemberInfo(id, userNo, username);
+    }
+
+
+    @Override
+    public void check() throws OrderCheckException {
+        super.check();
+        if (this.getId() != null) {
+            return;
+        }
+        if (Strings.isNotBlank(this.getUsername())) {
+            return;
+        }
+        if (Strings.isNotBlank(this.getUserNo())) {
+            return;
+        }
+        OrderCheckException.throwIt("memberInfo", "没有唯一标志存在");
     }
 
     public String getLabel() {

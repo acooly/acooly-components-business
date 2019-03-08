@@ -1,9 +1,9 @@
 package com.acooly.module.account.service.impl;
 
+import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.service.AccountManageService;
-import com.acooly.core.utils.enums.SimpleStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +33,8 @@ public class AccountManageServiceImpl extends AccountSupportService implements A
         accountService.statusChange(accountId, status);
     }
 
-
+    @Override
+    public void statusChange(String accountNo, SimpleStatus status) {
+        accountService.statusChange(accountNo, status);
+    }
 }

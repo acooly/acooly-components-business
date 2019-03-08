@@ -17,17 +17,13 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					用户编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+					编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
 					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
 				    企业类型: <select style="width:80px;height:27px;" name="search_EQ_entType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allEntTypes}"><option value="${e.key}" ${param.search_EQ_entType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 					企业名称: <input type="text" class="text" size="15" name="search_LIKE_entName"/>
-					社会统一信用代码: <input type="text" class="text" size="15" name="search_EQ_licenceNo"/>
-					开户许可证号码: <input type="text" class="text" size="15" name="search_EQ_accountLicenseNo"/>
-					税务登记证号码: <input type="text" class="text" size="15" name="search_EQ_taxAuthorityNo"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					更新时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					信用代码: <input type="text" class="text" size="15" name="search_EQ_licenceNo"/>
+					注册时间: <input size="15" type="text" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至 <input size="15" type="text" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_memberEnterprise_searchform','manage_memberEnterprise_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>

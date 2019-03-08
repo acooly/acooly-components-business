@@ -11,7 +11,7 @@ import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberTemplateEnum;
 import com.acooly.module.member.enums.SendTypeEnum;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.AbstractMemberService;
 import com.acooly.module.member.service.MemberSendingService;

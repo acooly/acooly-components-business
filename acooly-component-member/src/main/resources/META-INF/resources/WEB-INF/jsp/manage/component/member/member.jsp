@@ -50,17 +50,28 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
         <tr>
           <td align="left">
           	<div>
-					编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
-					用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
-					手机: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
-					姓名: <input type="text" class="text" size="15" name="search_EQ_realName"/>
-                    类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-                    等级: <select style="width:80px;height:27px;" name="search_EQ_grade" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allGrades}"><option value="${e.key}" ${param.search_EQ_grade == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				    状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-				实名状态: <select style="width:80px;height:27px;" name="search_EQ_realNameStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allWhtherStatuss}"><option value="${e.key}" ${param.search_EQ_realNameStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					注册时间: <input size="10" type="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="10" type="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-          	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_member_searchform','manage_member_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+
+                编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
+                用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
+                手机: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
+                姓名: <input type="text" class="text" size="15" name="search_EQ_realName"/>
+                类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+                等级: <select style="width:80px;height:27px;" name="search_EQ_grade" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allGrades}"><option value="${e.key}" ${param.search_EQ_grade == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+                状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+                <br/>
+       	实名状态: <select style="width:80px;height:27px;" name="search_EQ_realNameStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allWhtherStatuss}"><option value="${e.key}" ${param.search_EQ_realNameStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>         
+                客服: <input type="text" class="text" size="15" name="search_EQ_manager"/>
+                经纪人: <input type="text" class="text" size="15" name="search_EQ_broker"/>
+                介绍人: <input type="text" class="text" size="15" name="search_EQ_inviter"/>
+                注册时间: <input size="10" type="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                至 <input size="10" type="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                <%--<span style="margin: 0 5px;">--%>
+                    <%--<input type="radio" name="memberPath" checked value=""> 所有--%>
+                    <%--<input type="radio" name="memberPath" value="EQ"> 同级--%>
+                    <%--<input type="radio" name="memberPath" value="RLIKE"> 子会员--%>
+                <%--</span>--%>
+                <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_member_searchform','manage_member_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+
           	</div>
           </td>
         </tr>
@@ -107,8 +118,10 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
 
     <!-- 表格的工具栏 -->
     <div id="manage_member_toolbar">
+      <c:if test="${manage.allowCreate}">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:600,height:600,reload:true})"><i
               class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+      </c:if>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>会员配置信息</a>
         <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_contact_edit()"><i class="fa fa-address-book fa-lg fa-fw fa-col"></i>会员联系信息</a>
 

@@ -10,13 +10,10 @@
 package com.acooly.module.member.event;
 
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.service.interceptor.MemberRegistryData;
 import com.acooly.module.member.service.interceptor.MemberRegistryInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * 测试用注册拦截器
@@ -46,16 +43,6 @@ public class TestMemberRegistryInterceptor implements MemberRegistryInterceptor 
 
     @Override
     public void exceptionRegistry(MemberRegistryData memberRegistryData, BusinessException be) {
-
-    }
-
-    @Override
-    public void onCaptchaSms(Member member, Map<String, Object> data) {
-
-    }
-
-    @Override
-    public void onCaptchaMail(Member member, Map<String, String> data) {
 
     }
 }

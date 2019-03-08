@@ -73,6 +73,24 @@ TradeCode的来源：
 
 通用组件集成模式，通过pom引用，默认为开启状态。参数配置前缀：acooly.account.
 
+### 推荐方案
+
+* 根据场景情况，优先推荐查看单元测试，里面有完整场景的测试案例代码和文档描述，可直接运行
+* 所有账户的操作（包括：开户，单笔，批量等），账户的定位方式推荐使用：AccountInfo对应,内置三种定位逻辑
+
+	* accountNo （推荐）
+	* userNo + accountType 或 userId + accountType (推荐)
+	* accountId (不推荐)
+
+```java
+// account的4种定位方式
+AccountInfo accountInfo = AccountInfo.withNo("11111111111111111111")
+AccountInfo accountInfo = AccountInfo.withId(1L)
+AccountInfo accountInfo = new AccountInfo(userNo,accountType)
+AccountInfo accountInfo = new AccountInfo(userId,accountType)
+```
+	
+
 ### 核心接口使用说明
 
 ```java

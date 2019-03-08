@@ -43,5 +43,6 @@ public interface AccountManageService {
      */
     void statusChange(Long accountId, SimpleStatus status);
 
+    void statusChange(String accountNo, SimpleStatus status);
 
 }

@@ -10,9 +10,6 @@
 package com.acooly.module.member.service.interceptor;
 
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.module.member.entity.Member;
-
-import java.util.Map;
 
 /**
  * 注册相关的扩拦截展器
@@ -60,30 +57,5 @@ public interface MemberRegistryInterceptor {
      */
     void exceptionRegistry(MemberRegistryData memberRegistryData, BusinessException be);
 
-
-    /**
-     * 根据配置发送注册短信验证码时的模板数据扩展。
-     * <p>
-     * 默认组件以在数据中提供：username, captcha
-     * 如果你的注册短信验证码模板新增了其他数据，则请实现该方法扩展.
-     * 注册短信的模板配置：acooly.member.active.smsTemplateContent
-     *
-     * @param member
-     * @param data
-     */
-    void onCaptchaSms(Member member, Map<String, Object> data);
-
-    /**
-     * 激活邮件模板数据扩展
-     * <p>
-     * 默认组件以在数据中提供：username, captcha
-     * 注册邮件的模板配置：acooly.member.active.mailTemplateName
-     * 这里配置的是/resources/mail/*.ftl的文件模板
-     * 注意：这里的参数data为Map<String,String>是因为发送组件的限制，够用，谅解。
-     *
-     * @param member
-     * @param data
-     */
-    void onCaptchaMail(Member member, Map<String, String> data);
 
 }

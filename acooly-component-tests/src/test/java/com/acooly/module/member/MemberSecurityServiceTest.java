@@ -5,7 +5,7 @@ import com.acooly.module.member.dto.MemberRegistryInfo;
 import com.acooly.module.member.enums.MemberActiveTypeEnum;
 import com.acooly.module.member.enums.MemberTemplateEnum;
 import com.acooly.module.member.enums.SendTypeEnum;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.service.MemberSecurityService;
 import com.acooly.module.member.service.MemberSendingService;
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2018-08-06 16:19
  */
 @Slf4j
-public class MemberSecurityServiceTest extends AbstractComponentsTest {
+public class MemberSecurityServiceTest extends AbstractMemberTest {
     /**
      * 测试用户
      */

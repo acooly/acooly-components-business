@@ -27,7 +27,7 @@ import com.acooly.module.member.entity.MemberPersonal;
 import com.acooly.module.member.entity.MemberProfile;
 import com.acooly.module.member.enums.CertStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.AbstractMemberService;

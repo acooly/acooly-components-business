@@ -19,7 +19,7 @@ import com.acooly.module.member.MemberProperties;
 import com.acooly.module.member.dto.MemberInfo;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.enums.MemberStatusEnum;
-import com.acooly.module.member.exception.MemberErrorEnum;
+import com.acooly.module.member.error.MemberErrorEnum;
 import com.acooly.module.member.exception.MemberOperationException;
 import com.acooly.module.member.manage.*;
 import com.acooly.module.member.service.interceptor.MemberCaptchaInterceptor;

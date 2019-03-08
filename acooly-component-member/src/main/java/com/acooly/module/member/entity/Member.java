@@ -58,6 +58,12 @@ public class Member extends AbstractEntity {
     private String userNo;
 
     /**
+     * 多级快速搜索路径
+     */
+    @Size(max = 255)
+    private String path;
+
+    /**
      * 用户名
      */
     @NotEmpty

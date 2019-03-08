@@ -38,13 +38,4 @@ public class MemberRegistryInterceptorProxy extends AbstractSpringProxyBean<Memb
         getTarget().exceptionRegistry(memberRegistryData, be);
     }
 
-    @Override
-    public void onCaptchaSms(Member member, Map<String, Object> data) {
-        getTarget().onCaptchaSms(member, data);
-    }
-
-    @Override
-    public void onCaptchaMail(Member member, Map<String, String> data) {
-        getTarget().onCaptchaMail(member, data);
-    }
 }

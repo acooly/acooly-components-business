@@ -1,5 +1,6 @@
 package com.acooly.module.account.service.impl;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.entity.Account;
 import com.acooly.module.account.entity.AccountBill;
@@ -10,7 +11,6 @@ import com.acooly.module.account.exception.AccountVerifyException;
 import com.acooly.module.account.manage.AccountBillService;
 import com.acooly.module.account.manage.AccountService;
 import com.acooly.module.account.service.AccountVerifyService;
-import com.acooly.core.common.dao.support.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +82,9 @@ public class AccountVerifyServiceImpl implements AccountVerifyService {
                 calcBalancePost = prevBalancePost + amount;
             } else if (accountBill.getDirection() == DirectionEnum.out) {
                 calcBalancePost = prevBalancePost - amount;
+            } else {
+                // 冻结
+                continue;
             }
 
             if (accountBill.getBalancePost() != calcBalancePost) {
