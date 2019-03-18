@@ -18,7 +18,7 @@ import com.google.common.collect.Lists;
 @Configuration
 @EnableConfigurationProperties({RedPackProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
-@ComponentScan(basePackages = "com.acooly.module.point")
+@ComponentScan(basePackages = "com.acooly.module.redpack")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class RedPackAutoConfig {
     @Bean
@@ -31,7 +31,7 @@ public class RedPackAutoConfig {
 
             @Override
             public String getComponentName() {
-                return "redPack";
+                return "redpack";
             }
 
             @Override
