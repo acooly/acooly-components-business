@@ -24,7 +24,6 @@ public class RedPackUtils {
 			long balanceNum = num - i;
 			long redPack = RedPackUtils.redPack("00000", amount, balance, balanceNum);
 			total = total + redPack;
-			System.out.println((i + 1) + "-------" + redPack);
 		}
 		System.out.println(total);
 	}
@@ -36,41 +35,41 @@ public class RedPackUtils {
 	 * @param surplusNum    数量
 	 * @return
 	 */
-	public static Long redPack(String redPackId, Long totalAmount, Long surplusAmount, Long surplusNum) {
+	public static long redPack(String redPackId, long totalAmount, long surplusAmount, long surplusNum) {
 		if (totalAmount <= 0) {
-			throw new BusinessException("红包剩余总余额小于0",RedPackResultCodeEnum.RED_PACK_SURPLUS_LESS_0.code());
+			throw new BusinessException("红包剩余总余额小于0", RedPackResultCodeEnum.RED_PACK_SURPLUS_LESS_0.code());
 		}
 
 		if (surplusAmount <= 0) {
-			throw new BusinessException("红包剩余金额为0",RedPackResultCodeEnum.RED_PACK_SURPLUS_EQUAL_0.code());
+			throw new BusinessException("红包剩余金额为0", RedPackResultCodeEnum.RED_PACK_SURPLUS_EQUAL_0.code());
 		}
 
 		if (surplusNum <= 0) {
-			throw new BusinessException("红包剩余个数为0",RedPackResultCodeEnum.RED_PACK_NUM_EQUAL_0.code());
+			throw new BusinessException("红包剩余个数为0", RedPackResultCodeEnum.RED_PACK_NUM_EQUAL_0.code());
 		}
 
 		// 剩余金额=剩余数量
-		if (surplusAmount == surplusNum) {
+		if (surplusAmount == (surplusNum)) {
 			return 1L;
 		}
 
 		// 总金额 小于 剩余数量
 		if (totalAmount < surplusNum) {
-			throw new BusinessException("红包总额不足,小于包括剩余个数",RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_NUM.code());
+			throw new BusinessException("红包总额不足,小于包括剩余个数", RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_NUM.code());
 		}
 
 		// 总金额 小于 剩余金额
 		if (totalAmount < surplusAmount) {
-			throw new BusinessException("红包总额小于剩余金额",RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_SURPLUS.code());
+			throw new BusinessException("红包总额小于剩余金额", RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_SURPLUS.code());
 		}
 
 		// 剩余数量小于0
 		if (surplusNum <= 0) {
-			throw new BusinessException("红包剩余数量小于0",RedPackResultCodeEnum.RED_PACK_NUM_LESS_0.code());
+			throw new BusinessException("红包剩余数量小于0", RedPackResultCodeEnum.RED_PACK_NUM_LESS_0.code());
 		}
 
 		// 剩余数量 等于 1（最后一条）
-		if (surplusNum == 1) {
+		if (surplusNum == 1L) {
 			return surplusAmount;
 		}
 

@@ -295,7 +295,7 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	 * @param dto
 	 */
 	private void checkUserPartakeNum(RedPackDto redPackDto, SendRedPackDto sendRedPackDto) {
-		if (redPackDto.getPartakeNum() == 0) {
+		if (redPackDto.getPartakeNum().equals(0L)) {
 			return;
 		}
 		Long redPackId = redPackDto.getRedPackId();

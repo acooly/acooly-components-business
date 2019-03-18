@@ -33,8 +33,8 @@ public class RedPackOrderEventHandle {
 	public void handleRedPackOrderEventAsyn(RedPackOrderEvent event) {
 
 		RedPack redPack = redPackService.lockById(event.getRedPackId());
-
-		if ((redPack.getTotalAmount() - redPack.getSendOutAmount() - redPack.getRefundAmount()) == 0) {
+		long surplusAmount = redPack.getTotalAmount() - redPack.getSendOutAmount() - redPack.getRefundAmount();
+		if (surplusAmount == 0) {
 			redPackOrderService.updateIsFirst(event.getRedPackId());
 		}
 		redPackCacheDataService.setRedPackOrderRedisDataDelete(event.getRedPackId());
