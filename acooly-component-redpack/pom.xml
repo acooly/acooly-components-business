@@ -40,5 +40,10 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-distributedlock</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-dubbo</artifactId>
+		</dependency>
 	</dependencies>
 </project>
