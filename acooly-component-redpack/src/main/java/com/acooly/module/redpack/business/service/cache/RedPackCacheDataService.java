@@ -1,6 +1,5 @@
 package com.acooly.module.redpack.business.service.cache;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +13,6 @@ import com.acooly.module.redpack.RedPackProperties;
 import com.acooly.module.redpack.business.service.conver.RedPackEntityConverDto;
 import com.acooly.module.redpack.entity.RedPack;
 import com.acooly.module.redpack.entity.RedPackOrder;
-import com.acooly.module.redpack.enums.RedPackStatusEnum;
 import com.acooly.module.redpack.event.dto.RedPackDto;
 import com.acooly.module.redpack.event.dto.RedPackOrderDto;
 import com.acooly.module.redpack.service.RedPackOrderService;
@@ -89,6 +87,7 @@ public class RedPackCacheDataService {
 	public RedPackDto getRedPackRedisDataByKey(Long redPackId) {
 		RedPackDto dto = (RedPackDto) redisTemplate.opsForValue().get(getRedPackRedisKey(redPackId));
 		if (dto == null) {
+			dto = new RedPackDto();
 			RedPack redPack = redPackService.lockById(redPackId);
 			redPackService.checkRedPackOverdue(redPack);
 			RedPackEntityConverDto.converRedPackDto(redPack, dto);

@@ -34,9 +34,9 @@ public class TestManagerController {
 
 	public class MyThread extends Thread {
 		public void run() {
-			int size = 10;
+			int size = 2;
 			long totalAmount = 10000L;
-			long totalNum = 1000;
+			long totalNum = 100;
 			long startTime = System.currentTimeMillis();
 
 			for (int i = 1; i < (size + 1); i++) {
@@ -98,7 +98,7 @@ public class TestManagerController {
 			int size = 10;
 
 			long totalAmount = 1000L;
-			long maxNum = 10;
+			long maxNum = 100;
 
 			for (int i = 1; i < (size + 1); i++) {
 				long startTime = System.currentTimeMillis();
