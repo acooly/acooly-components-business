@@ -70,6 +70,12 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public RedPackDto createRedPack(CreateRedPackDto createDto) {
+		// 红包总额小于红包数量
+		if (createDto.getTotalAmount() < createDto.getTotalNum()) {
+			throw new BusinessException(RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_NUM.message(),
+					RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_NUM.code());
+		}
+
 		RedPackDto dto = new RedPackDto();
 		RedPack redPack = new RedPack();
 		try {

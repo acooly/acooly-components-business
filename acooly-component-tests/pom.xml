@@ -27,15 +27,11 @@
 		</dependency>
 
 		<!-- 抽奖 -->
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>acooly-component-lottery</artifactId>
-		</dependency>
 
 		<!-- 积分 -->
 		<dependency>
 			<groupId>com.acooly</groupId>
-			<artifactId>acooly-component-point</artifactId>
+			<artifactId>acooly-component-redpack</artifactId>
 		</dependency>
 
 		<dependency>

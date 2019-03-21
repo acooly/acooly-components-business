@@ -36,8 +36,8 @@ public class RedPackOrderEventHandle {
 		long surplusAmount = redPack.getTotalAmount() - redPack.getSendOutAmount() - redPack.getRefundAmount();
 		if (surplusAmount == 0) {
 			redPackOrderService.updateIsFirst(event.getRedPackId());
+			redPackCacheDataService.setRedPackOrderRedisDataDelete(event.getRedPackId());
 		}
-		redPackCacheDataService.setRedPackOrderRedisDataDelete(event.getRedPackId());
 	}
 
 }

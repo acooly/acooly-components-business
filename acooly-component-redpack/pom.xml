@@ -45,5 +45,6 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-dubbo</artifactId>
 		</dependency>
+
 	</dependencies>
 </project>

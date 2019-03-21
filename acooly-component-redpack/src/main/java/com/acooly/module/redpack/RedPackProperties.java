@@ -27,11 +27,7 @@ public class RedPackProperties {
 	/** 红包分布式锁Key */
 	private String redPackDistributedLockKey = "red_pack_lock_key";
 
-	/** 红包分布式 redis缓存时间(最少设置20分钟) */
-	private Long redPackRedisTime = 20L;
-	
-	
-	
-	
-	
+	/** 红包分布式 redis缓存时间(最少设置10分钟) */
+	private Long redPackRedisTime = 10L;
+
 }
