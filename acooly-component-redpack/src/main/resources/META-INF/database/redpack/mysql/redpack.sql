@@ -39,7 +39,7 @@ CREATE TABLE `red_red_pack` (
   `business_data` varchar(255) DEFAULT NULL COMMENT '业务参数',
   `comments` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='红包';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='红包';
 
 
 -- ----------------------------
@@ -63,4 +63,4 @@ CREATE TABLE `red_red_pack_order` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `comments` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='红包订单';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='红包订单';
