@@ -78,42 +78,36 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 
 		RedPackDto dto = new RedPackDto();
 		RedPack redPack = new RedPack();
+		redPack.setTitle(createDto.getTitle());
+		redPack.setSendUserId(createDto.getSendUserId());
+		redPack.setSendUserName(createDto.getSendUserName());
+		redPack.setOverdueTime(createDto.getOverdueTime());
+		redPack.setTotalAmount(createDto.getTotalAmount());
+		redPack.setTotalNum(createDto.getTotalNum());
+		redPack.setRemark(createDto.getRemark());
+		redPack.setPartakeNum(createDto.getPartakeNum());
+		redPack.setBusinessId(createDto.getBusinessId());
+		redPack.setBusinessData(createDto.getBusinessData());
+		redPackService.save(redPack);
+
+		Long redPackId = redPack.getId();
+		Lock lock = factory.newLock(redPackCacheDataService.getRedPackLockKey(redPackId));
+		lock.lock();
 		try {
-			redPack.setTitle(createDto.getTitle());
-			redPack.setSendUserId(createDto.getSendUserId());
-			redPack.setSendUserName(createDto.getSendUserName());
-			redPack.setOverdueTime(createDto.getOverdueTime());
-			redPack.setTotalAmount(createDto.getTotalAmount());
-			redPack.setTotalNum(createDto.getTotalNum());
-			redPack.setRemark(createDto.getRemark());
-			redPack.setPartakeNum(createDto.getPartakeNum());
-			redPack.setBusinessId(createDto.getBusinessId());
-			redPack.setBusinessData(createDto.getBusinessData());
-			redPackService.save(redPack);
 
-			Long redPackId = redPack.getId();
-			Lock lock = factory.newLock(redPackCacheDataService.getRedPackLockKey(redPackId));
-			lock.lock();
-			try {
-
-				// 设置红包缓存，并发布红包事件
-				dto = RedPackEntityConverDto.converRedPackDto(redPack, dto);
-				redPackCacheDataService.setRedPackRedisData(dto);
-				// 发布事件
-				redPackService.pushEvent(redPack);
-			} catch (BusinessException e) {
-				throw new BusinessException(e.getMessage(), e.getCode());
-			} catch (Exception e) {
-				log.error("创建红包失败,业务id:{},{}", createDto.getBusinessId(), e);
-				throw new BusinessException("红包组件:[创建红包]失败");
-			} finally {
-				lock.unlock();
-			}
-
+			// 设置红包缓存，并发布红包事件
+			dto = RedPackEntityConverDto.converRedPackDto(redPack, dto);
+			redPackCacheDataService.setRedPackRedisData(dto);
+			// 发布事件
+			redPackService.pushEvent(redPack);
+		} catch (BusinessException e) {
+			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
-			log.error("创建红包失败:{}", e);
+			log.error("创建红包失败,业务id:{},{}", createDto.getBusinessId(), e);
+			throw new BusinessException("红包组件:[创建红包]失败");
+		} finally {
+			lock.unlock();
 		}
-
 		return dto;
 	}
 
