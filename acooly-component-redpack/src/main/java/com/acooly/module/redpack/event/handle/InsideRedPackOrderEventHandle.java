@@ -51,6 +51,7 @@ public class InsideRedPackOrderEventHandle {
 		order.setUserName(redPackOrderDto.getUserName());
 		order.setAmount(redPackOrderDto.getAmount());
 		order.setType(type);
+		order.setCreateTime(redPackOrderDto.getCreateTime());
 		redPackOrderService.save(order);
 
 		// 红包支付

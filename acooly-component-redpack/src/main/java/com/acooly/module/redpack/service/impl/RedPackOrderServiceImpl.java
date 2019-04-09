@@ -78,9 +78,8 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 		sendRedPackEvent.setAmount(redPackOrder.getAmount());
 		sendRedPackEvent.setType(redPackOrder.getType());
 		sendRedPackEvent.setIsFirst(redPackOrder.getIsFirst());
-
+		sendRedPackEvent.setCreateTime(redPackOrder.getCreateTime());
 		eventBus.publishAfterTransactionCommitted(sendRedPackEvent);
-
 	}
 
 	@Override

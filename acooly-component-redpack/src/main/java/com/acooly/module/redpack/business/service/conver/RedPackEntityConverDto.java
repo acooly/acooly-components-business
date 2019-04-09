@@ -49,6 +49,7 @@ public class RedPackEntityConverDto {
 			orderDto.setAmount(redPackOrder.getAmount());
 			orderDto.setIsFirst(redPackOrder.getIsFirst());
 			orderDto.setType(redPackOrder.getType());
+			orderDto.setCreateTime(redPackOrder.getCreateTime());
 			orderDtoList.add(orderDto);
 		}
 		return orderDtoList;

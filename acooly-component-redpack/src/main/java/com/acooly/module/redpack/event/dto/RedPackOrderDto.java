@@ -7,17 +7,13 @@
 package com.acooly.module.redpack.event.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import com.acooly.module.redpack.entity.RedPackOrder;
 import com.acooly.module.redpack.enums.RedPackOrderTypeEnum;
 import com.acooly.module.redpack.enums.WhetherEnum;
 
@@ -57,6 +53,9 @@ public class RedPackOrderDto implements Serializable {
 
 	/** 类型 */
 	private RedPackOrderTypeEnum type = RedPackOrderTypeEnum.RED_PACK;
+
+	/** 创建时间 */
+	private Date createTime;
 
 	@Override
 	public String toString() {

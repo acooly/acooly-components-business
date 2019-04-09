@@ -7,6 +7,7 @@
 package com.acooly.module.redpack.business.event.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -75,6 +76,9 @@ public class RedPackOrderEvent implements Serializable {
 
 	/** 状态 */
 	private RedPackOrderStatusEnum status = RedPackOrderStatusEnum.INIT;
+	
+	/** 创建时间 */
+	private Date createTime;
 
 	@Override
 	public String toString() {
