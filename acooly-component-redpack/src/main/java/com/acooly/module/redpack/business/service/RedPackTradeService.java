@@ -72,4 +72,13 @@ public interface RedPackTradeService {
 	 */
 	List<RedPackOrderDto> findRedPackOrder(Long redPackId);
 
+	/**
+	 * 统计红包领取个数
+	 * 
+	 * @param userId
+	 * @param redPackId
+	 * @return
+	 */
+	Long coutRedOrderNum(long userId, long redPackId);
+
 }

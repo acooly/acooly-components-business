@@ -46,4 +46,13 @@ public interface RedPackOrderService extends EntityService<RedPackOrder> {
 
 	Long sumRedPackByRedPackIdAndStatus(Long redPackId, RedPackOrderStatusEnum success);
 
+	/**
+	 * 统计红包领取个数
+	 * 
+	 * @param userId
+	 * @param redPackId
+	 * @return
+	 */
+	Long coutRedOrderNum(long userId, long redPackId);
+
 }

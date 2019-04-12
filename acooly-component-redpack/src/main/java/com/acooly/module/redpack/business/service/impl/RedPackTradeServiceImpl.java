@@ -26,6 +26,7 @@ import com.acooly.module.redpack.enums.result.RedPackResultCodeEnum;
 import com.acooly.module.redpack.event.dto.RedPackDto;
 import com.acooly.module.redpack.event.dto.RedPackOrderDto;
 import com.acooly.module.redpack.event.order.InsideRedPackOrderEvent;
+import com.acooly.module.redpack.service.RedPackOrderService;
 import com.acooly.module.redpack.service.RedPackService;
 import com.acooly.module.redpack.utils.RedPackUtils;
 
@@ -37,6 +38,9 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 
 	@Autowired
 	private RedPackService redPackService;
+
+	@Autowired
+	private RedPackOrderService redPackOrderService;
 
 	@Autowired
 	private RedPackCacheDataService redPackCacheDataService;
@@ -266,6 +270,7 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		orderDto.setUserName(sendDto.getUserName());
 		orderDto.setAmount(redPackAmount);
 		orderDto.setType(RedPackOrderTypeEnum.RED_PACK);
+		orderDto.setCreateTime(new Date());
 		return orderDto;
 	}
 
@@ -332,5 +337,10 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 			throw new BusinessException(RedPackResultCodeEnum.RED_PACK_ALREADY_FINISH.message(),
 					RedPackResultCodeEnum.RED_PACK_ALREADY_FINISH.code());
 		}
+	}
+
+	@Override
+	public Long coutRedOrderNum(long userId, long redPackId) {
+		return redPackOrderService.coutRedOrderNum(userId, redPackId);
 	}
 }

@@ -49,4 +49,7 @@ public interface RedPackOrderDao extends EntityMybatisDao<RedPackOrder> {
 	@Select("select IFNULL(sum(amount),0) as sumAmount from red_red_pack_order WHERE red_pack_id = #{redPackId} and status=#{status}")
 	long sumRedPackByRedPackIdAndStatus(@Param("redPackId") Long redPackId, @Param("status") String status);
 
+	@Select("select count(id) from red_red_pack_order WHERE red_pack_id = #{redPackId} and user_id=#{userId}")
+	Long coutRedOrderNum(@Param("userId") long userId, @Param("redPackId") long redPackId);
+
 }

@@ -95,4 +95,9 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 		return sum;
 	}
 
+	@Override
+	public Long coutRedOrderNum(long userId, long redPackId) {
+		return getEntityDao().coutRedOrderNum(userId, redPackId);
+	}
+
 }
