@@ -339,10 +339,12 @@ public class MemberServiceImpl extends AbstractMemberService implements MemberSe
                 OrderCheckException.throwIt("mobileNo", "邮件激活方式邮件不能为空");
             }
 
+            /**
             if (activeType == MemberActiveTypeEnum.auto && !hasEmail && !hasMobileNo) {
                 log.warn("注册 失败 memberInfo:{}, 原因:自动激活方式手机号码或邮件不能同时为空", memberRegistryInfo.getLabel());
                 OrderCheckException.throwIt("mobileNo", "自动激活方式手机号码或邮件不能同时为空");
             }
+            */
         }
 
         if (loadMember(null, null, memberRegistryInfo.getUsername()) != null) {
