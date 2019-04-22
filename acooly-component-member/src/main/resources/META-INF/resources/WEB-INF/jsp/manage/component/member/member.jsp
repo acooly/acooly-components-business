@@ -1,3 +1,4 @@
+<%@page import="com.acooly.core.utils.Strings"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp"%>
 <c:if test="${initParam['ssoEnable']=='true'}">
@@ -50,7 +51,6 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
         <tr>
           <td align="left">
           	<div>
-
                 编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
                 用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
                 手机: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
@@ -81,7 +81,7 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
 
   <!-- 列表和工具栏 -->
   <div data-options="region:'center',border:false">
-    <table id="manage_member_datagrid" class="easyui-datagrid" url="${pageContext.request.contextPath}/manage/component/member/member/listJson.html" toolbar="#manage_member_toolbar" fit="true"
+    <table id="manage_member_datagrid" class="easyui-datagrid" url="${pageContext.request.contextPath}/manage/component/member/member/listJson.html<%=Strings.isBlank(request.getParameter("search_EQ_parentUserNo"))?"":("?search_EQ_parentUserNo="+request.getParameter("search_EQ_parentUserNo"))%>" toolbar="#manage_member_toolbar" fit="true"
            border="false" fitColumns="false" pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]"
            sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true">
       <thead>
