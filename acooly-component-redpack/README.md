@@ -1,4 +1,4 @@
-<!-- title:积分组件 -->
+<!-- title: 红包组件 -->
 <!-- type: business -->
 <!-- author: cuifuqiang -->
 acooly-component-redpack(红包组件)
