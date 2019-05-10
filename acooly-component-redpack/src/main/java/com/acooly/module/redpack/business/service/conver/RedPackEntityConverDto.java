@@ -28,6 +28,7 @@ public class RedPackEntityConverDto {
 		dto.setSendOutNum(redPack.getSendOutNum());
 		dto.setPartakeNum(redPack.getPartakeNum());
 		dto.setBusinessId(redPack.getBusinessId());
+		dto.setStatus(redPack.getStatus());
 		return dto;
 	}
 
