@@ -25,7 +25,7 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					订单号: <input type="text" class="text" size="15" name="search_EQ_orderNo"/>
+					订单号: <input type="text" class="text" size="10" name="search_EQ_orderNo"/>
 					红包ID: <input type="text" class="text" size="15" name="search_EQ_redPackId"/>
 					红包标题: <input type="text" class="text" size="15" name="search_LIKE_redPackTitle"/>
 					发送者ID: <input type="text" class="text" size="15" name="search_EQ_sendUserId"/>

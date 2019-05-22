@@ -27,12 +27,13 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					标题: <input type="text" class="text" size="15" name="search_EQ_title"/>
-					用户ID: <input type="text" class="text" size="15" name="search_EQ_sendUserId"/>
-					用户名: <input type="text" class="text" size="15" name="search_EQ_sendUserName"/>
+          			id: <input type="text" class="text" size="6" name="search_EQ_id"/>
+					标题: <input type="text" class="text" size="10" name="search_EQ_title"/>
+					用户ID: <input type="text" class="text" size="10" name="search_EQ_sendUserId"/>
+					用户名: <input type="text" class="text" size="10" name="search_EQ_sendUserName"/>
 					状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					创建时间: <input size="10" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="10" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_redPack_searchform','manage_redPack_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
