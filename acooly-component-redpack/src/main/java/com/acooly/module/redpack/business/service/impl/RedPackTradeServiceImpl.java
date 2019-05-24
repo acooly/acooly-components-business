@@ -1,5 +1,7 @@
 package com.acooly.module.redpack.business.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -244,12 +246,44 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		lock.lock();
 		try {
 			orderDtoList = redPackCacheDataService.getRedPackRedisDataListByKey(redPackId);
+
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
 			throw new BusinessException("红包组件:[查询红包]失败");
 		} finally {
 			lock.unlock();
+		}
+		return orderDtoList;
+	}
+
+	@Override
+	public List<RedPackOrderDto> findRedPackOrderSort(Long redPackId, Boolean sort) {
+		List<RedPackOrderDto> orderDtoList = findRedPackOrder(redPackId);
+		if (sort == null) {
+			return orderDtoList;
+		}
+
+		if (orderDtoList != null) {
+			Collections.sort(orderDtoList, new Comparator<RedPackOrderDto>() {
+				public int compare(RedPackOrderDto list1, RedPackOrderDto list2) {
+					long amount1 = list1.getAmount();
+					long amount2 = list2.getAmount();
+
+					// 金额相同，按照时间先后 升序
+					if (amount1 == amount2) {
+						return list1.getCreateTime().compareTo(list2.getCreateTime());
+					}
+
+					if (sort) {
+						// 降序
+						return list2.getAmount().compareTo(list1.getAmount());
+					} else {
+						// 升序
+						return list1.getAmount().compareTo(list2.getAmount());
+					}
+				}
+			});
 		}
 		return orderDtoList;
 	}
@@ -343,4 +377,5 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	public Long coutRedOrderNum(long userId, long redPackId) {
 		return redPackOrderService.coutRedOrderNum(userId, redPackId);
 	}
+
 }

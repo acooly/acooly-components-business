@@ -6,6 +6,8 @@
 */
 package com.acooly.module.redpack.portal.web;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.module.distributedlock.DistributedLockFactory;
 import com.acooly.module.redpack.business.service.RedPackTradeService;
 import com.acooly.module.redpack.dto.SendRedPackDto;
+import com.acooly.module.redpack.event.dto.RedPackOrderDto;
 import com.acooly.module.redpack.portal.service.TestRedPackService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -57,17 +60,36 @@ public class TestManagerController {
 		long startTime = System.currentTimeMillis();
 
 		try {
-			String redPackId = request.getParameter("redPackId");
-			SendRedPackDto dto = new SendRedPackDto();
-			dto.setRedPackId(Long.parseLong(redPackId));
-			dto.setUserId(100L);
-			dto.setUserName("cuifuq");
+
+//			String redPackId = request.getParameter("redPackId");
+//			SendRedPackDto dto = new SendRedPackDto();
+//			dto.setRedPackId(Long.parseLong(redPackId));
+//			dto.setUserId(100L);
+//			dto.setUserName("cuifuq");
+
+			String redPackId = "142";
+			List<RedPackOrderDto> sss = redPackTradeService.findRedPackOrder(Long.parseLong(redPackId));
+			for (RedPackOrderDto redPackOrderDto : sss) {
+				System.out.println("---1---"+redPackOrderDto.getUserId()+"----"+redPackOrderDto.getCreateTime()+"-------"+redPackOrderDto.getAmount());
+			}
+			
+			
+			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), true);
+			for (RedPackOrderDto redPackOrderDto : sss) {
+				System.out.println("---2---"+redPackOrderDto.getUserId()+"----"+redPackOrderDto.getCreateTime()+"-------"+redPackOrderDto.getAmount());
+			}
+			
+			
+			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), false);
+			for (RedPackOrderDto redPackOrderDto : sss) {
+				System.out.println("---3---"+redPackOrderDto.getUserId()+"----"+redPackOrderDto.getCreateTime()+"-------"+redPackOrderDto.getAmount());
+			}
 
 			// 数据库 锁
 //			testRedPackService.sendRedPack(dto);
 
 //			redis 分布式 锁
-			redPackTradeService.sendRedPack(dto);
+//			redPackTradeService.sendRedPack(dto);
 
 		} catch (BusinessException e) {
 			result.setSuccess(false);
@@ -89,9 +111,12 @@ public class TestManagerController {
 		long startTime = System.currentTimeMillis();
 
 		Lock lock = factory.newLock("abcdefg");
-		lock.lock();
+//		lock.lock();
 		try {
-			System.out.println("redisLock---------");
+			if (lock.tryLock(1, TimeUnit.SECONDS)) {
+
+				System.out.println("redisLock---------");
+			}
 		} catch (Exception e) {
 			throw new BusinessException("红包组件:[发送红包]发送红包失败");
 		} finally {

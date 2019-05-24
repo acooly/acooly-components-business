@@ -70,7 +70,17 @@ public interface RedPackTradeService {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	List<RedPackOrderDto> findRedPackOrder(Long redPackId);
+
+	/**
+	 * 查询红包列表
+	 *
+	 * @param redPackId 红包id
+	 * @param sort      true:降序(从大到小);flase:升序(从小到大);null:（默认id倒序）
+	 * @return
+	 */
+	List<RedPackOrderDto> findRedPackOrderSort(Long redPackId, Boolean sort);
 
 	/**
 	 * 统计红包领取个数

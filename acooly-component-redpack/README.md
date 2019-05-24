@@ -99,6 +99,16 @@ maven坐标：
 	 * @return
 	 */
 	List<RedPackOrderDto> findRedPackOrder(Long redPackId);
+	
+	
+	/**
+	 * 查询红包列表
+	 *
+	 * @param redPackId 红包id
+	 * @param sort      true:降序(从大到小);flase:升序(从小到大);null:（默认id倒序）
+	 * @return
+	 */
+	List<RedPackOrderDto> findRedPackOrderSort(Long redPackId, Boolean sort);
 
 
 ####	接口类：com.acooly.module.redpack.business.service.RedPackReplyTradeService
@@ -138,6 +148,9 @@ maven坐标：
 
 
 ##版本说明
+
+####v1:2019-05
+新增红包订单查询接口(findRedPackOrderSort(Long redPackId, Boolean sort))，并支持 金额排序
 
 ####v1:2019-03
 积分组件基本功能：红包创建（领取次数，过期时间，红包总额，红包数量，红包状态），红包发放，红包查询，红包订单查询
