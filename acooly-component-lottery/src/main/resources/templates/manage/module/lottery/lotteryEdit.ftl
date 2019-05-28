@@ -61,9 +61,9 @@
                 <tr>
                     <th>活动周期：</th>
                     <td><input type="text" class="text" name="startTime" size="15"
-                               value="<#if lottery??>${lottery.startTime?string("yyyy-MM-dd")}</#if>" data-options="required:true"/>
+                               value="<#if lottery??>${(lottery.startTime?string("yyyy-MM-dd"))!}</#if>" data-options="required:true"/>
                         到 <input type="text" class="text" name="endTime" size="15"
-                                 value="<#if lottery??>${(lottery.endTime)?string("yyyy-MM-dd")}</#if>" data-options="required:true"/>
+                                 value="<#if lottery??>${(lottery.endTime?string("yyyy-MM-dd"))!}</#if>" data-options="required:true"/>
                         <div style="margin-top: 5px">活动到期后，活动自动结束。</div>
                     </td>
                 </tr>
