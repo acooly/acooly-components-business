@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service("redPackTradeService")
 public class RedPackTradeServiceImpl implements RedPackTradeService {
 
+	/** redis尝试锁，时间设置 **/
+	public static Integer REDIS_TRY_LOCK_TIME = 1;
+
 	@Autowired
 	private RedPackService redPackService;
 
@@ -60,59 +64,47 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 
 	@Override
 	public RedPackDto findRedPack(Long redPackId) {
-		RedPackDto dto = null;
-		Lock lock = factory.newLock(redPackCacheDataService.getRedPackLockKey(redPackId));
-		lock.lock();
-		try {
-			dto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
-		} catch (Exception e) {
-			log.error("查询红包失败{}", e);
-		} finally {
-			lock.unlock();
-		}
+		RedPackDto dto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
 		return dto;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public RedPackDto createRedPack(CreateRedPackDto createDto) {
+		RedPackDto dto = new RedPackDto();
+
 		// 红包总额小于红包数量
 		if (createDto.getTotalAmount() < createDto.getTotalNum()) {
 			throw new BusinessException(RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_NUM.message(),
 					RedPackResultCodeEnum.RED_PACK_NOT_ENOUGH_NUM.code());
 		}
 
-		RedPackDto dto = new RedPackDto();
-		RedPack redPack = new RedPack();
-		redPack.setTitle(createDto.getTitle());
-		redPack.setSendUserId(createDto.getSendUserId());
-		redPack.setSendUserName(createDto.getSendUserName());
-		redPack.setOverdueTime(createDto.getOverdueTime());
-		redPack.setTotalAmount(createDto.getTotalAmount());
-		redPack.setTotalNum(createDto.getTotalNum());
-		redPack.setRemark(createDto.getRemark());
-		redPack.setPartakeNum(createDto.getPartakeNum());
-		redPack.setBusinessId(createDto.getBusinessId());
-		redPack.setBusinessData(createDto.getBusinessData());
-		redPackService.save(redPack);
-
-		Long redPackId = redPack.getId();
-		Lock lock = factory.newLock(redPackCacheDataService.getRedPackLockKey(redPackId));
-		lock.lock();
 		try {
+
+			RedPack redPack = new RedPack();
+			redPack.setTitle(createDto.getTitle());
+			redPack.setSendUserId(createDto.getSendUserId());
+			redPack.setSendUserName(createDto.getSendUserName());
+			redPack.setOverdueTime(createDto.getOverdueTime());
+			redPack.setTotalAmount(createDto.getTotalAmount());
+			redPack.setTotalNum(createDto.getTotalNum());
+			redPack.setRemark(createDto.getRemark());
+			redPack.setPartakeNum(createDto.getPartakeNum());
+			redPack.setBusinessId(createDto.getBusinessId());
+			redPack.setBusinessData(createDto.getBusinessData());
+			redPackService.save(redPack);
 
 			// 设置红包缓存，并发布红包事件
 			dto = RedPackEntityConverDto.converRedPackDto(redPack, dto);
 			redPackCacheDataService.setRedPackRedisData(dto);
+
 			// 发布事件
 			redPackService.pushEvent(redPack);
-		} catch (BusinessException e) {
-			throw new BusinessException(e.getMessage(), e.getCode());
+
 		} catch (Exception e) {
-			log.error("创建红包失败,业务id:{},{}", createDto.getBusinessId(), e);
-			throw new BusinessException("红包组件:[创建红包]失败");
-		} finally {
-			lock.unlock();
+			log.error("红包组件:创建红包失败:{}", e);
+			throw new BusinessException(RedPackResultCodeEnum.RED_PACK_CREATE_ERROR.message(),
+					RedPackResultCodeEnum.RED_PACK_CREATE_ERROR.code());
 		}
 		return dto;
 	}
@@ -126,60 +118,72 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		String redPackLockKey = redPackCacheDataService.getRedPackLockKey(redPackId);
 
 		Lock lock = factory.newLock(redPackLockKey);
-		lock.lock();
 		try {
-			RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
+			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
+				log.info("红包组件:[发送红包],获取锁成功,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 
-			// 红包状态校验
-			checkRedPackStatus(redPackDto);
+				try {
+					RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
 
-			// 用户允许参与的最大次数
-			checkUserPartakeNum(redPackDto, sendDto);
+					// 红包状态校验
+					checkRedPackStatus(redPackDto);
 
-			// 校验过期
-			Date overdueDateTime = redPackDto.getOverdueTime();
-			if (overdueDateTime != null) {
-				Long overdueTime = redPackDto.getOverdueTime().getTime();
-				Long currentTime = (new Date()).getTime();
-				if (currentTime > overdueTime) {
-					throw new BusinessException(RedPackResultCodeEnum.RED_PACK_OVERDUE.message(),
-							RedPackResultCodeEnum.RED_PACK_OVERDUE.code());
+					// 用户允许参与的最大次数
+					checkUserPartakeNum(redPackDto, sendDto);
+
+					// 校验过期
+					Date overdueDateTime = redPackDto.getOverdueTime();
+					if (overdueDateTime != null) {
+						Long overdueTime = redPackDto.getOverdueTime().getTime();
+						Long currentTime = (new Date()).getTime();
+						if (currentTime > overdueTime) {
+							throw new BusinessException(RedPackResultCodeEnum.RED_PACK_OVERDUE.message(),
+									RedPackResultCodeEnum.RED_PACK_OVERDUE.code());
+						}
+					}
+
+					// 红包算法
+					long totalAmount = redPackDto.getTotalAmount();
+					long surplusAmount = totalAmount - redPackDto.getSendOutAmount() - redPackDto.getRefundAmount();
+					long surplusNum = redPackDto.getTotalNum() - redPackDto.getSendOutNum();
+
+					Long redPackAmount = RedPackUtils.redPack(redPackCacheDataService.getRedPackRedisKey(redPackId),
+							totalAmount, surplusAmount, surplusNum);
+
+					redPackDto.setSendOutAmount(redPackDto.getSendOutAmount() + redPackAmount);
+					redPackDto.setSendOutNum(redPackDto.getSendOutNum() + 1);
+					redPackDto.setStatus(RedPackStatusEnum.PROCESSING);
+
+					log.info("红包组件:[发送红包]lockKey:{},红包id:{},领取人 userId:{},userName:{},领取金额：{}", redPackLockKey,
+							redPackId, sendDto.getUserId(), sendDto.getUserName(), Money.cent(redPackAmount));
+
+					// 组建order订单
+					orderDto = buildSendRedPackOrderDto(sendDto, redPackId, redPackAmount);
+
+					// 设置红包缓存数据（红包，红包订单）
+					redPackCacheDataService.setRedPackRedisData(redPackDto);
+					redPackCacheDataService.setRedPackOrderRedisData(orderDto);
+
+					// 发红包事件
+					InsideRedPackOrderEvent insideEvent = new InsideRedPackOrderEvent(orderDto);
+					eventBus.publishAfterTransactionCommitted(insideEvent);
+
+				} catch (BusinessException e) {
+					log.info("红包组件:[发送红包],业务处理失败,lockKey:{},红包id:{},{}", redPackLockKey, redPackId, e);
+					throw new BusinessException(e.getMessage(), e.getCode());
+				} finally {
+					lock.unlock();
 				}
+			} else {
+				log.info("红包组件:[发送红包],获取锁失败,lockKey:{},红包id:{}", redPackLockKey, redPackId);
+				throw new BusinessException(RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.message(),
+						RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.code());
 			}
-
-			// 红包算法
-			long totalAmount = redPackDto.getTotalAmount();
-			long surplusAmount = totalAmount - redPackDto.getSendOutAmount() - redPackDto.getRefundAmount();
-			long surplusNum = redPackDto.getTotalNum() - redPackDto.getSendOutNum();
-
-			Long redPackAmount = RedPackUtils.redPack(redPackCacheDataService.getRedPackRedisKey(redPackId),
-					totalAmount, surplusAmount, surplusNum);
-
-			redPackDto.setSendOutAmount(redPackDto.getSendOutAmount() + redPackAmount);
-			redPackDto.setSendOutNum(redPackDto.getSendOutNum() + 1);
-			redPackDto.setStatus(RedPackStatusEnum.PROCESSING);
-
-			log.info("红包组件:[发送红包]lockKey:{},红包id:{},领取人 userId:{},userName:{},领取金额：{}", redPackLockKey, redPackId,
-					sendDto.getUserId(), sendDto.getUserName(), Money.cent(redPackAmount));
-
-			// 组建order订单
-			orderDto = buildSendRedPackOrderDto(sendDto, redPackId, redPackAmount);
-
-			// 设置红包缓存数据（红包，红包订单）
-			redPackCacheDataService.setRedPackRedisData(redPackDto);
-			redPackCacheDataService.setRedPackOrderRedisData(orderDto);
-
-			// 发红包事件
-			InsideRedPackOrderEvent insideEvent = new InsideRedPackOrderEvent(orderDto);
-			eventBus.publishAfterTransactionCommitted(insideEvent);
-
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
-			log.error("红包组件:[发送红包]发送红包失败,红包id:{},{}", sendDto.getRedPackId(), e);
+			log.error("红包组件:[发送红包]发送红包失败,红包id:{},{}", redPackId, e);
 			throw new BusinessException("红包组件:[发送红包]发送红包失败");
-		} finally {
-			lock.unlock();
 		}
 
 		return orderDto;
@@ -192,48 +196,61 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		RedPackOrderDto orderDto = new RedPackOrderDto();
 
 		String redPackLockKey = redPackCacheDataService.getRedPackLockKey(redPackId);
-
 		Lock lock = factory.newLock(redPackLockKey);
-		lock.lock();
 		try {
-			RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
 
-			checkRedPackStatus(redPackDto);
+			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
+				log.info("红包组件:[红包退款],获取锁成功,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 
-			// 红包算法
-			long totalAmount = redPackDto.getTotalAmount();
-			long surplusAmount = totalAmount - redPackDto.getSendOutAmount() - redPackDto.getRefundAmount();
+				try {
+					RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
 
-//			红包已经完结 
-			if (surplusAmount == 0) {
-				throw new BusinessException(RedPackResultCodeEnum.RED_PACK_ALREADY_FINISH.message(),
-						RedPackResultCodeEnum.RED_PACK_ALREADY_FINISH.code());
+					checkRedPackStatus(redPackDto);
+
+					// 红包算法
+					long totalAmount = redPackDto.getTotalAmount();
+					long surplusAmount = totalAmount - redPackDto.getSendOutAmount() - redPackDto.getRefundAmount();
+
+					// 红包已经完结
+					if (surplusAmount == 0) {
+						throw new BusinessException(RedPackResultCodeEnum.RED_PACK_ALREADY_FINISH.message(),
+								RedPackResultCodeEnum.RED_PACK_ALREADY_FINISH.code());
+					}
+
+					redPackDto.setRefundAmount(surplusAmount);
+					redPackDto.setStatus(RedPackStatusEnum.REFUNDING);
+
+					log.info("红包组件:[退款]lockKey:{},红包id:{},退款人 userId:{},userName:{},退款金额：{}", redPackLockKey, redPackId,
+							redPackDto.getSendUserId(), redPackDto.getSendUserName(), Money.cent(surplusAmount));
+
+					// 组建order订单
+					orderDto = buildRefundRedPackOrderDto(redPackDto);
+
+					// 设置红包缓存数据（红包，红包订单）
+					redPackCacheDataService.setRedPackRedisData(redPackDto);
+					redPackCacheDataService.setRedPackOrderRedisData(orderDto);
+
+					// 发红包事件
+					InsideRedPackOrderEvent insideEvent = new InsideRedPackOrderEvent(orderDto);
+					eventBus.publishAfterTransactionCommitted(insideEvent);
+
+				} catch (BusinessException e) {
+					throw new BusinessException(e.getMessage(), e.getCode());
+				} finally {
+					lock.unlock();
+				}
+
+			} else {
+				log.info("红包组件:[红包退款],获取锁失败,lockKey:{},红包id:{}", redPackLockKey, redPackId);
+				throw new BusinessException(RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.message(),
+						RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.code());
 			}
-
-			redPackDto.setRefundAmount(surplusAmount);
-			redPackDto.setStatus(RedPackStatusEnum.REFUNDING);
-
-			log.info("红包组件:[退款]lockKey:{},红包id:{},退款人 userId:{},userName:{},退款金额：{}", redPackLockKey, redPackId,
-					redPackDto.getSendUserId(), redPackDto.getSendUserName(), Money.cent(surplusAmount));
-
-			// 组建order订单
-			orderDto = buildRefundRedPackOrderDto(redPackDto);
-
-			// 设置红包缓存数据（红包，红包订单）
-			redPackCacheDataService.setRedPackRedisData(redPackDto);
-			redPackCacheDataService.setRedPackOrderRedisData(orderDto);
-
-			// 发红包事件
-			InsideRedPackOrderEvent insideEvent = new InsideRedPackOrderEvent(orderDto);
-			eventBus.publishAfterTransactionCommitted(insideEvent);
 
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
-			log.error("红包组件:[退款]失败,红包id:{},{}", redPackId, e);
-			throw new BusinessException("红包组件:[退款]失败");
-		} finally {
-			lock.unlock();
+			log.error("红包组件:[红包退款]红包退款失败,红包id:{},{}", redPackId, e);
+			throw new BusinessException("红包组件:[红包退款]红包退款失败");
 		}
 
 		return orderDto;
@@ -241,19 +258,7 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 
 	@Override
 	public List<RedPackOrderDto> findRedPackOrder(Long redPackId) {
-		List<RedPackOrderDto> orderDtoList = null;
-		Lock lock = factory.newLock(redPackCacheDataService.getRedPackLockKey(redPackId));
-		lock.lock();
-		try {
-			orderDtoList = redPackCacheDataService.getRedPackRedisDataListByKey(redPackId);
-
-		} catch (BusinessException e) {
-			throw new BusinessException(e.getMessage(), e.getCode());
-		} catch (Exception e) {
-			throw new BusinessException("红包组件:[查询红包]失败");
-		} finally {
-			lock.unlock();
-		}
+		List<RedPackOrderDto> orderDtoList = redPackCacheDataService.getRedPackRedisDataListByKey(redPackId);
 		return orderDtoList;
 	}
 

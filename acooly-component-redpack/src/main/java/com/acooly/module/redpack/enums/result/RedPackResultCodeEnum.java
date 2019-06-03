@@ -20,6 +20,9 @@ import com.acooly.core.utils.enums.Messageable;
  * @author cuifuq Date: 2019-03-05 18:18:09
  */
 public enum RedPackResultCodeEnum implements Messageable {
+	
+	/** 红包不存在 **/
+	RED_PACK_CREATE_ERROR("RED_PACK_CREATE_ERROR", "创建红包失败"),
 
 	/** 红包不存在 **/
 	RED_PACK_NOT_EXISTING("RED_PACK_NOT_EXISTING", "红包不存在"),
@@ -53,6 +56,12 @@ public enum RedPackResultCodeEnum implements Messageable {
 
 	/** 领取超过最大领取次数,(已经领取红包) **/
 	RED_PACK_PASS_MAX_NUM("RED_PACK_PASS_MAX_NUM", "领取超过最大领取次数"),
+	
+	/** 发送红包失败，获取锁lock 失败 **/
+	RED_PACK_SEND_LOCK_ERROR("RED_PACK_SEND_LOCK_ERROR", "领取红包失败,请稍后重试"),
+	
+	/** 红包退款失败，获取锁lock 失败 **/
+	RED_PACK_REFUND_LOCK_ERROR("RED_PACK_REFUND_LOCK_ERROR", "红包退款失败,请稍后重试"),
 
 	;
 

@@ -61,36 +61,36 @@ public class TestManagerController {
 
 		try {
 
-//			String redPackId = request.getParameter("redPackId");
-//			SendRedPackDto dto = new SendRedPackDto();
-//			dto.setRedPackId(Long.parseLong(redPackId));
-//			dto.setUserId(100L);
-//			dto.setUserName("cuifuq");
+			String redPackId = request.getParameter("redPackId");
+			redPackId = "185";
+			SendRedPackDto dto = new SendRedPackDto();
+			dto.setRedPackId(Long.parseLong(redPackId));
+			dto.setUserId(100L);
+			dto.setUserName("cuifuq");
 
-			String redPackId = "142";
-			List<RedPackOrderDto> sss = redPackTradeService.findRedPackOrder(Long.parseLong(redPackId));
-			for (RedPackOrderDto redPackOrderDto : sss) {
-				System.out.println("---1---"+redPackOrderDto.getUserId()+"----"+redPackOrderDto.getCreateTime()+"-------"+redPackOrderDto.getAmount());
-			}
-			
-			
-			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), true);
-			for (RedPackOrderDto redPackOrderDto : sss) {
-				System.out.println("---2---"+redPackOrderDto.getUserId()+"----"+redPackOrderDto.getCreateTime()+"-------"+redPackOrderDto.getAmount());
-			}
-			
-			
-			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), false);
-			for (RedPackOrderDto redPackOrderDto : sss) {
-				System.out.println("---3---"+redPackOrderDto.getUserId()+"----"+redPackOrderDto.getCreateTime()+"-------"+redPackOrderDto.getAmount());
-			}
+//			List<RedPackOrderDto> sss = redPackTradeService.findRedPackOrder(Long.parseLong(redPackId));
+//			for (RedPackOrderDto redPackOrderDto : sss) {
+//				System.out.println("---1---" + redPackOrderDto.getUserId() + "----" + redPackOrderDto.getCreateTime()
+//						+ "-------" + redPackOrderDto.getAmount());
+//			}
+//
+//			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), true);
+//			for (RedPackOrderDto redPackOrderDto : sss) {
+//				System.out.println("---2---" + redPackOrderDto.getUserId() + "----" + redPackOrderDto.getCreateTime()
+//						+ "-------" + redPackOrderDto.getAmount());
+//			}
+//
+//			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), false);
+//			for (RedPackOrderDto redPackOrderDto : sss) {
+//				System.out.println("---3---" + redPackOrderDto.getUserId() + "----" + redPackOrderDto.getCreateTime()
+//						+ "-------" + redPackOrderDto.getAmount());
+//			}
 
 			// 数据库 锁
 //			testRedPackService.sendRedPack(dto);
 
 //			redis 分布式 锁
-//			redPackTradeService.sendRedPack(dto);
-
+			redPackTradeService.sendRedPack(dto);
 		} catch (BusinessException e) {
 			result.setSuccess(false);
 			result.setCode(e.getCode());
@@ -98,9 +98,10 @@ public class TestManagerController {
 			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
 			result.setSuccess(false);
+			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-		log.info("程序运行时间：{} ms", ((endTime - startTime)));
+		log.info("程序运行时间：{} s", ((endTime - startTime)/1000.00));
 		return result;
 	}
 

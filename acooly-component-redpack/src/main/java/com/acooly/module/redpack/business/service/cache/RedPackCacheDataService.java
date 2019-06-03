@@ -9,10 +9,12 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.module.redpack.RedPackProperties;
 import com.acooly.module.redpack.business.service.conver.RedPackEntityConverDto;
 import com.acooly.module.redpack.entity.RedPack;
 import com.acooly.module.redpack.entity.RedPackOrder;
+import com.acooly.module.redpack.enums.result.RedPackResultCodeEnum;
 import com.acooly.module.redpack.event.dto.RedPackDto;
 import com.acooly.module.redpack.event.dto.RedPackOrderDto;
 import com.acooly.module.redpack.service.RedPackOrderService;
@@ -89,6 +91,10 @@ public class RedPackCacheDataService {
 		if (dto == null) {
 			dto = new RedPackDto();
 			RedPack redPack = redPackService.lockById(redPackId);
+			if (null == redPack) {
+				throw new BusinessException(RedPackResultCodeEnum.RED_PACK_NOT_EXISTING.message(),
+						RedPackResultCodeEnum.RED_PACK_NOT_EXISTING.code());
+			}
 			redPackService.checkRedPackOverdue(redPack);
 			RedPackEntityConverDto.converRedPackDto(redPack, dto);
 		}
@@ -138,7 +144,6 @@ public class RedPackCacheDataService {
 	public List<RedPackOrderDto> getRedPackRedisDataListByKey(Long redPackId) {
 		String redPackRedisListKey = getRedPackRedisListKey(redPackId);
 		ListOperations redisDataList = redisTemplate.opsForList();
-
 		List<RedPackOrderDto> orderDtoList = (List<RedPackOrderDto>) redisDataList.range(redPackRedisListKey, 0, -1);
 		if ((orderDtoList == null) || (orderDtoList.isEmpty())) {
 			orderDtoList = Lists.newArrayList();
