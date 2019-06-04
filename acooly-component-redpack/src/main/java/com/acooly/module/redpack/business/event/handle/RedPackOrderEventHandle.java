@@ -35,6 +35,7 @@ public class RedPackOrderEventHandle {
 		RedPack redPack = redPackService.lockById(event.getRedPackId());
 		long surplusAmount = redPack.getTotalAmount() - redPack.getSendOutAmount() - redPack.getRefundAmount();
 		if (surplusAmount == 0) {
+			log.info("红包组件[红包完结],红包id:{},更新红包排名记录",event.getRedPackId());
 			redPackOrderService.updateIsFirst(event.getRedPackId());
 			redPackCacheDataService.setRedPackOrderRedisDataDelete(event.getRedPackId());
 		}

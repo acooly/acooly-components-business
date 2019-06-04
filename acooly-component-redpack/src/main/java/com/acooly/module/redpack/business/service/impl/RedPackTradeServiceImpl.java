@@ -119,9 +119,8 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 
 		Lock lock = factory.newLock(redPackLockKey);
 		try {
+			log.info("红包组件:[发送红包],开始获取锁,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
-				log.info("红包组件:[发送红包],获取锁成功,lockKey:{},红包id:{}", redPackLockKey, redPackId);
-
 				try {
 					RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
 
@@ -199,8 +198,8 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		Lock lock = factory.newLock(redPackLockKey);
 		try {
 
+			log.info("红包组件:[红包退款],开始获取锁,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
-				log.info("红包组件:[红包退款],获取锁成功,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 
 				try {
 					RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
