@@ -33,7 +33,7 @@ public interface RedPackOrderDao extends EntityMybatisDao<RedPackOrder> {
 	@Select("select * from red_red_pack_order where red_pack_id = #{redPackId} and user_id=#{userId} ")
 	List<RedPackOrder> findByRedPackIdAndUserId(@Param("redPackId") Long redPackId, @Param("userId") Long userId);
 
-	@Select("select id from red_red_pack_order where amount=(select max(amount) from red_red_pack_order where type='RED_PACK' and red_pack_id = #{redPackId}) LIMIT 0,1")
+	@Select("select id from red_red_pack_order where amount=(select max(amount) from red_red_pack_order where type='RED_PACK' and red_pack_id = #{redPackId} ) and red_pack_id = #{redPackId} ORDER BY create_time asc LIMIT 0,1")
 	Long findByRedPackMaxId(@Param("redPackId") Long redPackId);
 
 	@Select("select id from red_red_pack_order where amount=(select max(amount) from red_red_pack_order where red_pack_id = #{redPackId}) LIMIT 0,1")
@@ -51,5 +51,9 @@ public interface RedPackOrderDao extends EntityMybatisDao<RedPackOrder> {
 
 	@Select("select count(id) from red_red_pack_order WHERE red_pack_id = #{redPackId} and user_id=#{userId}")
 	Long coutRedOrderNum(@Param("userId") long userId, @Param("redPackId") long redPackId);
+
+	@Select("select IFNULL(sum(amount),0) as sumAmount from red_red_pack_order WHERE id!=#{redPackOrderId} and red_pack_id = #{redPackId} and status=#{status}")
+	Long sumRedPackByRedPackIdAndStatusNotId(@Param("redPackOrderId") Long redPackOrderId,
+			@Param("redPackId") Long redPackId, @Param("status") String status);
 
 }

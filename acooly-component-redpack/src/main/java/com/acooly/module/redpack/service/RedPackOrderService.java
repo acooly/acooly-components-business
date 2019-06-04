@@ -47,6 +47,16 @@ public interface RedPackOrderService extends EntityService<RedPackOrder> {
 	Long sumRedPackByRedPackIdAndStatus(Long redPackId, RedPackOrderStatusEnum success);
 
 	/**
+	 * 统计所有订单记录金额总额,排除 redPackOrderId
+	 * 
+	 * @param redPackOrderId
+	 * @param redPackId
+	 * @param success
+	 * @return
+	 */
+	Long sumRedPackByRedPackIdAndStatusNotId(Long redPackOrderId, Long redPackId, RedPackOrderStatusEnum success);
+
+	/**
 	 * 统计红包领取个数
 	 * 
 	 * @param userId

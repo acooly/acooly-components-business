@@ -51,7 +51,10 @@ public class RedPackReplyTradeServiceImpl implements RedPackReplyTradeService {
 		RedPackStatusEnum oldStatus = redPack.getStatus();
 
 		// 已经成功的条数
-		long sumAmount = redPackOrderService.sumRedPackByRedPackIdAndStatus(redPackId, RedPackOrderStatusEnum.SUCCESS);
+		long sumAmount = redPackOrderService.sumRedPackByRedPackIdAndStatusNotId(redPackOrder.getId(), redPackId,
+				RedPackOrderStatusEnum.SUCCESS);
+		sumAmount = sumAmount + redPackOrder.getAmount();
+
 		log.info("红包组件:[更新红包记录为成功],redPackOrderId:{},红包总额:{},记录成功金额总和:{}", redPackId, redPack.getTotalAmount(),
 				sumAmount);
 

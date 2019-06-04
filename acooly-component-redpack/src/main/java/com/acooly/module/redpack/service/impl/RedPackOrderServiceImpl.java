@@ -100,4 +100,10 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 		return getEntityDao().coutRedOrderNum(userId, redPackId);
 	}
 
+	@Override
+	public Long sumRedPackByRedPackIdAndStatusNotId(Long redPackOrderId, Long redPackId,
+			RedPackOrderStatusEnum status) {
+		return getEntityDao().sumRedPackByRedPackIdAndStatusNotId(redPackOrderId, redPackId, status.code());
+	}
+
 }
