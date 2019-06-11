@@ -91,6 +91,14 @@ public class TestManagerController {
 
 //			redis 分布式 锁
 			redPackTradeService.sendRedPack(dto);
+			
+			
+			
+//			for (int i = 1; i < 500; i++) {
+//				redPackTradeService.sendRedPack(dto);
+//			}
+			
+			
 		} catch (BusinessException e) {
 			result.setSuccess(false);
 			result.setCode(e.getCode());
@@ -119,6 +127,7 @@ public class TestManagerController {
 				System.out.println("redisLock---------");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BusinessException("红包组件:[发送红包]发送红包失败");
 		} finally {
 			lock.unlock();

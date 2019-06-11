@@ -44,9 +44,9 @@ public class RedPackReplyTradeServiceImpl implements RedPackReplyTradeService {
 
 		// 锁表
 		RedPack redPack = redPackService.lockById(redPackId);
-		redPackOrder = redPackOrderService.lockById(redPackOrderId);
-		redPackOrder.setStatus(RedPackOrderStatusEnum.SUCCESS);
-		redPackOrderService.update(redPackOrder);
+
+		// 新启事务，保持数据记录
+		redPackOrderService.newUpdate(redPackOrderId);
 
 		RedPackStatusEnum oldStatus = redPack.getStatus();
 

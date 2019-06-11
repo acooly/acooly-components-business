@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.service.EntityServiceImpl;
@@ -104,6 +105,14 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 	public Long sumRedPackByRedPackIdAndStatusNotId(Long redPackOrderId, Long redPackId,
 			RedPackOrderStatusEnum status) {
 		return getEntityDao().sumRedPackByRedPackIdAndStatusNotId(redPackOrderId, redPackId, status.code());
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void newUpdate(Long redPackOrderId) {
+		RedPackOrder redPackOrder = lockById(redPackOrderId);
+		redPackOrder.setStatus(RedPackOrderStatusEnum.SUCCESS);
+		getEntityDao().update(redPackOrder);
 	}
 
 }

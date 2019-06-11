@@ -65,4 +65,6 @@ public interface RedPackOrderService extends EntityService<RedPackOrder> {
 	 */
 	Long coutRedOrderNum(long userId, long redPackId);
 
+	void newUpdate(Long redPackOrderId);
+
 }
