@@ -6,6 +6,11 @@
         $.acooly.framework.registerKeydown('manage_pointGrade_searchform', 'manage_pointGrade_datagrid');
     });
 
+
+    function showThumbnail(value) {
+      return '<a class="manage_onlineFile_datagrid_Thumbnail" target="_blank"  href="' + value + '"><img src="' + value + '" width="40" height="30""/></a>';
+    }
+
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
     <!-- 查询条件 -->
@@ -44,6 +49,7 @@
                 <th field="id" sum="true">id</th>
                 <th field="num">等级</th>
                 <th field="title">标题</th>
+                <th field="picture" data-options="formatter:function(value){return showThumbnail(value)}">图标</th>
                 <th field="startPoint">${pointModuleName}区间_开始</th>
                 <th field="endPoint">${pointModuleName}区间_结束</th>
                 <th field="createTime" formatter="formatDate">创建时间</th>

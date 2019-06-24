@@ -3,7 +3,7 @@
 <div>
     <form id="manage_pointGrade_editform"
           action="${pageContext.request.contextPath}/manage/point/pointGrade/${action=='create'?'saveJson':'updateJson'}.html"
-          method="post">
+          method="post" enctype="multipart/form-data">
         <jodd:form bean="pointGrade" scope="request">
             <input name="id" type="hidden"/>
             <table class="tableForm" width="100%">
@@ -27,10 +27,17 @@
                     <td><input type="text" name="endPoint" size="40" class="easyui-numberbox text" data-options="required:true"
                                validType="byteLength[1,10]"/></td>
                 </tr>
-                <!-- 			<tr> -->
-                <!-- 				<th> 图标：</th> -->
-                <!-- 				<td><textarea rows="3" cols="40" style="width:300px;" name="picture" class="easyui-validatebox"  validType="byteLength[1,255]"></textarea></td> -->
-                <!-- 			</tr>					 -->
+      			<tr>
+      				<th> 图标：</th>
+      				<td>
+      				<input type="file" name="pictureFile" />
+      				<c:if test="${pointGrade.picture!=''}">
+      				<br/>
+      				<a class="manage_onlineFile_datagrid_Thumbnail" target="_blank"  href="' + value + '"><img src="${pointGrade.picture}" width="120" height="100""/></a>
+      				</c:if>
+      				</td>
+<!--       				<textarea rows="3" cols="40" style="width:300px;" name="picture" class="easyui-validatebox"  validType="byteLength[1,255]"></textarea> -->
+      			</tr>					
                 <tr>
                     <th>备注：</th>
                     <td><textarea rows="3" cols="40" style="width:300px;" name="memo" class="easyui-validatebox"

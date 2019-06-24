@@ -36,5 +36,10 @@
 			<artifactId>acooly-component-security</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-ofile</artifactId>
+		</dependency>
+
 	</dependencies>
 </project>

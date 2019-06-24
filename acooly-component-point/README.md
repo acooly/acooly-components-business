@@ -38,6 +38,10 @@ acooly-component-point以acooly框架为基础开发的积分业务组件
 acooly.point.pointModuleName=积分
 
 ##版本说明
+
+####v2:2019-06
+积分等级支持等级图标上传
+
 ####v2:2018-08
 1.新增根据积分产生的业务类型进行分类统计
 

@@ -21,124 +21,139 @@ import javax.persistence.*;
 @Entity
 @Table(name = "point_account")
 public class PointAccount extends AbstractEntity {
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
-    /** ID */
-    /**
-     * 用户名
-     */
-    private String userName;
-    /**
-     * 积分余额
-     */
-    private Long balance = 0l;
-    /**
-     * 冻结
-     */
-    private Long freeze = 0l;
-    /**
-     * 可用余额
-     */
-    @Transient
-    private Long available = 0l;
-    /**
-     * 总消费积分 *
-     */
-    private Long totalExpensePoint = 0l;
-    /**
-     * 总产生积分 *
-     */
-    private Long totalProducePoint = 0l;
-    /**
-     * 状态
-     */
-    @Enumerated(EnumType.STRING)
-    private PointAccountStatus status = PointAccountStatus.valid;
-    /**
-     * 积分等级 *
-     */
-    private Long gradeId;
-    /**
-     * 备注
-     */
-    private String memo;
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	/** ID */
+	/**
+	 * 用户名
+	 */
+	private String userName;
+	/**
+	 * 积分余额
+	 */
+	private Long balance = 0l;
+	/**
+	 * 冻结
+	 */
+	private Long freeze = 0l;
+	/**
+	 * 可用余额
+	 */
+	@Transient
+	private Long available = 0l;
+	/**
+	 * 总消费积分 *
+	 */
+	private Long totalExpensePoint = 0l;
+	/**
+	 * 总产生积分 *
+	 */
+	private Long totalProducePoint = 0l;
+	/**
+	 * 状态
+	 */
+	@Enumerated(EnumType.STRING)
+	private PointAccountStatus status = PointAccountStatus.valid;
+	/**
+	 * 积分等级 *
+	 */
+	private Long gradeId;
 
-    public String getUserName() {
-        return this.userName;
-    }
+	/**
+	 * 等级图标
+	 */
+	@Transient
+	private String gradePicture;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	/**
+	 * 备注
+	 */
+	private String memo;
 
-    public Long getBalance() {
-        return this.balance;
-    }
+	public String getUserName() {
+		return this.userName;
+	}
 
-    public void setBalance(Long balance) {
-        this.balance = balance;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    public Long getFreeze() {
-        return this.freeze;
-    }
+	public Long getBalance() {
+		return this.balance;
+	}
 
-    public void setFreeze(Long freeze) {
-        this.freeze = freeze;
-    }
+	public void setBalance(Long balance) {
+		this.balance = balance;
+	}
 
-    public Long getAvailable() {
-        return this.balance - this.freeze;
-    }
+	public Long getFreeze() {
+		return this.freeze;
+	}
 
-    public void setAvailable(Long available) {
-        this.available = available;
-    }
+	public void setFreeze(Long freeze) {
+		this.freeze = freeze;
+	}
 
-    public Long getTotalExpensePoint() {
-        return totalExpensePoint;
-    }
+	public Long getAvailable() {
+		return this.balance - this.freeze;
+	}
 
-    public void setTotalExpensePoint(Long totalExpensePoint) {
-        this.totalExpensePoint = totalExpensePoint;
-    }
+	public void setAvailable(Long available) {
+		this.available = available;
+	}
 
-    public Long getTotalProducePoint() {
-        return totalProducePoint;
-    }
+	public Long getTotalExpensePoint() {
+		return totalExpensePoint;
+	}
 
-    public void setTotalProducePoint(Long totalProducePoint) {
-        this.totalProducePoint = totalProducePoint;
-    }
+	public void setTotalExpensePoint(Long totalExpensePoint) {
+		this.totalExpensePoint = totalExpensePoint;
+	}
 
-    public PointAccountStatus getStatus() {
-        return status;
-    }
+	public Long getTotalProducePoint() {
+		return totalProducePoint;
+	}
 
-    public void setStatus(PointAccountStatus status) {
-        this.status = status;
-    }
+	public void setTotalProducePoint(Long totalProducePoint) {
+		this.totalProducePoint = totalProducePoint;
+	}
 
-    public Long getGradeId() {
-        return gradeId;
-    }
+	public PointAccountStatus getStatus() {
+		return status;
+	}
 
-    public void setGradeId(Long gradeId) {
-        this.gradeId = gradeId;
-    }
+	public void setStatus(PointAccountStatus status) {
+		this.status = status;
+	}
 
-    public String getMemo() {
-        return this.memo;
-    }
+	public Long getGradeId() {
+		return gradeId;
+	}
 
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
+	public void setGradeId(Long gradeId) {
+		this.gradeId = gradeId;
+	}
 
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
+	public String getMemo() {
+		return this.memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public String getGradePicture() {
+		return gradePicture;
+	}
+
+	public void setGradePicture(String gradePicture) {
+		this.gradePicture = gradePicture;
+	}
+
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }
