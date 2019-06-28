@@ -7,12 +7,14 @@
 package com.acooly.module.redpack.portal.web;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.curator.shaded.com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -61,12 +63,20 @@ public class TestManagerController {
 
 		try {
 
-			String redPackId = request.getParameter("redPackId");
-			redPackId = "185";
-			SendRedPackDto dto = new SendRedPackDto();
-			dto.setRedPackId(Long.parseLong(redPackId));
-			dto.setUserId(100L);
-			dto.setUserName("cuifuq");
+			Long redPackId=536L;
+			List<RedPackOrderDto> list = redPackTradeService.findRedPackOrder(redPackId);
+			
+			
+			Map<Object, Object> data=Maps.newHashMap();
+			data.put("key", list);
+			result.setData(data);
+			
+//			String redPackId = request.getParameter("redPackId");
+//			redPackId = "185";
+//			SendRedPackDto dto = new SendRedPackDto();
+//			dto.setRedPackId(Long.parseLong(redPackId));
+//			dto.setUserId(100L);
+//			dto.setUserName("cuifuq");
 
 //			List<RedPackOrderDto> sss = redPackTradeService.findRedPackOrder(Long.parseLong(redPackId));
 //			for (RedPackOrderDto redPackOrderDto : sss) {
@@ -90,7 +100,7 @@ public class TestManagerController {
 //			testRedPackService.sendRedPack(dto);
 
 //			redis 分布式 锁
-			redPackTradeService.sendRedPack(dto);
+//			redPackTradeService.sendRedPack(dto);
 			
 			
 			

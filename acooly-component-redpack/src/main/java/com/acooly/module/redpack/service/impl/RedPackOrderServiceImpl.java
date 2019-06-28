@@ -23,6 +23,8 @@ import com.acooly.module.redpack.enums.RedPackOrderStatusEnum;
 import com.acooly.module.redpack.enums.RedPackOrderTypeEnum;
 import com.acooly.module.redpack.service.RedPackOrderService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 红包订单 Service实现
  *
@@ -31,6 +33,7 @@ import com.acooly.module.redpack.service.RedPackOrderService;
  * @author cuifuq
  *
  */
+@Slf4j
 @Service("redPackOrderService")
 public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, RedPackOrderDao>
 		implements RedPackOrderService {
@@ -56,6 +59,7 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 
 	@Override
 	public void updateIsFirst(Long redPackId) {
+		log.info("红包组件[红包完结],红包id:{}已被领取完成,更新用户手气最佳", redPackId);
 		Long id = getEntityDao().findByRedPackMaxId(redPackId);
 		if (id != null) {
 			getEntityDao().updateIsFirst(id);

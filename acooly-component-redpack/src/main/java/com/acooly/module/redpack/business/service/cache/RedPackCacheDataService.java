@@ -128,8 +128,10 @@ public class RedPackCacheDataService {
 		return redPackProperties.getRedPackDistributedLockKey() + "_redis_list_" + redPackId;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setRedPackOrderRedisDataDelete(Long redPackId) {
 		String redPackRedisListKey = getRedPackRedisListKey(redPackId);
+		log.info("红包组件,红包id:{},清空红包缓存列表,listKey:{}", redPackId, redPackRedisListKey);
 		redisTemplate.delete(redPackRedisListKey);
 	}
 
@@ -140,7 +142,7 @@ public class RedPackCacheDataService {
 	 * @param eventDto
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<RedPackOrderDto> getRedPackRedisDataListByKey(Long redPackId) {
 		String redPackRedisListKey = getRedPackRedisListKey(redPackId);
 		ListOperations redisDataList = redisTemplate.opsForList();
@@ -150,6 +152,9 @@ public class RedPackCacheDataService {
 			List<RedPackOrder> redPackOrderList = redPackOrderService.findByRedPackId(redPackId);
 			orderDtoList = RedPackEntityConverDto.converSendRedPackDto(redPackOrderList, orderDtoList);
 			if ((orderDtoList != null) && (!orderDtoList.isEmpty())) {
+				// 防止高并发重复缓存列表，需清空列表
+				setRedPackOrderRedisDataDelete(redPackId);
+
 				redisDataList.leftPushAll(redPackRedisListKey, orderDtoList);
 				redisTemplate.expire(redPackRedisListKey, setRedisLifeTime(), TimeUnit.MINUTES);
 			}

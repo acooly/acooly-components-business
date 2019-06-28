@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class RedPackAutoConfig {
 	@Bean
-	public StandardDatabaseScriptIniter pointScriptIniter() {
+	public StandardDatabaseScriptIniter redPackScriptIniter() {
 		return new StandardDatabaseScriptIniter() {
 			@Override
 			public String getEvaluateTable() {
