@@ -4,6 +4,7 @@
 package com.acooly.module.lottery.facade.result;
 
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.module.lottery.domain.LotteryWinner;
 import com.acooly.module.lottery.dto.LotteryAwardInfo;
 
 /**
@@ -25,6 +26,11 @@ public class LotteryResult extends ResultBase {
      * 奖项信息
      */
     private LotteryAwardInfo award;
+
+    /**
+     * 中奖记录
+     */
+    private LotteryWinner lotteryWinner;
 
     /**
      * 计数奖项标识
@@ -72,5 +78,13 @@ public class LotteryResult extends ResultBase {
 
     public void setUkey(String ukey) {
         this.ukey = ukey;
+    }
+
+    public LotteryWinner getLotteryWinner() {
+        return lotteryWinner;
+    }
+
+    public void setLotteryWinner(LotteryWinner lotteryWinner) {
+        this.lotteryWinner = lotteryWinner;
     }
 }

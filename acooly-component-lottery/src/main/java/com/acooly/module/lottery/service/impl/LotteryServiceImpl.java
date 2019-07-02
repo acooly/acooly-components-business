@@ -104,6 +104,7 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao>
                     logger.info("抽奖活动参与人数上限达到，自动关闭活动:{}", LotteryStatus.disable);
                 }
             }
+            result.setLotteryWinner(lotteryWinner);
             result.setUser(user);
             result.setAward(
                     BeanCopier.copy(award, LotteryAwardInfo.class, BeanCopier.CopyStrategy.IGNORE_NULL));
