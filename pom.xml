@@ -50,6 +50,12 @@
 
 			<dependency>
 				<groupId>com.acooly</groupId>
+				<artifactId>acooly-component-countnum</artifactId>
+				<version>${parent.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.acooly</groupId>
 				<artifactId>acooly-component-business-common</artifactId>
 				<version>${parent.version}</version>
 			</dependency>
@@ -98,5 +104,6 @@
 		<module>acooly-component-business-common</module>
 		<module>acooly-component-point</module>
 		<module>acooly-component-redpack</module>
+		<module>acooly-component-countnum</module>
 	</modules>
 </project>
