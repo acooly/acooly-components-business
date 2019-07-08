@@ -97,6 +97,7 @@ public class RedPackCacheDataService {
 			}
 			redPackService.checkRedPackOverdue(redPack);
 			RedPackEntityConverDto.converRedPackDto(redPack, dto);
+			setRedPackRedisData(dto);
 		}
 		log.info("获取红包：redis缓存数据:{}", dto);
 		return dto;

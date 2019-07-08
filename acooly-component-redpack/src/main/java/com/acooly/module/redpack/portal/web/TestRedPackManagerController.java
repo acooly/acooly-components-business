@@ -42,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping(value = "/test/redPack")
-public class TestManagerController {
+public class TestRedPackManagerController {
 
 	@Autowired
 	private RedPackTradeService redPackTradeService;
@@ -64,6 +64,8 @@ public class TestManagerController {
 		try {
 
 			Long redPackId=536L;
+			redPackTradeService.findRedPack(redPackId);
+			
 			List<RedPackOrderDto> list = redPackTradeService.findRedPackOrder(redPackId);
 			
 			
