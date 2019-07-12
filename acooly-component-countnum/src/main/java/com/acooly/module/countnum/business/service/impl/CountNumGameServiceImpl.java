@@ -180,10 +180,11 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		List<CountNumGameOrderDto> countNumGameOrderDtoList = countNumCacheDataService
 				.getCountNumOrderOneRedisData(countNumId, userId);
 		int orderSize = countNumGameOrderDtoList.size();
-		log.info("[计数游戏组件],userId:{},countId:{},用户参与游戏次数：{}", userId, countNumId, orderSize);
-
 		Long limitNum = countNumGameDto.getLimitNum();
-		if ((limitNum > 0) && (limitNum >= orderSize)) {
+
+		log.info("[计数游戏组件],userId:{},countId:{},限制次数:{},用户参与游戏次数:{}", userId, countNumId, limitNum, orderSize);
+
+		if ((limitNum > 0) && (orderSize >= limitNum)) {
 			throw new BusinessException(CountNumGameResultCodeEnum.COUNT_NUM_PLAY_LIMIT_ALREADY.message(),
 					CountNumGameResultCodeEnum.COUNT_NUM_PLAY_LIMIT_ALREADY.code());
 		}
