@@ -29,6 +29,7 @@ import com.acooly.module.countnum.dto.CountNumGameDto;
 import com.acooly.module.countnum.dto.CountNumGameOrderDto;
 import com.acooly.module.countnum.dto.order.CountNumGameResultDto;
 import com.acooly.module.countnum.dto.order.CreateCountNumGameDto;
+import com.acooly.module.countnum.enums.CountNumTypeEnum;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,18 +60,19 @@ public class TestCountNumManagerController {
 			dto.setTitle("计数游戏01");
 			dto.setCreateUserId(999L);
 			dto.setCreateUserName("999OOO");
+			dto.setType(CountNumTypeEnum.NUM_LIMIT);
 			dto.setBusinessId("100000L");
-			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
+//			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
 
 //			Long countNumId = countDto.getCountNumId();
-			Long countNumId = 307L;
+			Long countNumId = 16L;
 
 			CountNumGameResultDto gameDto = new CountNumGameResultDto();
 			gameDto.setCountNumId(countNumId);
 			gameDto.setUserId(888L);
 			gameDto.setUserName("888OOO");
 			gameDto.setNum((long) (1 + Math.random() * (99 - 10 + 1)));
-//			countNumGameService.submitCountNumGameResult(gameDto);
+			countNumGameService.submitCountNumGameResult(gameDto);
 
 			// 提交游戏
 
@@ -80,10 +82,10 @@ public class TestCountNumManagerController {
 			data.put("key", list);
 			result.setData(data);
 
-			countNumGameService.userRanking(8888L, countNumId, true);
+//			countNumGameService.userRanking(8888L, countNumId, true);
 
-			Date overdueDate = Dates.parse("2019-07-08 11:06:00");
-			countNumGameService.countNumGameOverdueFinish(countNumId, overdueDate);
+//			Date overdueDate = Dates.parse("2019-07-08 11:06:00");
+//			countNumGameService.countNumGameOverdueFinish(countNumId, overdueDate);
 
 		} catch (BusinessException e) {
 			result.setSuccess(false);

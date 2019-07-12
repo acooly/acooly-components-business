@@ -214,7 +214,7 @@ public class CountNumCacheDataService {
 		CountNumGameDto countNumGame = getCountNumRedisDataByKey(countNumId);
 		List<CountNumGameOrderDto> orderDtoList = (List<CountNumGameOrderDto>) redisDataList.range(redisDataListKey, 0,
 				countNumProperties.getCountNumRedisOrderNum());
-		if (countNumGame.getType() == CountNumTypeEnum.TIME_LIMIT) {
+		if (countNumGame.getType() == CountNumTypeEnum.NUM_LIMIT) {
 			orderDtoList.sort((a, b) -> a.getNum().compareTo(b.getNum()));
 		} else {
 			orderDtoList.sort((a, b) -> b.getNum().compareTo(a.getNum()));
