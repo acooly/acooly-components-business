@@ -11,6 +11,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -52,8 +53,9 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 	@Autowired
 	private PointTypeCountService pointTypeCountService;
 
-	@Autowired
-	private TaskExecutor taskExecutor;
+    @Autowired
+    @Qualifier("commonTaskExecutor")
+    private TaskExecutor taskExecutor;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
