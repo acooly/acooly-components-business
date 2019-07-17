@@ -72,6 +72,12 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		CountNumEntityConverDto.converCountNumDto(countNum, dto);
 		countNumCacheDataService.setCountNumRedisData(dto);
 
+		// 设置缓存监听事件
+		if (createDto.getOverdueTime() != null) {
+			countNumCacheDataService.setListenerCountNumRedisLockKey(dto.getCountNumId(), dto,
+					createDto.getOverdueTime());
+		}
+
 		return dto;
 	}
 
@@ -152,6 +158,8 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		CountNumGameDto dto = new CountNumGameDto();
 		CountNumEntityConverDto.converCountNumDto(countNum, dto);
 		countNumCacheDataService.setCountNumRedisData(dto);
+		// 设置缓存监听事件
+		countNumCacheDataService.setListenerCountNumRedisLockKey(countNumId, dto, overdueDate);
 		return dto;
 	}
 
@@ -253,10 +261,14 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 
 		if (isOverstep) {
 			long rank = rankDto.getRank();
-			long totalNum = countNumOrderService.countByCountId(countNumId);
-			double overstep = ((totalNum - rank) * 100.00 / totalNum);
-			String overstepRate = String.format("%.2f", overstep);
-			rankDto.setOverstepRate(overstepRate);
+			if (rank == 1) {
+				rankDto.setOverstepRate("100.00");
+			} else {
+				long totalNum = countNumOrderService.countByCountId(countNumId);
+				double overstep = ((totalNum - rank) * 100.00 / totalNum);
+				String overstepRate = String.format("%.2f", overstep);
+				rankDto.setOverstepRate(overstepRate);
+			}
 		}
 		log.info("[计数游戏组件],countId:{},userId:{},用户排名：{}", countNumId, userId, rankDto);
 		return rankDto;

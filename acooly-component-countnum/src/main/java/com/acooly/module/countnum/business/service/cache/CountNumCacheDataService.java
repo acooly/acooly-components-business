@@ -62,6 +62,38 @@ public class CountNumCacheDataService {
 
 	/**
 	 * 
+	 * game_count_num_key_redis_lock_listener_xxxx
+	 * 
+	 * 获取Redis key计数游戏 监听器锁
+	 * 
+	 * @param countNumId
+	 * @return
+	 */
+	public String getListenerCountNumRedisLockKey(Long countNumId) {
+		return countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_listener_" + countNumId;
+	}
+
+	/**
+	 * 
+	 * game_count_num_key_redis_lock_listener_xxxx
+	 * 
+	 * 获取Redis key计数游戏 监听器锁
+	 * 
+	 * @param countNumId
+	 * @return
+	 */
+	public void setListenerCountNumRedisLockKey(Long countNumId, CountNumGameDto dto, Date overdueTime) {
+		String listenerKey = getListenerCountNumRedisLockKey(countNumId);
+		Date currentDate = new Date();
+		long times = overdueTime.getTime() - currentDate.getTime();
+		System.out.println(times);
+		if (times > 0) {
+			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
+		}
+	}
+
+	/**
+	 * 
 	 * game_count_num_key_redis_lock_xxxx
 	 * 
 	 * 获取Redis key计数游戏锁
@@ -139,7 +171,7 @@ public class CountNumCacheDataService {
 	@SuppressWarnings("unchecked")
 	public void setCountNumOrderRedisDataDelete(Long countNumId) {
 		String countNumRedisListKey = getCountNumRedisListKey(countNumId);
-		log.info("计数游戏组件,计数游戏id:{},清空缓存列表,listKey:{}", countNumId, countNumRedisListKey);
+		log.info("[计数游戏组件],计数游戏id:{},清空缓存列表,listKey:{}", countNumId, countNumRedisListKey);
 		redisTemplate.delete(countNumRedisListKey);
 	}
 

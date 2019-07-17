@@ -23,6 +23,8 @@ import com.acooly.module.countnum.enums.CountNumTypeEnum;
 import com.acooly.module.countnum.service.CountNumOrderService;
 import com.acooly.module.event.EventBus;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 游戏-计数用户订单 Service实现
  *
@@ -31,6 +33,7 @@ import com.acooly.module.event.EventBus;
  * @author cuifuq
  *
  */
+@Slf4j
 @Service("countNumOrderService")
 public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, CountNumOrderDao>
 		implements CountNumOrderService {
@@ -87,11 +90,12 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 		event.setNum(order.getNum());
 		event.setCreateTime(order.getCreateTime());
 		eventBus.publishAfterTransactionCommitted(event);
+		log.info("[计数游戏组件]发布CountNumOrderEvent事件:{}", event);
 	}
 
 	@Override
 	public CountNumGameOrderRankDto userRankByCountNumId(long userId, long countNumId, CountNumTypeEnum type) {
-		if (type == CountNumTypeEnum.NUM_LIMIT) {
+		if (type == CountNumTypeEnum.TIME_LIMIT) {
 			return getEntityDao().userRankingByCountNumIdGroupNum(countNumId, userId);
 		} else {
 			return getEntityDao().userRankingByCountNumIdGroupTime(countNumId, userId);

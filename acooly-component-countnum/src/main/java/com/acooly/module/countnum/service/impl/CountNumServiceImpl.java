@@ -8,14 +8,19 @@ package com.acooly.module.countnum.service.impl;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.module.countnum.business.event.dto.CountNumEvent;
 import com.acooly.module.countnum.dao.CountNumDao;
 import com.acooly.module.countnum.entity.CountNum;
 import com.acooly.module.countnum.enums.CountNumStatusEnum;
 import com.acooly.module.countnum.service.CountNumService;
+import com.acooly.module.event.EventBus;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 游戏-计数 Service实现
@@ -25,12 +30,16 @@ import com.acooly.module.countnum.service.CountNumService;
  * @author cuifuq
  *
  */
+@Slf4j
 @Service("countNumService")
 public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao> implements CountNumService {
 
+	@Autowired
+	private EventBus eventBus;
+
 	@Override
 	@Transactional
-	public CountNum lockById(Long countNumId) {
+	public CountNum lockById(long countNumId) {
 		return getEntityDao().lockById(countNumId);
 	}
 
@@ -55,7 +64,7 @@ public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao
 
 	@Override
 	@Transactional
-	public CountNum countNumGameFinish(Long countNumId) {
+	public CountNum countNumGameFinish(long countNumId) {
 		CountNum countNum = lockById(countNumId);
 		countNum.setStatus(CountNumStatusEnum.FINISH);
 		getEntityDao().update(countNum);
@@ -63,11 +72,27 @@ public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao
 	}
 
 	@Override
-	public CountNum setOverdueDate(Long countNumId, Date overdueDate) {
+	public CountNum setOverdueDate(long countNumId, Date overdueDate) {
 		CountNum countNum = lockById(countNumId);
 		countNum.setOverdueTime(overdueDate);
 		getEntityDao().update(countNum);
 		return countNum;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void pushEvent(CountNum countNum) {
+		CountNumEvent event = new CountNumEvent();
+		event.setCountNumId(countNum.getId());
+		event.setTitle(countNum.getTitle());
+		event.setCreateUserId(countNum.getCreateUserId());
+		event.setCreateUserName(countNum.getCreateUserName());
+		event.setType(countNum.getType());
+		event.setOverdueTime(countNum.getOverdueTime());
+		event.setStatus(countNum.getStatus());
+		event.setBusinessId(countNum.getBusinessId());
+		eventBus.publishAfterTransactionCommitted(event);
+		log.info("[计数游戏组件]发布CountNumEvent事件:{}", event);
 	}
 
 }

@@ -28,7 +28,7 @@ public interface CountNumService extends EntityService<CountNum> {
 	 * @param countNumId
 	 * @return
 	 */
-	CountNum lockById(Long countNumId);
+	CountNum lockById(long countNumId);
 
 	/**
 	 * 校验过期时间
@@ -43,7 +43,7 @@ public interface CountNumService extends EntityService<CountNum> {
 	 * @param countNumId
 	 * @return
 	 */
-	CountNum countNumGameFinish(Long countNumId);
+	CountNum countNumGameFinish(long countNumId);
 
 	/**
 	 * 设置过期时间
@@ -51,6 +51,13 @@ public interface CountNumService extends EntityService<CountNum> {
 	 * @param countNumId
 	 * @return
 	 */
-	CountNum setOverdueDate(Long countNumId, Date overdueDate);
+	CountNum setOverdueDate(long countNumId, Date overdueDate);
+
+	/**
+	 * 事件发布
+	 * 
+	 * @param countNum
+	 */
+	public void pushEvent(CountNum countNum);
 
 }
