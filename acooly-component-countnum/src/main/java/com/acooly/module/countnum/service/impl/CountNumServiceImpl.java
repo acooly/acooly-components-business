@@ -34,8 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service("countNumService")
 public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao> implements CountNumService {
 
-	@Autowired
-	private EventBus eventBus;
+//	@SuppressWarnings("rawtypes")
+//	@Autowired
+//	private EventBus eventBus;
 
 	@Override
 	@Transactional
@@ -91,8 +92,7 @@ public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao
 		event.setOverdueTime(countNum.getOverdueTime());
 		event.setStatus(countNum.getStatus());
 		event.setBusinessId(countNum.getBusinessId());
-		eventBus.publishAfterTransactionCommitted(event);
-		log.info("[计数游戏组件]发布CountNumEvent事件:{}", event);
+//		eventBus.publishAfterTransactionCommitted(event);
 	}
 
 }

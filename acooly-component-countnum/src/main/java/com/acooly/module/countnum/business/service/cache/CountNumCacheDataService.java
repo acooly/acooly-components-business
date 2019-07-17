@@ -86,7 +86,6 @@ public class CountNumCacheDataService {
 		String listenerKey = getListenerCountNumRedisLockKey(countNumId);
 		Date currentDate = new Date();
 		long times = overdueTime.getTime() - currentDate.getTime();
-		System.out.println(times);
 		if (times > 0) {
 			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
 		}

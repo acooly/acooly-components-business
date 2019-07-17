@@ -263,14 +263,21 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 			long rank = rankDto.getRank();
 			if (rank == 1) {
 				rankDto.setOverstepRate("100.00");
-			} else {
-				long totalNum = countNumOrderService.countByCountId(countNumId);
-				double overstep = ((totalNum - rank) * 100.00 / totalNum);
-				String overstepRate = String.format("%.2f", overstep);
-				rankDto.setOverstepRate(overstepRate);
+				return rankDto;
 			}
+
+			long totalNum = countNumOrderService.countByCountId(countNumId);
+			if (rank == totalNum) {
+				rankDto.setOverstepRate("0.00");
+				return rankDto;
+			}
+
+			double overstep = ((totalNum - rank + 1) * 100.00 / totalNum);
+			String overstepRate = String.format("%.2f", overstep);
+			rankDto.setOverstepRate(overstepRate);
 		}
-		log.info("[计数游戏组件],countId:{},userId:{},用户排名：{}", countNumId, userId, rankDto);
+		log.info("[计数游戏组件],countId:{},userId:{},用户排名：{},百分比:{}", countNumId, userId, rankDto.getRank(),
+				rankDto.getOverstepRate());
 		return rankDto;
 	}
 

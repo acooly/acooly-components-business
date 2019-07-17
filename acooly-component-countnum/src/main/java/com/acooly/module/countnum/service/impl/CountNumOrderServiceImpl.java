@@ -90,7 +90,6 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 		event.setNum(order.getNum());
 		event.setCreateTime(order.getCreateTime());
 		eventBus.publishAfterTransactionCommitted(event);
-		log.info("[计数游戏组件]发布CountNumOrderEvent事件:{}", event);
 	}
 
 	@Override
