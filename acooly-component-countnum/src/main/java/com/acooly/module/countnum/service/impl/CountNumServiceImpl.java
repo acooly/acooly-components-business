@@ -9,6 +9,7 @@ package com.acooly.module.countnum.service.impl;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service("countNumService")
 public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao> implements CountNumService {
 
-//	@SuppressWarnings("rawtypes")
-//	@Autowired
-//	private EventBus eventBus;
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@Override
 	@Transactional
@@ -80,7 +80,7 @@ public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao
 		return countNum;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void pushEvent(CountNum countNum) {
 		CountNumEvent event = new CountNumEvent();
@@ -92,7 +92,10 @@ public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao
 		event.setOverdueTime(countNum.getOverdueTime());
 		event.setStatus(countNum.getStatus());
 		event.setBusinessId(countNum.getBusinessId());
-//		eventBus.publishAfterTransactionCommitted(event);
+
+		// 动态bean
+		EventBus eventBus = applicationContext.getBean(EventBus.class);
+		eventBus.publishAfterTransactionCommitted(event);
 	}
 
 }

@@ -16,8 +16,8 @@ public class CountNumOrderEventHandle {
 	// 异步事件处理器
 	@Handler(delivery = Invoke.Asynchronously)
 	@Transactional
-	public void handleRedPackOrderEventAsyn(CountNumOrderEvent event) {
-		log.info("[计数游戏组件]异步事件处理:{}", event);
+	public void handleCountNumOrderEventAsyn(CountNumOrderEvent event) {
+		log.info("[计数游戏组件]CountNumOrderEvent异步事件处理:{}", event);
 	}
 
 }
