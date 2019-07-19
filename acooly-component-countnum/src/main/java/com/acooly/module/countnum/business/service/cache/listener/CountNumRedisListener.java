@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.acooly.module.countnum.CountNumProperties;
 import com.acooly.module.countnum.entity.CountNum;
 import com.acooly.module.countnum.service.CountNumService;
-import com.acooly.module.event.EventBus;
 
 import lombok.extern.slf4j.Slf4j;
 

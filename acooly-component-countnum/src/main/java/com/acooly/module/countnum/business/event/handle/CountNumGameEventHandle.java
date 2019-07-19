@@ -11,7 +11,7 @@ import net.engio.mbassy.listener.Invoke;
 
 @Slf4j
 @EventHandler
-public class CountNumEventHandle {
+public class CountNumGameEventHandle {
 
 	// 异步事件处理器
 	@Handler(delivery = Invoke.Asynchronously)
