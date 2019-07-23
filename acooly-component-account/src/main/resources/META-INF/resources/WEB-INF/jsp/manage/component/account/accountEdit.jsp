@@ -36,7 +36,7 @@
 				<td>
 					<c:if test="${action=='edit'}">${account.userNo}</c:if>
 					<c:if test="${action=='create'}">
-						<input type="text" name="userNo" size="48" placeholder="请输出用户编码..." style="height: 27px;line-height: 27px;" class="easyui-numberbox text" data-options="validType:['length[1,19]']"/>
+						<input type="text" name="userNo" size="48" placeholder="请输出用户编码..." style="height: 27px;line-height: 27px;" class="easyui-numberbox text" data-options="validType:['length[1,48]']"/>
 					</c:if>
 				</td>
 			</tr>

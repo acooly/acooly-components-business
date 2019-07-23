@@ -24,6 +24,20 @@ $(function() {
         return html;
     }
 
+
+	/**
+	 * 账户类型转换
+	 */
+    function manage_account_datagrid_type_formatter(value){
+        var showValues=formatRefrence('manage_account_datagrid','allAccountTypes',value);
+		if((showValues==undefined)||(showValues=='')){
+			return value;
+		}else{
+			return showValues;
+		}
+    }
+    
+
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
   <!-- 查询条件 -->
@@ -37,7 +51,7 @@ $(function() {
                     账户编码: <input type="text" class="text" size="15" name="search_EQ_accountNo"/>
 					用户ID: <input type="text" class="text" size="15" name="search_EQ_userId"/>
                     用户名: <input type="text" class="text" size="15" name="search_LIKE_username"/>
-					余额: <input type="text" class="text" size="15" name="search_GTE_balance"/> ~ <input type="text" class="text" size="15" name="search_LTE_balance"/>
+					余额: <input type="text" class="text" size="8" name="search_GTE_balance"/> ~ <input type="text" class="text" size="8" name="search_LTE_balance"/>
                     类型: <select style="width:80px;height:27px;" name="search_EQ_accountType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allAccountTypes}"><option value="${e.key}" ${param.search_EQ_accountType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 				    状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_account_searchform','manage_account_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
@@ -63,7 +77,7 @@ $(function() {
 			<th field="balance" sum="true" formatter="centMoneyFormatter">余额</th>
 			<th field="freeze" sum="true" formatter="centMoneyFormatter">冻结金额</th>
             <th field="available" sum="true" formatter="centMoneyFormatter">可用金额</th>
-            <th field="accountType" formatter="mappingFormatter">账户类型</th>
+            <th field="accountType"  data-options="formatter:function(value, row, index){return manage_account_datagrid_type_formatter(value)}">账户类型</th>
 			<th field="status" formatter="mappingFormatter">状态</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
