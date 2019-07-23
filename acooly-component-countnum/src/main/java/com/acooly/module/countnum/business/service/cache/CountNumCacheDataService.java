@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Dates;
 import com.acooly.module.countnum.CountNumProperties;
 import com.acooly.module.countnum.business.service.conver.CountNumEntityConverDto;
 import com.acooly.module.countnum.dto.CountNumGameDto;
@@ -86,6 +87,10 @@ public class CountNumCacheDataService {
 		String listenerKey = getListenerCountNumRedisLockKey(countNumId);
 		Date currentDate = new Date();
 		long times = overdueTime.getTime() - currentDate.getTime();
+		String overdueTimeStr = Dates.format(overdueTime);
+		String currentDateStr = Dates.format(currentDate);
+		log.info("计数游戏组件:[设置游戏过期时间],计数游戏id:{},过期时间:{},当前时间:{}有效时间:{}毫秒", countNumId, overdueTimeStr, currentDateStr,
+				times);
 		if (times > 0) {
 			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
 		}
