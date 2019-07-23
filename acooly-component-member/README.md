@@ -81,6 +81,8 @@ acooly.member.mailTemplates.changePassword=member_changePassword
 
 ## [可选] 管理相关参数
 acooly.member.manage.allowCreate=false
+## [可选] 显示关联账户按钮
+acooly.member.manage.showAccount = false;
 
 ## dependence centification component if necessary.
 acooly.certification.provider=ali

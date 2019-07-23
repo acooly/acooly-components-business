@@ -60,7 +60,8 @@
 	</tr>					
 	<tr>
 		<th>法人证件背面图片:</th>
-		<td>${memberEnterprise.legalCertBackPath}</td>
+		<td><a class="manage_onlineFile_datagrid_thumbnail" target="_blank"  href="${memberEnterprise.legalCertBackPath}"><img src="${memberEnterprise.legalCertBackPath}" width="100" height="80"/></a>
+		</td>
 	</tr>					
 	<tr>
 		<th>经营范围:</th>

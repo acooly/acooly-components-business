@@ -1,5 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp"%>
+<script type="text/javascript" src="/manage/assert/plugin/area/area.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    _init_area();
+    $(function () {
+        setAreaValue();
+    });
+
+    function setAreaValue() {
+        <c:if test="${memberContact != null}">
+        $('#s_province').val('${memberContact.province}');
+        change(1);
+        $('#s_city').val('${memberContact.city}');
+        change(2);
+        $('#s_county').val('${memberContact.district}');
+        </c:if>
+    }
+</script>
+
 <div>
     <form id="manage_memberContact_editform" action="${pageContext.request.contextPath}/manage/component/member/memberContact/${action=='create'?'saveJson':'updateJson'}.html" method="post">
       <jodd:form bean="memberContact" scope="request">
@@ -42,21 +61,17 @@
 				<td><input type="text" name="google" size="48" placeholder="请输入备注..." class="easyui-validatebox text" data-options="validType:['length[1,32]']"/></td>
 			</tr>
 			<tr>
-				<th>facebeek：</th>
-				<td><input type="text" name="facebeek" size="48" placeholder="请输入facebeek..." class="easyui-validatebox text" data-options="validType:['length[1,32]']"/></td>
+				<th>facebook：</th>
+				<td><input type="text" name="facebeek" size="48" placeholder="请输入facebook..." class="easyui-validatebox text" data-options="validType:['length[1,32]']"/></td>
 			</tr>
+			
 			<tr>
-				<th>居住地 省：</th>
-				<td><input type="text" name="province" size="48" placeholder="请输入居住地 省..." class="easyui-validatebox text" data-options="validType:['length[1,64]']"/></td>
-			</tr>
-			<tr>
-				<th>居住地 市：</th>
-				<td><input type="text" name="city" size="48" placeholder="请输入居住地 市..." class="easyui-validatebox text" data-options="validType:['length[1,64]']"/></td>
-			</tr>
-			<tr>
-				<th>居住地 县/区：</th>
-				<td><input type="text" name="district" size="48" placeholder="请输入居住地 县/区..." class="easyui-validatebox text" data-options="validType:['length[1,64]']"/></td>
-			</tr>
+                 <th>居住地（省/市/县）：</th>
+                 <td>
+                     <select id="s_province" name="province"></select> <select id="s_city" name="city"></select> <select id="s_county" name="district"></select>
+                 </td>
+             </tr>
+			
 			<tr>
 				<th>详细地址：</th>
 				<td><textarea rows="3" cols="40" placeholder="请输入详细地址..." style="width:300px;" name="address" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>

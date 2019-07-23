@@ -38,6 +38,42 @@ function manage_member_contact_edit(){
     });
 }
 
+
+/**
+ * 企业实名信息
+ */
+function manage_member_enterprise_edit(){
+    $.acooly.framework.fireSelectRow("manage_member_datagrid",function(row){
+		if(row.userType=='personal'){
+            $.messager.show({title: '提示', msg: "用户类型不是企业或者个体户,请先升级为企业"});
+			return;	
+		}
+
+    	$.acooly.framework.edit({
+            url:'/manage/component/member/memberEnterprise/edit.html',
+            id:row.id,
+            entity:'memberEnterprise',
+            width:660,height:600
+        });
+    });
+}
+
+
+/**
+ * 企业实名信息
+ */
+function manage_member_account_list(){
+    $.acooly.framework.fireSelectRow("manage_member_datagrid",function(row){
+    	$.acooly.framework.show("/manage/component/account/account/accountRelationList.html?userId="+row.id+"&userNo="+row.userNo+"&username="+row.username,760,600);
+    });
+}
+
+
+
+
+
+
+
 function manage_memeber_profile_formatter(v,r,i,d,property) {
     if(!r.memberProfile || !r.memberProfile[property]){return null;} return d['data'].allWhtherStatuss[r.memberProfile[property]];
 }
@@ -51,15 +87,15 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
         <tr>
           <td align="left">
           	<div>
-                编码: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
-                用户名: <input type="text" class="text" size="15" name="search_EQ_username"/>
+                编码: <input type="text" class="text" size="12" name="search_EQ_userNo"/>
+                用户名: <input type="text" class="text" size="10" name="search_EQ_username"/>
                 手机: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
                 姓名: <input type="text" class="text" size="15" name="search_EQ_realName"/>
                 类型: <select style="width:80px;height:27px;" name="search_EQ_userType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allUserTypes}"><option value="${e.key}" ${param.search_EQ_userType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
                 等级: <select style="width:80px;height:27px;" name="search_EQ_grade" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allGrades}"><option value="${e.key}" ${param.search_EQ_grade == e.key?'selected':''}>${e.value}</option></c:forEach></select>
                 状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
                 <br/>
-       	实名状态: <select style="width:80px;height:27px;" name="search_EQ_realNameStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allWhtherStatuss}"><option value="${e.key}" ${param.search_EQ_realNameStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>         
+                是否实名: <select style="width:80px;height:27px;" name="search_EQ_realNameStatus" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allWhtherStatuss}"><option value="${e.key}" ${param.search_EQ_realNameStatus == e.key?'selected':''}>${e.value}</option></c:forEach></select>         
                 客服: <input type="text" class="text" size="15" name="search_EQ_manager"/>
                 经纪人: <input type="text" class="text" size="15" name="search_EQ_broker"/>
                 介绍人: <input type="text" class="text" size="15" name="search_EQ_inviter"/>
@@ -91,14 +127,14 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
 			<th field="userNo" sortable="true">会员编码</th>
 			<th field="username">用户名</th>
             <th field="userType" formatter="mappingFormatter">类型</th>
-            <th field="realName">真名</th>
-                <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'realNameStatus');}">实名
+            <th field="realName">真实姓名</th>
+                <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'realNameStatus');}">是否实名认证
             </th>
 			<th field="mobileNo">手机</th>
             <th field="memberProfile.mobileNoStatus"
-                data-options="formatter:function(v,r,i,d){if(!r.memberProfile || !r.memberProfile.mobileNoStatus){return null;} return d['data'].allWhtherStatuss[r.memberProfile.mobileNoStatus];}">手机认证</th>
+                data-options="formatter:function(v,r,i,d){if(!r.memberProfile || !r.memberProfile.mobileNoStatus){return null;} return d['data'].allWhtherStatuss[r.memberProfile.mobileNoStatus];}">是否手机认证</th>
 			<th field="email">邮件</th>
-            <th field="memberProfile.emailStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'emailStatus');}">邮件认证</th>
+            <th field="memberProfile.emailStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'emailStatus');}">是否邮件认证</th>
             <th field="memberProfile.broker" data-options="formatter:function(v,r,i,d){return r.memberProfile.broker;}">经纪人</th>
             <th field="memberProfile.inviter" data-options="formatter:function(v,r,i,d){return r.memberProfile.inviter;}">介绍人</th>
 			<th field="grade" formatter="mappingFormatter">等级</th>
@@ -122,8 +158,14 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/member/member/create.html',entity:'member',width:600,height:600,reload:true})"><i
               class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
       </c:if>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>会员配置信息</a>
+      	<a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_profile_edit()"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>会员配置信息</a>
         <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_contact_edit()"><i class="fa fa-address-book fa-lg fa-fw fa-col"></i>会员联系信息</a>
+        
+        <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_enterprise_edit()"><i class="fa fa-users fa-lg fa-fw fa-col"></i>企业基本信息</a>
+        
+        <c:if test="${manage.showAccount}">
+        	<a href="#" class="easyui-linkbutton" plain="true" onclick="manage_member_account_list()"><i class="fa fa-database fa-lg fa-fw fa-col"></i>账户信息</a>
+        </c:if>
 
       <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_member_auth_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>认证</a>--%>
       <%--<div id="manage_member_auth_menu" style="width:150px;">--%>
