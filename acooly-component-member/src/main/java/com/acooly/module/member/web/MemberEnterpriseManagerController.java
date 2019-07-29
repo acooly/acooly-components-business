@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.module.member.entity.Member;
 import com.acooly.module.member.entity.MemberEnterprise;
@@ -49,20 +50,41 @@ public class MemberEnterpriseManagerController
 
 	@Autowired
 	private MemberEntityService memberEntityService;
-	
-    @Autowired
-    private MemberProfileEntityService memberProfileEntityService;
+
+	@Autowired
+	private MemberProfileEntityService memberProfileEntityService;
 
 	@Autowired
 	private OFileProperties oFileProperties;
 
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-		model.put("allEntTypes", MemberUserTypeEnum.mapping());
+		Map<String, String> map = MemberUserTypeEnum.mapping();
+		map.remove("personal");
+		model.put("allEntTypes", map);
+		
 		model.put("allHoldingEnums", HoldingEnumEnum.mapping());
 		model.put("allLegalCertTypes", CertTypeEnum.mapping());
 		model.put("allHoldingCertTypes", CertTypeEnum.mapping());
 		model.put("allWhtherStatuss", WhetherStatus.mapping());
+	}
+
+	protected void onEdit(HttpServletRequest request, HttpServletResponse response, Model model,
+			MemberEnterprise entity) {
+		String idStr = request.getParameter("id");
+		if (Strings.isNotBlank(idStr)) {
+			long id = Long.parseLong(idStr);
+			MemberEnterprise memberEnterprise = memberEnterpriseService.get(id);
+			if (memberEnterprise == null) {
+				Member member = memberEntityService.get(id);
+				entity = new MemberEnterprise();
+				entity.setId(id);
+				entity.setUserNo(member.getUserNo());
+				entity.setUsername(member.getUsername());
+				memberEnterpriseService.save(entity);
+			}
+		}
+		model.addAttribute("memberEnterprise", entity);
 	}
 
 	@Override
@@ -129,18 +151,22 @@ public class MemberEnterpriseManagerController
 			}
 		}
 
+		// 实名认证状态
 		String enterpriseStatus = request.getParameter("enterpriseStatus");
 		WhetherStatus status = WhetherStatus.findStatus(enterpriseStatus);
+
+		// 会员信息
 		Member memberEntity = memberEntityService.findUniqueByUserNo(entity.getUserNo());
 		memberEntity.setRealName(entity.getEntName());
 		memberEntityService.update(memberEntity);
-		
-		
+
+		// 会员扩展信息
 		MemberProfile memberProfile = memberProfileEntityService.get(memberEntity.getId());
 		memberProfile.setRealNameStatus(status);
 		memberProfileEntityService.update(memberProfile);
-		
-		
+
+		entity.setCertStatus(status);
+
 		return entity;
 	}
 

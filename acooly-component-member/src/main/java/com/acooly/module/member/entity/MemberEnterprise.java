@@ -6,20 +6,23 @@
  */
 package com.acooly.module.member.entity;
 
-import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.member.enums.CertTypeEnum;
-import com.acooly.module.member.enums.HoldingEnumEnum;
-import com.acooly.module.member.enums.MemberUserTypeEnum;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.URL;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
+
+import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.enums.WhetherStatus;
+import com.acooly.module.member.enums.CertTypeEnum;
+import com.acooly.module.member.enums.HoldingEnumEnum;
+import com.acooly.module.member.enums.MemberUserTypeEnum;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 企业客户实名认证 Entity
@@ -35,7 +38,6 @@ public class MemberEnterprise extends AbstractEntity {
 	/**
 	 * 用户编码
 	 */
-	@NotEmpty
 	@Size(max = 64)
 	private String userNo;
 
@@ -49,7 +51,7 @@ public class MemberEnterprise extends AbstractEntity {
 	 * 企业类型
 	 */
 	@Enumerated(EnumType.STRING)
-	private MemberUserTypeEnum entType;
+	private MemberUserTypeEnum entType=MemberUserTypeEnum.enterprise;
 
 	/**
 	 * 企业名称
@@ -209,6 +211,9 @@ public class MemberEnterprise extends AbstractEntity {
 	 */
 	@Size(max = 512)
 	private String taxAuthorityPath;
+
+	@Enumerated(EnumType.STRING)
+	private WhetherStatus certStatus;
 
 	/**
 	 * 网站地址
