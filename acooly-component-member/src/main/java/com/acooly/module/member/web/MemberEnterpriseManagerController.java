@@ -152,8 +152,8 @@ public class MemberEnterpriseManagerController
 		}
 
 		// 实名认证状态
-		String enterpriseStatus = request.getParameter("enterpriseStatus");
-		WhetherStatus status = WhetherStatus.findStatus(enterpriseStatus);
+//		String enterpriseStatus = request.getParameter("enterpriseStatus");
+//		WhetherStatus status = WhetherStatus.findStatus(enterpriseStatus);
 
 		// 会员信息
 		Member memberEntity = memberEntityService.findUniqueByUserNo(entity.getUserNo());
@@ -162,10 +162,8 @@ public class MemberEnterpriseManagerController
 
 		// 会员扩展信息
 		MemberProfile memberProfile = memberProfileEntityService.get(memberEntity.getId());
-		memberProfile.setRealNameStatus(status);
+		memberProfile.setRealNameStatus(entity.getCertStatus());
 		memberProfileEntityService.update(memberProfile);
-
-		entity.setCertStatus(status);
 
 		return entity;
 	}
