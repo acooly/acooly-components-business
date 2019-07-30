@@ -170,5 +170,7 @@ public class AccountManagerController extends AbstractJQueryEntityController<Acc
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		model.put("allAccountTypes", accountProperties.getAccountType());
 		model.put("allStatuss", SimpleStatus.mapping());
+        model.put("isCreateAccount", accountProperties.isCreateAccount());
+
 	}
 }

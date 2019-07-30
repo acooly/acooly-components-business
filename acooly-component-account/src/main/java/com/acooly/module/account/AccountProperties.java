@@ -48,6 +48,11 @@ public class AccountProperties {
 	private boolean analyseEnable = false;
 
 	/**
+	 * 是否显示开通账户（默认关闭）
+	 */
+	private boolean createAccount = false;
+
+	/**
 	 * 账户类型(仅作为列表关系映射)
 	 */
 	private Map<String, String> accountType = Maps.newLinkedHashMap();

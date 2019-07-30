@@ -96,7 +96,9 @@ $(function() {
 
     <!-- 表格的工具栏 -->
     <div id="manage_account_toolbar">
+    <c:if test="${isCreateAccount}">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/account/account/create.html',entity:'account',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>开户</a>
+    </c:if> 
       <!--
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/component/account/account/deleteJson.html','manage_account_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
       <a href="#" class="easyui-menubutton" data-options="menu:'#manage_account_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
