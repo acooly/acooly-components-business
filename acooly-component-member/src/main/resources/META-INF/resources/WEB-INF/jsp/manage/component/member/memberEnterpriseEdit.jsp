@@ -187,7 +187,7 @@
 			<tr>
 				<th style="color: red;">是否实名：</th>
 				<td>
-				<select name="enterpriseStatus" editable="false" style="height:27px;min-width:200px" panelHeight="auto" class="easyui-combobox" >
+				<select name="certStatus" editable="false" style="height:27px;min-width:200px" panelHeight="auto" class="easyui-combobox" >
 					<c:forEach items="${allWhtherStatuss}" var="e">
 						<option value="${e.key}">${e.value}</option>
 					</c:forEach>
