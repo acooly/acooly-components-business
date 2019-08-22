@@ -27,7 +27,6 @@ CREATE TABLE `game_count_num` (
   `type` varchar(32) DEFAULT NULL COMMENT '类型{time_limit:时间限制,num_limit:次数限制}',
   `overdue_time` datetime DEFAULT NULL COMMENT '过期时间',
   `status` varchar(32) CHARACTER SET utf8 NOT NULL COMMENT '状态{init:初始化,processing:游戏中,success:结束}',
-  `is_cover` varchar(16) DEFAULT 'NO' COMMENT '是否参与覆盖{YES:是,NO:否}',
   `max_num` bigint(20) DEFAULT '0' COMMENT '最大参与人数(0:无限次)',
   `limit_num` bigint(20) DEFAULT '0' COMMENT '可参与次数(0:无限次)',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
@@ -57,11 +56,16 @@ CREATE TABLE `game_count_num_order` (
   `user_id` bigint(20) NOT NULL COMMENT '用户id',
   `user_name` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '用户名称',
   `num` bigint(20) DEFAULT '0' COMMENT '有效值',
+  `join_num` bigint(20) DEFAULT '1' COMMENT '参与次数',
+  `valid_time` datetime DEFAULT NULL COMMENT '有效值更新时间',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `comments` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='游戏-计数用户订单';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='游戏-计数用户订单';
+
+
+
 
 -- ----------------------------
 -- Records of game_count_num_order

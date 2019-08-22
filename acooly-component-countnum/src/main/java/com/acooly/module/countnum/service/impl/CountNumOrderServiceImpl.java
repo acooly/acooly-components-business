@@ -6,10 +6,12 @@
  */
 package com.acooly.module.countnum.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Ids;
@@ -56,23 +58,56 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 	}
 
 	@Override
+	public CountNumOrder findByCountNumIdAndUserIdOne(long countNumId, long userId) {
+		return getEntityDao().findByCountNumIdAndUserIdOne(countNumId, userId);
+	}
+
+	@Override
 	public long countByCountId(long countNumId) {
 		return getEntityDao().countByCountId(countNumId);
 	}
 
 	@Override
+	@Transactional
 	public CountNumOrder saveCountNumOrderResult(CountNumGameResultDto dto, CountNumGameDto countNumGameDto) {
-		CountNumOrder order = new CountNumOrder();
-		order.setOrderNo(Ids.oid());
-		order.setCountId(dto.getCountNumId());
-		order.setCountTitle(countNumGameDto.getTitle());
-		order.setCountType(countNumGameDto.getType());
-		order.setCreateUserId(countNumGameDto.getCreateUserId());
-		order.setCreateUserName(countNumGameDto.getCreateUserName());
-		order.setUserId(dto.getUserId());
-		order.setUserName(dto.getUserName());
-		order.setNum(dto.getNum());
-		getEntityDao().create(order);
+		long userId = dto.getUserId();
+		long countNumId = dto.getCountNumId();
+		long currentNum = dto.getNum();
+		CountNumTypeEnum type = countNumGameDto.getType();
+
+		CountNumOrder order = getEntityDao().lockByUserIdAndCountId(userId, countNumId);
+		if (order == null) {
+			order = new CountNumOrder();
+			order.setOrderNo(Ids.oid());
+			order.setCountId(countNumId);
+			order.setCountTitle(countNumGameDto.getTitle());
+			order.setCountType(countNumGameDto.getType());
+			order.setCreateUserId(countNumGameDto.getCreateUserId());
+			order.setCreateUserName(countNumGameDto.getCreateUserName());
+			order.setUserId(userId);
+			order.setUserName(dto.getUserName());
+			order.setNum(currentNum);
+			getEntityDao().create(order);
+		} else {
+			long dbNum = order.getNum();
+			// 时间限制----num 降序(由大到小)
+			if (type == CountNumTypeEnum.TIME_LIMIT) {
+				if (currentNum > dbNum) {
+					order.setNum(currentNum);
+					order.setValidTime(new Date());
+				}
+			}
+			// 数量限制---num 升序(由小到大)
+			if (type == CountNumTypeEnum.NUM_LIMIT) {
+				if ((currentNum < dbNum)&&(currentNum>0)) {
+					order.setNum(currentNum);
+					order.setValidTime(new Date());
+				}
+			}
+			// 参与次数
+			order.setJoinNum(order.getJoinNum() + 1);
+			getEntityDao().update(order);
+		}
 		return order;
 	}
 
@@ -89,6 +124,8 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 		event.setType(order.getCountType());
 		event.setNum(order.getNum());
 		event.setCreateTime(order.getCreateTime());
+		event.setJoinNum(order.getJoinNum());
+		event.setValidTime(order.getValidTime());
 		eventBus.publishAfterTransactionCommitted(event);
 	}
 

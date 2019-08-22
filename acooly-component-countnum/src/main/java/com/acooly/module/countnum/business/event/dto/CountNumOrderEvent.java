@@ -66,6 +66,16 @@ public class CountNumOrderEvent implements Serializable {
 	/** 创建时间 */
 	private Date createTime;
 
+	/**
+	 * 用户参与的次数
+	 */
+	private Long joinNum = 0L;
+
+	/**
+	 * 有效值更新时间
+	 */
+	private Date validTime;
+
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);

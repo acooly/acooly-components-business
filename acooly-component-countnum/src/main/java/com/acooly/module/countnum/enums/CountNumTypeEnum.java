@@ -17,14 +17,15 @@ import com.acooly.core.utils.enums.Messageable;
 /**
  * 游戏-计数 CountNumTypeEnum 枚举定义
  * 
- * @author cuifuq
- * Date: 2019-07-03 11:48:59
+ * @author cuifuq Date: 2019-07-03 11:48:59
  */
 public enum CountNumTypeEnum implements Messageable {
 
+	/** num 降序(由大到小) */
 	TIME_LIMIT("TIME_LIMIT", "时间限制"),
-	NUM_LIMIT("NUM_LIMIT", "次数限制"),
-	;
+
+	/** num 升序(由小到大) */
+	NUM_LIMIT("NUM_LIMIT", "次数限制"),;
 
 	private final String code;
 	private final String message;
@@ -33,7 +34,6 @@ public enum CountNumTypeEnum implements Messageable {
 		this.code = code;
 		this.message = message;
 	}
-
 
 	public String getCode() {
 		return code;
@@ -64,11 +64,9 @@ public enum CountNumTypeEnum implements Messageable {
 	/**
 	 * 通过枚举值码查找枚举值。
 	 * 
-	 * @param code
-	 *            查找枚举值的枚举值码。
+	 * @param code 查找枚举值的枚举值码。
 	 * @return 枚举值码对应的枚举值。
-	 * @throws IllegalArgumentException
-	 *             如果 code 没有对应的 Status 。
+	 * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
 	 */
 	public static CountNumTypeEnum find(String code) {
 		for (CountNumTypeEnum status : values()) {

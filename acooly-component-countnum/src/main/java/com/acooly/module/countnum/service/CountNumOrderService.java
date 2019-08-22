@@ -30,8 +30,17 @@ public interface CountNumOrderService extends EntityService<CountNumOrder> {
 
 	List<CountNumOrder> findByCountNumIdAndUserId(long countNumId, long userId);
 
+	CountNumOrder findByCountNumIdAndUserIdOne(long countNumId, long userId);
+
 	long countByCountId(long countNumId);
 
+	/**
+	 * 保存更新用户成绩
+	 * 
+	 * @param dto
+	 * @param countNumGameDto
+	 * @return
+	 */
 	CountNumOrder saveCountNumOrderResult(CountNumGameResultDto dto, CountNumGameDto countNumGameDto);
 
 	/**
@@ -43,6 +52,7 @@ public interface CountNumOrderService extends EntityService<CountNumOrder> {
 
 	/**
 	 * 用户排名
+	 * 
 	 * @param countNumId
 	 * @return
 	 */

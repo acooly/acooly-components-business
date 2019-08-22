@@ -60,7 +60,6 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		countNum.setCreateUserName(createDto.getCreateUserName());
 		countNum.setOverdueTime(createDto.getOverdueTime());
 		countNum.setType(createDto.getType());
-//		countNum.setIsCover(createDto.getIsCover());
 		countNum.setMaxNum(createDto.getMaxNum());
 		countNum.setLimitNum(createDto.getLimitNum());
 		countNum.setBusinessId(createDto.getBusinessId());
@@ -116,7 +115,7 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 					CountNumEntityConverDto.converCountNumOrderDto(order, orderDto);
 
 					// 设置缓存数据
-					countNumCacheDataService.setCountNumOrderRedisData(orderDto);
+					countNumCacheDataService.setCountNumReisMapData(orderDto);
 					countNumCacheDataService.setCountNumOrderOneRedisData(orderDto);
 
 					// 发送事件
@@ -158,6 +157,7 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		CountNumGameDto dto = new CountNumGameDto();
 		CountNumEntityConverDto.converCountNumDto(countNum, dto);
 		countNumCacheDataService.setCountNumRedisData(dto);
+
 		// 设置缓存监听事件
 		countNumCacheDataService.setListenerCountNumRedisLockKey(countNumId, dto, overdueDate);
 		return dto;
@@ -165,16 +165,14 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 
 	@Override
 	public List<CountNumGameOrderDto> findCountNumGameOrder(long countNumId) {
-		List<CountNumGameOrderDto> dtoList = countNumCacheDataService.getCountNumRedisDataListByKey(countNumId);
+		List<CountNumGameOrderDto> dtoList = countNumCacheDataService.findCountNumRedisMapSort(countNumId);
 		return dtoList;
 	}
 
 	@Override
 	public Long countNumGameOrderNum(long userId, long countNumId) {
-		List<CountNumGameOrderDto> countNumGameOrderDtoList = countNumCacheDataService
-				.getCountNumOrderOneRedisData(countNumId, userId);
-		int orderSize = countNumGameOrderDtoList.size();
-		return (long) orderSize;
+		CountNumGameOrderDto orderDto = countNumCacheDataService.getCountNumOrderOneRedisData(countNumId, userId);
+		return orderDto.getJoinNum();
 	}
 
 	/**
@@ -185,14 +183,15 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 	 * @param countNumGameDto
 	 */
 	public void verifyUserLimieNum(Long countNumId, Long userId, CountNumGameDto countNumGameDto) {
-		List<CountNumGameOrderDto> countNumGameOrderDtoList = countNumCacheDataService
-				.getCountNumOrderOneRedisData(countNumId, userId);
-		int orderSize = countNumGameOrderDtoList.size();
-		Long limitNum = countNumGameDto.getLimitNum();
-
-		log.info("[计数游戏组件],userId:{},countId:{},限制次数:{},用户参与游戏次数:{}", userId, countNumId, limitNum, orderSize);
-
-		if ((limitNum > 0) && (orderSize >= limitNum)) {
+		CountNumGameOrderDto countNumGameOrderDto = countNumCacheDataService.getCountNumOrderOneRedisData(countNumId,
+				userId);
+		long joinNum = 0L;
+		if (countNumGameOrderDto != null) {
+			joinNum = countNumGameOrderDto.getJoinNum();
+		}
+		long limitNum = countNumGameDto.getLimitNum();
+		log.info("[计数游戏组件],userId:{},countId:{},限制次数:{},用户参与游戏次数:{}", userId, countNumId, limitNum, joinNum);
+		if ((limitNum > 0) && (joinNum >= limitNum)) {
 			throw new BusinessException(CountNumGameResultCodeEnum.COUNT_NUM_PLAY_LIMIT_ALREADY.message(),
 					CountNumGameResultCodeEnum.COUNT_NUM_PLAY_LIMIT_ALREADY.code());
 		}
@@ -231,8 +230,8 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 			long maxNum = countNumGameDto.getMaxNum();
 			if (countNumDB > maxNum) {
 				log.info("[计数游戏组件],countId:{},参与人数已达到游戏最大数量限制", countNumId);
-				throw new BusinessException(CountNumGameResultCodeEnum.COUNT_NUM_OVERDUE.message(),
-						CountNumGameResultCodeEnum.COUNT_NUM_OVERDUE.code());
+				throw new BusinessException(CountNumGameResultCodeEnum.COUNT_NUM_MAX_NUM.message(),
+						CountNumGameResultCodeEnum.COUNT_NUM_MAX_NUM.code());
 			}
 		}
 	}
@@ -276,8 +275,8 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 			String overstepRate = String.format("%.2f", overstep);
 			rankDto.setOverstepRate(overstepRate);
 		}
-		log.info("[计数游戏组件],countId:{},userId:{},用户排名：{},百分比:{}", countNumId, userId, rankDto.getRank(),
-				rankDto.getOverstepRate());
+		log.info("[计数游戏组件],countId:{},userId:{},有效值:{},用户排名:{},百分比:{}", countNumId, userId, rankDto.getNum(),
+				rankDto.getRank(), rankDto.getOverstepRate());
 		return rankDto;
 	}
 

@@ -6,6 +6,8 @@
 */
 package com.acooly.module.countnum.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -76,7 +78,6 @@ public class CountNumOrder extends AbstractEntity {
 	 * 用户id
 	 */
 	@NotNull
-	@Max(2147483646)
 	private Long userId;
 
 	/**
@@ -95,5 +96,15 @@ public class CountNumOrder extends AbstractEntity {
 	 */
 	@Size(max = 64)
 	private String comments;
+
+	/**
+	 * 用户参与活动的次数
+	 */
+	private Long joinNum = 1L;
+
+	/**
+	 * 活动成绩最终结果有效时间
+	 */
+	private Date validTime = new Date();
 
 }

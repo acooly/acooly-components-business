@@ -36,8 +36,8 @@ public enum CountNumGameResultCodeEnum implements Messageable {
 	/** 游戏过期 */
 	COUNT_NUM_OVERDUE("COUNT_NUM_OVERDUE", "游戏过期"),
 
-	/** 超过游戏参与最大数量 **/
-	COUNT_NUM_MAX_NUM("COUNT_NUM_MAX_NUM", "超过游戏参与最大数量"),
+	/** 达到游戏参与最大数量 **/
+	COUNT_NUM_MAX_NUM("COUNT_NUM_MAX_NUM", "超过游戏最大人数限制"),
 
 	;
 

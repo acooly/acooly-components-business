@@ -16,8 +16,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.acooly.module.countnum.enums.CountNumTypeEnum;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,7 +32,7 @@ public class CountNumGameOrderDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/** 计数游戏Id */
 	@NotNull
 	private Long countNumId;
@@ -63,6 +61,16 @@ public class CountNumGameOrderDto implements Serializable {
 
 	/** 创建时间 */
 	private Date createTime;
+
+	/**
+	 * 用户参与的次数
+	 */
+	private Long joinNum = 0L;
+
+	/**
+	 * 有效值更新时间
+	 */
+	private Date validTime;
 
 	@Override
 	public String toString() {

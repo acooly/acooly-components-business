@@ -25,14 +25,39 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-member</artifactId>
 		</dependency>
-
 		<!-- 抽奖 -->
 
 		<!-- 积分 -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.acooly</groupId> -->
+<!-- 			<artifactId>acooly-component-point</artifactId> -->
+<!-- 		</dependency> -->
+
+
 		<dependency>
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-redpack</artifactId>
 		</dependency>
+
+
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-countnum</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-chart</artifactId>
+			<version>4.2.0-SNAPSHOT</version>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.acooly</groupId> -->
+<!-- 			<artifactId>acooly-component-chat</artifactId> -->
+<!-- 			<version>4.2.0-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>com.acooly</groupId>
@@ -43,6 +68,7 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-test</artifactId>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

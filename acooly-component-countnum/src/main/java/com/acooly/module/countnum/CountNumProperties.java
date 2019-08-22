@@ -28,9 +28,9 @@ public class CountNumProperties {
 	private String countNumDistributedLockKey = "game_count_num_key";
 
 	/** 计数类游戏-分布式 redis缓存时间(最少设置10分钟) */
-	private Long countNumRedisTime = 10L;
+	private long countNumRedisTime = 10L;
 
 	/** 计数类游戏-布式 redis缓存记录条数 */
-	private Long countNumRedisOrderNum = 50L;
+	private long countNumRedisOrderNum = 50L;
 
 }

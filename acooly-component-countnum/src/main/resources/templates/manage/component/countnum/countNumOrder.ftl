@@ -12,13 +12,14 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
+          			游戏ID: <input type="text" class="text" size="5" name="search_EQ_countId"/>
 					订单号: <input type="text" class="text" size="8" name="search_LIKE_orderNo"/>
 					游戏名称: <input type="text" class="text" size="8" name="search_LIKE_countTitle"/>
-					创建者: <input type="text" class="text" size="8" name="search_LIKE_createUserName"/>
+					<!--创建者: <input type="text" class="text" size="8" name="search_LIKE_createUserName"/>-->
 					用户名称: <input type="text" class="text" size="8" name="search_LIKE_userName"/>
 					类型: <select style="width:60px;height:27px;" name="search_EQ_countType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><#list allCountTypes as k,v><option value="${k}">${v}</option></#list></select>
-					创建时间: <input size="10" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="10" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					创建时间: <input size="8" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="8" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_countNumOrder_searchform','manage_countNumOrder_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
@@ -44,7 +45,9 @@ $(function() {
 			<th field="createUserName">创建者用户名</th>
 			<th field="userId" sortable="true" sum="true">用户id</th>
 			<th field="userName">用户名称</th>
+			<th field="joinNum" sortable="true" sum="true">参与次数</th>
 			<th field="num" sortable="true" sum="true">有效值</th>
+		    <th field="validTime" formatter="dateTimeFormatter">有效值更新时间</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
 			<th field="comments">备注</th>

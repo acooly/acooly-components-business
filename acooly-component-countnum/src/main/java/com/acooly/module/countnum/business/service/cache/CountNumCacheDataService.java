@@ -1,12 +1,14 @@
 package com.acooly.module.countnum.business.service.cache;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.exception.BusinessException;
@@ -21,7 +23,6 @@ import com.acooly.module.countnum.enums.CountNumTypeEnum;
 import com.acooly.module.countnum.enums.result.CountNumGameResultCodeEnum;
 import com.acooly.module.countnum.service.CountNumOrderService;
 import com.acooly.module.countnum.service.CountNumService;
-import com.google.common.collect.Lists;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,10 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 public class CountNumCacheDataService {
 
 	/** 计数游戏 redis 缓存时间 **/
-	public static Long COUNT_NUM_REDIS_TIME = 10L;
+	public static long COUNT_NUM_REDIS_TIME = 10L;
 
 	/** 计数游戏 单个用户 redis 缓存时间 5分钟 **/
-	public static Long COUNT_NUM_ORDER_ONE_REDIS_TIME = 5L;
+	public static long COUNT_NUM_ORDER_ONE_REDIS_TIME = 5L;
 
 	@Autowired
 	private CountNumService countNumService;
@@ -49,12 +50,25 @@ public class CountNumCacheDataService {
 	private RedisTemplate redisTemplate;
 
 	/**
+	 * 
+	 * game_count_num_key_redis_lock_xxxx
+	 * 
+	 * 获取Redis key计数游戏锁
+	 * 
+	 * @param countNumId
+	 * @return
+	 */
+	public String getCountNumRedisLockKey(long countNumId) {
+		return countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_" + countNumId;
+	}
+
+	/**
 	 * 设置计数游戏 redis有效时间
 	 * 
 	 * @return
 	 */
-	private Long setRedisLifeTime() {
-		Long countNumRedisTime = countNumProperties.getCountNumRedisTime();
+	private long setRedisLifeTime() {
+		long countNumRedisTime = countNumProperties.getCountNumRedisTime();
 		if (countNumRedisTime < COUNT_NUM_REDIS_TIME) {
 			countNumRedisTime = COUNT_NUM_REDIS_TIME;
 		}
@@ -70,7 +84,7 @@ public class CountNumCacheDataService {
 	 * @param countNumId
 	 * @return
 	 */
-	public String getListenerCountNumRedisLockKey(Long countNumId) {
+	public String getListenerCountNumRedisLockKey(long countNumId) {
 		return countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_listener_" + countNumId;
 	}
 
@@ -83,7 +97,8 @@ public class CountNumCacheDataService {
 	 * @param countNumId
 	 * @return
 	 */
-	public void setListenerCountNumRedisLockKey(Long countNumId, CountNumGameDto dto, Date overdueTime) {
+	@SuppressWarnings("unchecked")
+	public void setListenerCountNumRedisLockKey(long countNumId, CountNumGameDto dto, Date overdueTime) {
 		String listenerKey = getListenerCountNumRedisLockKey(countNumId);
 		Date currentDate = new Date();
 		long times = overdueTime.getTime() - currentDate.getTime();
@@ -98,19 +113,6 @@ public class CountNumCacheDataService {
 
 	/**
 	 * 
-	 * game_count_num_key_redis_lock_xxxx
-	 * 
-	 * 获取Redis key计数游戏锁
-	 * 
-	 * @param countNumId
-	 * @return
-	 */
-	public String getCountNumRedisLockKey(Long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_" + countNumId;
-	}
-
-	/**
-	 * 
 	 * game_count_num_key_redis_xxxx
 	 * 
 	 * 获取Redis key计数游戏锁
@@ -118,8 +120,21 @@ public class CountNumCacheDataService {
 	 * @param countNumId
 	 * @return
 	 */
-	public String getCountNumRedisKey(Long countNumId) {
+	public String getCountNumRedisKey(long countNumId) {
 		return countNumProperties.getCountNumDistributedLockKey() + "_redis_" + countNumId;
+	}
+
+	/**
+	 * 设置redis[计数游戏]数据
+	 * 
+	 * @param CountNumId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public void setCountNumRedisData(CountNumGameDto dto) {
+		String countNumRedisKey = getCountNumRedisKey(dto.getCountNumId());
+		log.debug("设置redis[计数游戏]数据countNumRedisKey：{}", countNumRedisKey);
+		redisTemplate.opsForValue().set(countNumRedisKey, dto, setRedisLifeTime(), TimeUnit.MINUTES);
 	}
 
 	/**
@@ -128,7 +143,7 @@ public class CountNumCacheDataService {
 	 * @param CountNumId
 	 * @return
 	 */
-	public CountNumGameDto getCountNumRedisDataByKey(Long countNumId) {
+	public CountNumGameDto getCountNumRedisDataByKey(long countNumId) {
 		String countNumRedisKey = getCountNumRedisKey(countNumId);
 		CountNumGameDto dto = (CountNumGameDto) redisTemplate.opsForValue().get(countNumRedisKey);
 		if (dto == null) {
@@ -147,121 +162,6 @@ public class CountNumCacheDataService {
 	}
 
 	/**
-	 * 设置redis[计数游戏]数据
-	 * 
-	 * @param CountNumId
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public void setCountNumRedisData(CountNumGameDto dto) {
-		String countNumRedisKey = getCountNumRedisKey(dto.getCountNumId());
-		log.debug("设置redis[计数游戏]数据countNumRedisKey：{}", countNumRedisKey);
-		redisTemplate.opsForValue().set(countNumRedisKey, dto, setRedisLifeTime(), TimeUnit.MINUTES);
-	}
-
-	/**
-	 * 
-	 * game_count_num_key_redis_list_xxxx
-	 * 
-	 * 获取Redis key计数游戏锁（计数游戏列表数据）
-	 * 
-	 * @param CountNumId
-	 * @return
-	 */
-	public String getCountNumRedisListKey(Long CountNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_list_" + CountNumId;
-	}
-
-	@SuppressWarnings("unchecked")
-	public void setCountNumOrderRedisDataDelete(Long countNumId) {
-		String countNumRedisListKey = getCountNumRedisListKey(countNumId);
-		log.info("[计数游戏组件],计数游戏id:{},清空缓存列表,listKey:{}", countNumId, countNumRedisListKey);
-		redisTemplate.delete(countNumRedisListKey);
-	}
-
-	/**
-	 * 获取计数游戏订单 redis缓存数据（计数游戏列表数据）
-	 * 
-	 * @param CountNumId
-	 * @param eventDto
-	 * @return
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<CountNumGameOrderDto> getCountNumRedisDataListByKey(Long countNumId) {
-		String countNumRedisListKey = getCountNumRedisListKey(countNumId);
-		ListOperations redisDataList = redisTemplate.opsForList();
-		List<CountNumGameOrderDto> orderDtoList = (List<CountNumGameOrderDto>) redisDataList.range(countNumRedisListKey,
-				0, -1);
-		if ((orderDtoList == null) || (orderDtoList.isEmpty())) {
-			orderDtoList = Lists.newArrayList();
-
-			CountNumGameDto countNumGame = getCountNumRedisDataByKey(countNumId);
-			List<CountNumOrder> countNumOrderList = countNumOrderService.findByCountNumIdAndLimit(countNumId,
-					countNumProperties.getCountNumRedisOrderNum(), countNumGame.getType());
-			if ((countNumOrderList != null) && (!countNumOrderList.isEmpty())) {
-				// 防止高并发重复缓存列表，需清空列表
-				setCountNumOrderRedisDataDelete(countNumId);
-
-				// 计数游戏记录-订单转化为dto
-				orderDtoList = CountNumEntityConverDto.converCountNumOrderDtoList(countNumOrderList, orderDtoList);
-
-				redisDataList.rightPushAll(countNumRedisListKey, orderDtoList);
-				redisTemplate.expire(countNumRedisListKey, setRedisLifeTime(), TimeUnit.MINUTES);
-			}
-		}
-		return orderDtoList;
-	}
-
-	/**
-	 * 设置计数游戏订单缓存数据（计数游戏列表数据）
-	 * 
-	 * @param eventDto
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void setCountNumOrderRedisData(CountNumGameOrderDto orderDto) {
-		long countNumId = orderDto.getCountNumId();
-
-		String redisDataListKey = getCountNumRedisListKey(countNumId);
-		ListOperations redisDataList = redisTemplate.opsForList();
-		Long expireTime = redisTemplate.getExpire(redisDataListKey, TimeUnit.MINUTES);
-		if (expireTime > 0) {
-			// 新增设置缓存数据
-			redisDataList.rightPush(redisDataListKey, orderDto);
-		} else {
-			// 获取游戏列表
-			getCountNumRedisDataListByKey(countNumId);
-		}
-
-		// 排序
-		setCountNumOrderRedisDataSort(countNumId, redisDataListKey, redisDataList);
-
-		log.debug("设置redis计数游戏订单数据redisDataListKey:{}", redisDataListKey);
-	}
-
-	/**
-	 * 排序
-	 * 
-	 * @param countNumId
-	 * @param redisDataListKey
-	 * @param redisDataList
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void setCountNumOrderRedisDataSort(long countNumId, String redisDataListKey, ListOperations redisDataList) {
-		CountNumGameDto countNumGame = getCountNumRedisDataByKey(countNumId);
-		List<CountNumGameOrderDto> orderDtoList = (List<CountNumGameOrderDto>) redisDataList.range(redisDataListKey, 0,
-				countNumProperties.getCountNumRedisOrderNum());
-		if (countNumGame.getType() == CountNumTypeEnum.NUM_LIMIT) {
-			orderDtoList.sort((a, b) -> a.getNum().compareTo(b.getNum()));
-		} else {
-			orderDtoList.sort((a, b) -> b.getNum().compareTo(a.getNum()));
-		}
-		redisTemplate.delete(redisDataListKey);
-
-		redisDataList.rightPushAll(redisDataListKey, orderDtoList);
-		redisTemplate.expire(redisDataListKey, setRedisLifeTime(), TimeUnit.MINUTES);
-	}
-
-	/**
 	 * 
 	 * game_count_num_key_redis_one_xxxx_
 	 * 
@@ -270,36 +170,8 @@ public class CountNumCacheDataService {
 	 * @param CountNumId
 	 * @return
 	 */
-	public String getCountNumOrderOneKey(Long countNumId, Long userId) {
+	public String getCountNumOrderOneKey(long countNumId, long userId) {
 		return countNumProperties.getCountNumDistributedLockKey() + "_redis_one_" + countNumId + "_" + userId;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<CountNumGameOrderDto> getCountNumOrderOneRedisData(long countNumId, long userId) {
-		String redisOneDataListKey = getCountNumOrderOneKey(countNumId, userId);
-
-		ListOperations redisDataList = redisTemplate.opsForList();
-		List<CountNumGameOrderDto> orderDtoList = (List<CountNumGameOrderDto>) redisDataList.range(redisOneDataListKey,
-				0, -1);
-
-		if ((orderDtoList == null) || (orderDtoList.isEmpty())) {
-			List<CountNumOrder> countNumOrderList = countNumOrderService.findByCountNumIdAndUserId(countNumId, userId);
-			if ((countNumOrderList != null) && (!countNumOrderList.isEmpty())) {
-
-				// 删除用户订单缓存列表
-				redisTemplate.delete(redisOneDataListKey);
-
-				// 计数游戏记录-订单转化为dto
-				orderDtoList = CountNumEntityConverDto.converCountNumOrderDtoList(countNumOrderList, orderDtoList);
-
-				// 开始设置缓存
-				redisDataList.rightPushAll(redisOneDataListKey, orderDtoList);
-				redisTemplate.expire(redisOneDataListKey, COUNT_NUM_ORDER_ONE_REDIS_TIME, TimeUnit.MINUTES);
-			}
-		}
-
-		return orderDtoList;
-
 	}
 
 	/**
@@ -307,25 +179,170 @@ public class CountNumCacheDataService {
 	 * 
 	 * @param eventDto
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public void setCountNumOrderOneRedisData(CountNumGameOrderDto orderDto) {
 		long countNumId = orderDto.getCountNumId();
 		long userId = orderDto.getUserId();
-		String redisOneDataListKey = getCountNumOrderOneKey(countNumId, userId);
+		String redisOneDatatKey = getCountNumOrderOneKey(countNumId, userId);
+		redisTemplate.opsForValue().set(redisOneDatatKey, orderDto, COUNT_NUM_ORDER_ONE_REDIS_TIME, TimeUnit.MINUTES);
+		log.debug("设置redis计数游戏订单数据redisOneDatatKey:{}", redisOneDatatKey);
+	}
 
-		ListOperations redisDataList = redisTemplate.opsForList();
-		Long expireTime = redisTemplate.getExpire(redisOneDataListKey, TimeUnit.MINUTES);
+	@SuppressWarnings({ "rawtypes" })
+	public CountNumGameOrderDto getCountNumOrderOneRedisData(long countNumId, long userId) {
+		String redisOneDatatKey = getCountNumOrderOneKey(countNumId, userId);
+		ValueOperations redisOneData = redisTemplate.opsForValue();
+		CountNumGameOrderDto orderDto = (CountNumGameOrderDto) redisOneData.get(redisOneDatatKey);
+		if (orderDto == null) {
+			orderDto = new CountNumGameOrderDto();
+			CountNumOrder countNumOrder = countNumOrderService.findByCountNumIdAndUserIdOne(countNumId, userId);
+			if (countNumOrder != null) {
+				orderDto = CountNumEntityConverDto.converCountNumOrderDto(countNumOrder, orderDto);
+			}
+		}
+		return orderDto;
 
-		if (expireTime > 0) {
-			// 新增新的缓存值
-			redisDataList.rightPush(redisOneDataListKey, orderDto);
+	}
+
+	/**
+	 * 
+	 * game_count_num_key_redis_map_xxxxxxxxx
+	 * 
+	 * 获取Redis key计数游戏锁（计数游戏列表数据）
+	 * 
+	 * @param redPackId
+	 * @return
+	 */
+	public String getCountNumRedisMapKey(long countNumId) {
+		return countNumProperties.getCountNumDistributedLockKey() + "_redis_map_" + countNumId;
+	}
+
+	/**
+	 * 设置计数游戏订单统计记录
+	 * 
+	 * @param eventDto
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setCountNumReisMapData(CountNumGameOrderDto orderDto) {
+		long countNumId = orderDto.getCountNumId();
+		String mapKey = getCountNumRedisMapKey(countNumId);
+		String hashKey = String.valueOf(orderDto.getUserId());
+		long currentNum = orderDto.getNum();
+
+		CountNumGameDto countNumGame = getCountNumRedisDataByKey(countNumId);
+		CountNumTypeEnum type = countNumGame.getType();
+
+		HashOperations redisMap = redisTemplate.opsForHash();
+
+		// 获取缓存数据
+		getCountNumReisMapData(countNumGame);
+
+		CountNumGameOrderDto redisOrderDto = (CountNumGameOrderDto) redisMap.get(mapKey, hashKey);
+		if (redisOrderDto != null) {
+			long redisNum = redisOrderDto.getNum();
+			if (type == CountNumTypeEnum.NUM_LIMIT) {
+				// 次数限制
+				if ((currentNum < redisNum) && (currentNum > 0)) {
+					redisMap.put(mapKey, hashKey, orderDto);
+				}
+			} else {
+				// 时间限制---num 升序(由小到大)
+				if (currentNum > redisNum) {
+					redisMap.put(mapKey, hashKey, orderDto);
+				}
+			}
 		} else {
-			// 获取游戏列表
-			getCountNumOrderOneRedisData(countNumId, userId);
+			if (currentNum > 0) {
+				redisMap.put(mapKey, hashKey, orderDto);
+			}
 		}
 
-		redisTemplate.expire(redisOneDataListKey, COUNT_NUM_ORDER_ONE_REDIS_TIME, TimeUnit.MINUTES);
-		log.debug("设置redis计数游戏订单数据redisDataListKey:{}", redisOneDataListKey);
+		// 删除N后 排名记录
+		long redisMapSize = redisMap.size(mapKey);
+		long countNumSize = countNumProperties.getCountNumRedisOrderNum();
+		if (redisMapSize > countNumSize) {
+			List<CountNumGameOrderDto> lists = countNumRedisMapSort(countNumId, type);
+			int lastIndex = lists.size() - 1;
+			CountNumGameOrderDto dto = lists.get(lastIndex);
+
+			String hashKeyStr = String.valueOf(dto.getUserId());
+			redisMap.delete(mapKey, hashKeyStr);
+
+			log.info("删除[计数组件]排名记录最后位,mapKey:{},hashKey:{},num:{}", mapKey, hashKeyStr, dto.getNum());
+		}
+		redisTemplate.expire(mapKey, setRedisLifeTime(), TimeUnit.MINUTES);
+		log.debug("设置redis[计数组件]统计数据mapKey:{},hashKey:{}", mapKey, hashKey);
+	}
+
+	/**
+	 * 获取key所有缓存数据
+	 * 
+	 * @param countNumId
+	 * @param mapKey
+	 * @param redisDataHash
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void getCountNumReisMapData(CountNumGameDto countNumGame) {
+		long countNumId = countNumGame.getCountNumId();
+		String mapKey = getCountNumRedisMapKey(countNumId);
+
+		HashOperations redisMap = redisTemplate.opsForHash();
+		List<CountNumGameOrderDto> orderDtoList = redisMap.values(mapKey);
+		if (orderDtoList.isEmpty()) {
+			// 删除已缓存数据
+			redisTemplate.delete(mapKey);
+
+			List<CountNumOrder> countNumOrderList = countNumOrderService.findByCountNumIdAndLimit(
+					countNumGame.getCountNumId(), countNumProperties.getCountNumRedisOrderNum(),
+					countNumGame.getType());
+
+			for (CountNumOrder countNumOrder : countNumOrderList) {
+				CountNumGameOrderDto orderDto = new CountNumGameOrderDto();
+				CountNumEntityConverDto.converCountNumOrderDto(countNumOrder, orderDto);
+				redisMap.put(mapKey, String.valueOf(countNumOrder.getUserId()), orderDto);
+			}
+		}
+		redisTemplate.expire(mapKey, setRedisLifeTime(), TimeUnit.MINUTES);
+	}
+
+	/**
+	 * 获取用户排序列表
+	 * 
+	 * @param mapKey
+	 * @param type
+	 * @return
+	 */
+	public List<CountNumGameOrderDto> findCountNumRedisMapSort(long countNumId) {
+		CountNumGameDto countNumGame = getCountNumRedisDataByKey(countNumId);
+		// 获取key所有缓存数据
+		getCountNumReisMapData(countNumGame);
+		List<CountNumGameOrderDto> orderDtoList = countNumRedisMapSort(countNumId, countNumGame.getType());
+		return orderDtoList;
+	}
+
+	/**
+	 * 排序
+	 * 
+	 * @param countNumId
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CountNumGameOrderDto> countNumRedisMapSort(long countNumId, CountNumTypeEnum type) {
+		String mapKey = getCountNumRedisMapKey(countNumId);
+		List<CountNumGameOrderDto> orderDtoList = redisTemplate.opsForHash().values(mapKey);
+		if (type == CountNumTypeEnum.NUM_LIMIT) {
+			// 次数限制
+			orderDtoList.sort(
+					Comparator.comparing(CountNumGameOrderDto::getNum).thenComparing(CountNumGameOrderDto::getValidTime)
+							.thenComparing(CountNumGameOrderDto::getCountNumOrderId));
+		} else {
+			// 时间限制
+			orderDtoList.sort(Comparator.comparing(CountNumGameOrderDto::getNum).reversed()
+					.thenComparing(CountNumGameOrderDto::getValidTime)
+					.thenComparing(CountNumGameOrderDto::getCountNumOrderId));
+		}
+		return orderDtoList;
 	}
 
 }

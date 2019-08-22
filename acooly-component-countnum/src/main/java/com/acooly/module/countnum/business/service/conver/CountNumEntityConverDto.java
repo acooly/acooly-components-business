@@ -73,6 +73,8 @@ public class CountNumEntityConverDto {
 		orderDto.setUserName(countNumOrder.getUserName());
 		orderDto.setNum(countNumOrder.getNum());
 		orderDto.setCreateTime(countNumOrder.getCreateTime());
+		orderDto.setJoinNum(countNumOrder.getJoinNum());
+		orderDto.setValidTime(countNumOrder.getValidTime());
 		return orderDto;
 	}
 }

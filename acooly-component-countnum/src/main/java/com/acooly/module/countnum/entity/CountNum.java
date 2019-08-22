@@ -75,11 +75,6 @@ public class CountNum extends AbstractEntity {
 	@NotNull
 	private CountNumStatusEnum status = CountNumStatusEnum.INIT;
 
-//	/**
-//	 * 是否参与覆盖
-//	 */
-//	@Enumerated(EnumType.STRING)
-//	private CountNumIsCoverEnum isCover = CountNumIsCoverEnum.NO;
 
 	/**
 	 * 最大参与人数

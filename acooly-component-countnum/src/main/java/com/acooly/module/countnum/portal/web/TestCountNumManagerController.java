@@ -29,6 +29,7 @@ import com.acooly.core.utils.Dates;
 import com.acooly.module.countnum.business.service.CountNumGameService;
 import com.acooly.module.countnum.dto.CountNumGameDto;
 import com.acooly.module.countnum.dto.CountNumGameOrderDto;
+import com.acooly.module.countnum.dto.CountNumGameOrderRankDto;
 import com.acooly.module.countnum.dto.order.CountNumGameResultDto;
 import com.acooly.module.countnum.dto.order.CreateCountNumGameDto;
 import com.acooly.module.countnum.enums.CountNumTypeEnum;
@@ -66,43 +67,52 @@ public class TestCountNumManagerController {
 			dto.setTitle("计数游戏01");
 			dto.setCreateUserId(999L);
 			dto.setCreateUserName("999OOO");
+			dto.setType(CountNumTypeEnum.TIME_LIMIT);
 			dto.setType(CountNumTypeEnum.NUM_LIMIT);
-			dto.setBusinessId("100000L");
-			
-			Date currentDate = new Date();
-			Date overdueTime=Dates.addDate(currentDate, 10000L);
 
-			
+			dto.setBusinessId("100000L");
+
+			Date currentDate = new Date();
+			Date overdueTime = Dates.addDate(currentDate, 1000000000L);
 			dto.setOverdueTime(overdueTime);
-			
+			dto.setLimitNum(5L);
+
 			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
 
-			Long countNumId = countDto.getCountNumId();
-//			Long countNumId = 16L;
+//			Long countNumId = countDto.getCountNumId();
+			Long countNumId = 4758L;
 
 			CountNumGameResultDto gameDto = new CountNumGameResultDto();
 			gameDto.setCountNumId(countNumId);
-			gameDto.setUserId(888L);
+//			gameDto.setUserId(119L);
+			gameDto.setUserId((long) (1 + Math.random() * (20 - 10 + 1)));
+
 			gameDto.setUserName("888OOO");
-			gameDto.setNum((long) (1 + Math.random() * (99 - 10 + 1)));
-		CountNumGameOrderDto orderDto = countNumGameService.submitCountNumGameResult(gameDto);
+			gameDto.setNum((long) (0 + Math.random() * (99 - 10 + 1)));
+//			gameDto.setNum(0L);
+			CountNumGameOrderDto orderDto = countNumGameService.submitCountNumGameResult(gameDto);
 
 			// 提交游戏
 
-			countNumGameService.findCountNum(countNumId);
-			List<CountNumGameOrderDto> list = countNumGameService.findCountNumGameOrder(countNumId);
+//			countNumGameService.findCountNum(countNumId);
+			List<CountNumGameOrderDto> orderDtoList = countNumGameService.findCountNumGameOrder(countNumId);
 			Map<Object, Object> data = Maps.newHashMap();
-			data.put("key", list);
+			data.put("key", orderDtoList);
 			result.setData(data);
-			
-			redisTemplate.opsForValue().set(orderDto.getOrderNo(), dto, 10, TimeUnit.SECONDS);
-			
-			
 
-			
+			System.out.println(orderDtoList.size());
+			for (CountNumGameOrderDto d : orderDtoList) {
+				System.out.println("成绩：" + d.getNum() + "----时间：" + Dates.format(d.getValidTime()) + "----用户"
+						+ d.getUserId() + "----参与次数:" + d.getJoinNum());
+			}
 
-//			countNumGameService.userRanking(8888L, countNumId, true);
+//			redisTemplate.opsForValue().set(orderDto.getOrderNo(), dto, 10, TimeUnit.SECONDS);
 
+			CountNumGameOrderRankDto countNumGame = countNumGameService.userRanking(gameDto.getUserId(), countNumId,
+					true);
+			System.out.println("排名：" + countNumGame.getRank() + "----击败对手：" + countNumGame.getOverstepRate()
+					+ "%----成绩：" + countNumGame.getNum() + "----用户id:" + countNumGame.getUserId() + "----参与次数:"
+					+ countNumGame.getJoinNum());
 //			Date overdueDate = Dates.parse("2019-07-08 11:06:00");
 //			countNumGameService.countNumGameOverdueFinish(countNumId, overdueDate);
 
