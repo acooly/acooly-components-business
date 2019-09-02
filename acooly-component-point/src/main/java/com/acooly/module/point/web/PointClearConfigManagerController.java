@@ -6,7 +6,7 @@
  */
 package com.acooly.module.point.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.utils.Dates;

@@ -17,7 +17,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ import java.util.List;
 @EnableConfigurationProperties({MemberProperties.class})
 @ConditionalOnProperty(value = MemberProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.member")
-public class MemberAutoConfig extends WebMvcConfigurerAdapter {
+public class MemberAutoConfig {
 
     @Autowired
     private MemberProperties memberProperties;
@@ -55,7 +54,7 @@ public class MemberAutoConfig extends WebMvcConfigurerAdapter {
 
             @Override
             public List<String> getInitSqlFile() {
-                return Lists.newArrayList("member","member_urls");
+                return Lists.newArrayList("member", "member_urls");
             }
         };
     }

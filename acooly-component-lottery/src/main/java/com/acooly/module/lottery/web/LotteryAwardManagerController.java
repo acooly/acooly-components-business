@@ -1,6 +1,6 @@
 package com.acooly.module.lottery.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Strings;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryAward")
 public class LotteryAwardManagerController
-        extends AbstractJQueryEntityController<LotteryAward, LotteryAwardService> {
+        extends AbstractJsonEntityController<LotteryAward, LotteryAwardService> {
 
     private static Map<String, String> allMaxPeriods = MaxPeriod.mapping();
     private static Map<String, String> allRecordWinners = SimpleStatus.mapping();

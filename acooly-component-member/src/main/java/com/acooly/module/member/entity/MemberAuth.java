@@ -15,7 +15,7 @@ import com.acooly.module.member.enums.AuthTypeEnum;
 import com.acooly.module.member.enums.LoginStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

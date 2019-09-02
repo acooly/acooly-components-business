@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.member.entity.MemberContact;
 import com.acooly.module.member.manage.MemberContactEntityService;
 
@@ -22,7 +22,7 @@ import com.acooly.module.member.manage.MemberContactEntityService;
  */
 @Controller
 @RequestMapping(value = "/manage/component/member/memberContact")
-public class MemberContactManagerController extends AbstractJQueryEntityController<MemberContact, MemberContactEntityService> {
+public class MemberContactManagerController extends AbstractJsonEntityController<MemberContact, MemberContactEntityService> {
 	
 
 	{

@@ -1,6 +1,6 @@
 package com.acooly.module.lottery.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.utils.Dates;
 import com.acooly.module.lottery.domain.LotteryUserCount;
 import com.acooly.module.lottery.service.LotteryUserCountService;
@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryUserCount")
 public class LotteryUserCountManagerController
-        extends AbstractJQueryEntityController<LotteryUserCount, LotteryUserCountService> {
+        extends AbstractJsonEntityController<LotteryUserCount, LotteryUserCountService> {
 
     @SuppressWarnings("unused")
     @Autowired

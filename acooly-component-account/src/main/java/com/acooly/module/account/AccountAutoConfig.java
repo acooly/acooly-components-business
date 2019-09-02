@@ -17,7 +17,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ import java.util.List;
 @EnableConfigurationProperties({AccountProperties.class})
 @ConditionalOnProperty(value = AccountProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.account")
-public class AccountAutoConfig extends WebMvcConfigurerAdapter {
+public class AccountAutoConfig {
 
     @Autowired
     private AccountProperties accountProperties;
@@ -55,7 +54,7 @@ public class AccountAutoConfig extends WebMvcConfigurerAdapter {
 
             @Override
             public List<String> getInitSqlFile() {
-                return Lists.newArrayList("account","account_urls");
+                return Lists.newArrayList("account", "account_urls");
             }
         };
     }

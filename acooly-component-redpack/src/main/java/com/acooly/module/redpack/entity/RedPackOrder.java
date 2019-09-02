@@ -1,29 +1,26 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2019 All Rights Reserved.
-* create by cuifuq
-* date:2019-03-05
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2019 All Rights Reserved.
+ * create by cuifuq
+ * date:2019-03-05
+ */
 package com.acooly.module.redpack.entity;
 
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.module.redpack.enums.RedPackOrderStatusEnum;
 import com.acooly.module.redpack.enums.RedPackOrderTypeEnum;
 import com.acooly.module.redpack.enums.WhetherEnum;
-
 import lombok.Getter;
 import lombok.Setter;
-import com.acooly.module.redpack.enums.WhetherEnum;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 红包订单 Entity
@@ -37,52 +34,76 @@ import com.acooly.module.redpack.enums.WhetherEnum;
 @Setter
 public class RedPackOrder extends AbstractEntity {
 
-	/** 订单号 */
-	@NotEmpty
-	@Size(max=64)
+    /**
+     * 订单号
+     */
+    @NotEmpty
+    @Size(max = 64)
     private String orderNo;
 
-	/** 红包id */
-	@NotNull
+    /**
+     * 红包id
+     */
+    @NotNull
     private Long redPackId;
 
-	/** 红包名称 */
-	@Size(max=64)
+    /**
+     * 红包名称
+     */
+    @Size(max = 64)
     private String redPackTitle;
 
-	/** 红包发送者id */
+    /**
+     * 红包发送者id
+     */
     private Long sendUserId;
 
-	/** 红包发送者名称 */
-	@Size(max=64)
+    /**
+     * 红包发送者名称
+     */
+    @Size(max = 64)
     private String sendUserName;
 
-	/** 用户id */
-	@NotNull
+    /**
+     * 用户id
+     */
+    @NotNull
     private Long userId;
 
-	/** 用户名称 */
-	@Size(max=64)
+    /**
+     * 用户名称
+     */
+    @Size(max = 64)
     private String userName;
-	
-	/** 是否第一 */
-	@Size(max=64)
+
+    /**
+     * 是否第一
+     */
+    @Size(max = 64)
     @Enumerated(EnumType.STRING)
-    private WhetherEnum isFirst=WhetherEnum.NO;
+    private WhetherEnum isFirst = WhetherEnum.NO;
 
-	/** 类型 */
+    /**
+     * 类型
+     */
     @Enumerated(EnumType.STRING)
-    private RedPackOrderTypeEnum type=RedPackOrderTypeEnum.RED_PACK;
+    private RedPackOrderTypeEnum type = RedPackOrderTypeEnum.RED_PACK;
 
-	/** 状态 */
+    /**
+     * 状态
+     */
     @Enumerated(EnumType.STRING)
-    private RedPackOrderStatusEnum status=RedPackOrderStatusEnum.INIT;
+    private RedPackOrderStatusEnum status = RedPackOrderStatusEnum.INIT;
 
-	/** 金额 */
-    private Long amount = 0l;
+    /**
+     * 金额
+     */
+    private Long amount = 0L;
 
-	/** 备注 */
-	@Size(max=64)
+    /**
+     * 备注
+     */
+    @Size(max = 64)
     private String comments;
 
 }

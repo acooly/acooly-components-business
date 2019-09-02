@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.*;
 import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+
 import lombok.Getter;
 import lombok.Setter;
 import com.acooly.core.common.domain.AbstractEntity;
@@ -48,7 +50,7 @@ public class PointTypeCount extends AbstractEntity {
 
 	/** 总积分 */
 	@NotNull
-    private Long totalPoint = 0l;
+    private Long totalPoint = 0L;
 
 	/** 备注 */
 	@Size(max=256)

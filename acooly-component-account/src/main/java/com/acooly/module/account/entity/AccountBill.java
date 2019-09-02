@@ -12,7 +12,7 @@ import com.acooly.core.utils.enums.AbleStatus;
 import com.acooly.module.account.enums.DirectionEnum;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

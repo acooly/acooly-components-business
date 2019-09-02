@@ -1,6 +1,6 @@
 package com.acooly.module.lottery.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.lottery.domain.LotteryWhitelist;
 import com.acooly.module.lottery.enums.LotteryWhitelistStatus;
 import com.acooly.module.lottery.service.LotteryService;
@@ -15,7 +15,7 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryWhitelist")
 public class LotteryWhitelistManagerController
-        extends AbstractJQueryEntityController<LotteryWhitelist, LotteryWhitelistService> {
+        extends AbstractJsonEntityController<LotteryWhitelist, LotteryWhitelistService> {
 
     private static Map<String, String> allStatuss = LotteryWhitelistStatus.mapping();
 

@@ -6,7 +6,7 @@
  */
 package com.acooly.module.member.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.module.member.entity.MemberProfile;
 import com.acooly.module.member.enums.ProfilePhotoTypeEnum;
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/component/member/memberProfile")
-public class MemberProfileManagerController extends AbstractJQueryEntityController<MemberProfile, MemberProfileEntityService> {
+public class MemberProfileManagerController extends AbstractJsonEntityController<MemberProfile, MemberProfileEntityService> {
 
 
     {

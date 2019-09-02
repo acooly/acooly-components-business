@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import com.acooly.module.countnum.enums.CountNumIsCoverEnum;
 import com.acooly.module.countnum.enums.CountNumTypeEnum;
