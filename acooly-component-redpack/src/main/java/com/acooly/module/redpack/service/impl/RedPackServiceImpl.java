@@ -9,12 +9,14 @@ package com.acooly.module.redpack.service.impl;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.redpack.business.event.dto.RedPackEvent;
+import com.acooly.module.redpack.business.event.dto.RedPackOverdueEvent;
 import com.acooly.module.redpack.dao.RedPackDao;
 import com.acooly.module.redpack.entity.RedPack;
 import com.acooly.module.redpack.enums.RedPackStatusEnum;
@@ -32,7 +34,7 @@ import com.acooly.module.redpack.service.RedPackService;
 public class RedPackServiceImpl extends EntityServiceImpl<RedPack, RedPackDao> implements RedPackService {
 
 	@Autowired
-	private EventBus eventBus;
+	private ApplicationContext applicationContext;
 
 	@Override
 	@Transactional
@@ -75,6 +77,19 @@ public class RedPackServiceImpl extends EntityServiceImpl<RedPack, RedPackDao> i
 		event.setPartakeNum(redPack.getPartakeNum());
 		event.setStatus(redPack.getStatus());
 		event.setBusinessId(redPack.getBusinessId());
+
+		EventBus eventBus = applicationContext.getBean(EventBus.class);
+		eventBus.publishAfterTransactionCommitted(event);
+	}
+
+	@Override
+	public void pushEventOverdue(RedPack redPack) {
+		RedPackOverdueEvent event = new RedPackOverdueEvent();
+		event.setRedPackId(redPack.getId());
+		event.setOverdueTime(redPack.getOverdueTime());
+		event.setBusinessId(redPack.getBusinessId());
+
+		EventBus eventBus = applicationContext.getBean(EventBus.class);
 		eventBus.publishAfterTransactionCommitted(event);
 	}
 

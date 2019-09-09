@@ -1,5 +1,6 @@
 package com.acooly.module.redpack.business.service.cache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Dates;
 import com.acooly.module.redpack.RedPackProperties;
 import com.acooly.module.redpack.business.service.conver.RedPackEntityConverDto;
 import com.acooly.module.redpack.entity.RedPack;
@@ -64,7 +66,7 @@ public class RedPackCacheDataService {
 	 * @return
 	 */
 	public String getRedPackLockKey(Long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + "_redis_lock_" + redPackId;
 	}
 
 	/**
@@ -263,6 +265,32 @@ public class RedPackCacheDataService {
 		redisTemplate.expire(redPackRedisMapKey, setRedisLifeTime(), TimeUnit.MINUTES);
 		log.debug("设置redis红包订单统计数据redPackRedisMapKey:{},redPackRedisMapHashKey:{}", redPackRedisMapKey,
 				redPackRedisMapHashKey);
+	}
+
+	/**
+	 * 
+	 * red_pack_key
+	 * 
+	 * 获取Redis key红包游戏 监听器锁
+	 * 
+	 * @param countNumId
+	 * @return
+	 */
+	public String getListenerRedPackRedisLockKey(long redPackId) {
+		return redPackProperties.getRedPackDistributedLockKey() + "_redis_lock_listener_" + redPackId;
+	}
+
+	public void setListenerRedPackRedisLockKey(Long redPackId, RedPackDto dto, Date overdueTime) {
+		String listenerKey = getListenerRedPackRedisLockKey(redPackId);
+		Date currentDate = new Date();
+		long times = overdueTime.getTime() - currentDate.getTime();
+		String overdueTimeStr = Dates.format(overdueTime);
+		String currentDateStr = Dates.format(currentDate);
+		log.info("红包游戏组件:[设置游戏过期时间],监听id:{},红包游戏id:{},过期时间:{},当前时间:{}有效时间:{}毫秒", listenerKey, redPackId, overdueTimeStr,
+				currentDateStr, times);
+		if (times > 0) {
+			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
+		}
 	}
 
 }

@@ -5,17 +5,27 @@ import static com.acooly.module.redpack.RedPackProperties.PREFIX;
 import java.util.List;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
+import com.acooly.core.utils.Strings;
+import com.acooly.module.redpack.business.service.cache.listener.RedPackRedisListener;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableConfigurationProperties({ RedPackProperties.class })
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
@@ -23,6 +33,13 @@ import com.google.common.collect.Lists;
 @MapperScan(basePackages = "com.acooly.module.redpack.dao")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class RedPackAutoConfig {
+
+	/**
+	 * 红包组件器监听器
+	 */
+	@Autowired
+	private RedPackRedisListener redPackRedisListener;
+
 	@Bean
 	public StandardDatabaseScriptIniter redPackScriptIniter() {
 		return new StandardDatabaseScriptIniter() {
@@ -42,4 +59,20 @@ public class RedPackAutoConfig {
 			}
 		};
 	}
+
+	@Bean
+	public RedisMessageListenerContainer redPackRedisMessageListenerContainer(RedisConnectionFactory connectionFactory,
+			Environment environment) {
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		String redisDataBase = environment.getProperty("spring.redis.database");
+		if (Strings.isBlank(redisDataBase)) {
+			redisDataBase = "0";
+		}
+		log.info("[计数游戏组件]:初始化RedisMessageListenerContainer监听事件,spring.redis.database:{}", redisDataBase);
+		String subscribeChannel = "__keyevent@" + redisDataBase + "__:expired";
+		container.addMessageListener(redPackRedisListener, new PatternTopic(subscribeChannel));
+		return container;
+	}
+
 }

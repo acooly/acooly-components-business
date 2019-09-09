@@ -149,6 +149,9 @@ maven坐标：
 
 ##版本说明
 
+####v1:2019-09
+新增功能支持，红包过期后发送 红包过期事件，RedPackOverdueEvent
+
 ####v1:2019-05
 新增红包订单查询接口(findRedPackOrderSort(Long redPackId, Boolean sort))，并支持 金额排序
 

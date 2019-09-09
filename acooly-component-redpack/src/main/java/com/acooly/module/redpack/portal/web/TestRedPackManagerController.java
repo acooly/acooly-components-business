@@ -6,6 +6,7 @@
 */
 package com.acooly.module.redpack.portal.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -25,11 +26,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Dates;
 import com.acooly.module.distributedlock.DistributedLockFactory;
 import com.acooly.module.redpack.business.service.RedPackTradeService;
-import com.acooly.module.redpack.dto.SendRedPackDto;
+import com.acooly.module.redpack.dto.CreateRedPackDto;
 import com.acooly.module.redpack.event.dto.RedPackOrderDto;
-import com.acooly.module.redpack.portal.service.TestRedPackService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,9 +48,6 @@ public class TestRedPackManagerController {
 	@Autowired
 	private RedPackTradeService redPackTradeService;
 	@Autowired
-	private TestRedPackService testRedPackService;
-
-	@Autowired
 	private DistributedLockFactory factory;
 
 	@Autowired
@@ -62,16 +60,31 @@ public class TestRedPackManagerController {
 		long startTime = System.currentTimeMillis();
 
 		try {
+			
+			CreateRedPackDto dto=new CreateRedPackDto();
+			dto.setTitle("12321");
+			dto.setSendUserId(100L);
+			dto.setSendUserName("111");
+			dto.setTotalAmount(100L);
+			dto.setTotalNum(100L);
+			dto.setPartakeNum(10L);
+			dto.setBusinessId("1");
+			
+			dto.setOverdueTime(Dates.addDate(new Date(), 10000L));
+			
+			redPackTradeService.createRedPack(dto);
+			
+			
 
-			Long redPackId=536L;
-			redPackTradeService.findRedPack(redPackId);
-			
-			List<RedPackOrderDto> list = redPackTradeService.findRedPackOrder(redPackId);
-			
-			
-			Map<Object, Object> data=Maps.newHashMap();
-			data.put("key", list);
-			result.setData(data);
+//			Long redPackId=536L;
+//			redPackTradeService.findRedPack(redPackId);
+//			
+//			List<RedPackOrderDto> list = redPackTradeService.findRedPackOrder(redPackId);
+//			
+//			
+//			Map<Object, Object> data=Maps.newHashMap();
+//			data.put("key", list);
+//			result.setData(data);
 			
 //			String redPackId = request.getParameter("redPackId");
 //			redPackId = "185";

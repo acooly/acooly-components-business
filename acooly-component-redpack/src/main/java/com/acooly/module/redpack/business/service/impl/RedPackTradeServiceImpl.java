@@ -101,6 +101,12 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 			// 发布事件
 			redPackService.pushEvent(redPack);
 
+			// 设置缓存监听事件
+			if (createDto.getOverdueTime() != null) {
+				redPackCacheDataService.setListenerRedPackRedisLockKey(dto.getRedPackId(), dto,
+						createDto.getOverdueTime());
+			}
+
 		} catch (Exception e) {
 			log.error("红包组件:创建红包失败:{}", e);
 			throw new BusinessException(RedPackResultCodeEnum.RED_PACK_CREATE_ERROR.message(),

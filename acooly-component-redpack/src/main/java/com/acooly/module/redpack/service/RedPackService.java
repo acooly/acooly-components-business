@@ -20,10 +20,13 @@ import com.acooly.module.redpack.entity.RedPack;
  */
 public interface RedPackService extends EntityService<RedPack> {
 
-	RedPack lockById(Long redPackId);
+	public RedPack lockById(Long redPackId);
 
-	// 发布事件
-	void pushEvent(RedPack redPack);
+	/** 发布事件 **/
+	public void pushEvent(RedPack redPack);
 
-	void checkRedPackOverdue(RedPack redPack);
+	/** 过期事件 **/
+	public void pushEventOverdue(RedPack redPack);
+
+	public void checkRedPackOverdue(RedPack redPack);
 }
