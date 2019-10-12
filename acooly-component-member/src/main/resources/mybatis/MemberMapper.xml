@@ -118,7 +118,7 @@
 
 
         <choose>
-            <when test="sortMap != null">
+            <when test="sortMap != null and sortMap.size() > 0">
                 ORDER BY
                 <foreach collection="sortMap.keys" item="key" open="" close="" separator=",">
                     ${key} <if test="sortMap[key] == false">DESC</if>
