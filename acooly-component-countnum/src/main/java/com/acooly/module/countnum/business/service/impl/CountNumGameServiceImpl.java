@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.exception.BusinessException;
@@ -32,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CountNumGameServiceImpl implements CountNumGameService {
 
 	/** redis尝试锁，时间设置 **/
-	public static Integer REDIS_TRY_LOCK_TIME = 1;
+	public static Integer COUNT_NUM_TRY_LOCK_TIME = 1;
 
 	@Autowired
 	private CountNumService countNumService;
@@ -45,6 +46,9 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 
 	@Autowired
 	private DistributedLockFactory factory;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	@Override
 	public CountNumGameDto findCountNum(Long countNumId) {
@@ -80,6 +84,7 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		return dto;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public CountNumGameOrderDto submitCountNumGameResult(CountNumGameResultDto dto) {
 		CountNumGameOrderDto orderDto = new CountNumGameOrderDto();
@@ -91,7 +96,7 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 		Lock lock = factory.newLock(countNumLockKey);
 		try {
 			log.info("计数游戏组件:[上传游戏结果],开始获取锁,lockKey:{},计数游戏id:{}", countNumLockKey, countNumId);
-			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
+			if (lock.tryLock(COUNT_NUM_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
 				try {
 
 					CountNumGameDto countNumGameDto = countNumCacheDataService.getCountNumRedisDataByKey(countNumId);
@@ -127,6 +132,15 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 				} finally {
 					lock.unlock();
 				}
+			} else {
+				if (redisTemplate.hasKey(countNumLockKey)) {
+					log.info("[计数游戏组件],当前key未释放,系统删除:lockKey:{}", countNumLockKey);
+					redisTemplate.delete(countNumLockKey);
+				}
+
+				log.info("[计数游戏组件]--,获取锁失败,lockKey:{},组件id:{}", countNumLockKey, countNumId);
+				throw new BusinessException(CountNumGameResultCodeEnum.COUNT_NUM_LOCK_ERROR.message(),
+						CountNumGameResultCodeEnum.COUNT_NUM_LOCK_ERROR.code());
 			}
 		} catch (BusinessException e) {
 			throw e;
@@ -134,7 +148,6 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 			log.error("计数游戏组件:[上传游戏结果]失败,计数游戏id:{},{}", countNumId, e);
 			throw new BusinessException("计数游戏组件:[上传游戏结果]失败");
 		}
-
 		return orderDto;
 	}
 

@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -66,11 +65,13 @@ public class CountNumAutoConfig {
 			Environment environment) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
+		String redisHost = environment.getProperty("spring.redis.host");
 		String redisDataBase = environment.getProperty("spring.redis.database");
 		if (Strings.isBlank(redisDataBase)) {
 			redisDataBase = "0";
 		}
-		log.info("[计数游戏组件]:初始化RedisMessageListenerContainer监听事件,spring.redis.database:{}", redisDataBase);
+		log.info("[计数游戏组件]:初始化RedisMessageListenerContainer监听事件,redisHost:{},redisDatabase:{}", redisHost,
+				redisDataBase);
 		String subscribeChannel = "__keyevent@" + redisDataBase + "__:expired";
 		container.addMessageListener(countNumRedisListener, new PatternTopic(subscribeChannel));
 		return container;

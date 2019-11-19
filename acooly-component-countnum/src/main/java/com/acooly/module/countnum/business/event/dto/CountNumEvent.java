@@ -52,7 +52,7 @@ public class CountNumEvent implements Serializable {
 	private String createUserName;
 
 	/** 类型 **/
-	private CountNumTypeEnum type = CountNumTypeEnum.TIME_LIMIT;
+	private CountNumTypeEnum type = CountNumTypeEnum.NUM_DESC;
 
 	/** 过期时间 */
 	private Date overdueTime;

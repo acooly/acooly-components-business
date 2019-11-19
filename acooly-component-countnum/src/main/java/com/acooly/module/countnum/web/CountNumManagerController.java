@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.module.countnum.entity.CountNum;
-import com.acooly.module.countnum.service.CountNumService;
-import com.acooly.module.countnum.enums.CountNumTypeEnum;
 import com.acooly.module.countnum.enums.CountNumStatusEnum;
-import com.acooly.module.countnum.enums.CountNumIsCoverEnum;
-
-import com.google.common.collect.Maps;
+import com.acooly.module.countnum.enums.CountNumTypeEnum;
+import com.acooly.module.countnum.service.CountNumService;
 
 /**
  * 游戏-计数 管理控制器
@@ -47,7 +44,6 @@ public class CountNumManagerController extends AbstractJQueryEntityController<Co
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		model.put("allTypes", CountNumTypeEnum.mapping());
 		model.put("allStatuss", CountNumStatusEnum.mapping());
-		model.put("allIsCovers", CountNumIsCoverEnum.mapping());
 	}
 
 }

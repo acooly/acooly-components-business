@@ -9,8 +9,6 @@ package com.acooly.module.countnum.dto.order;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,7 +16,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.acooly.module.countnum.enums.CountNumIsCoverEnum;
 import com.acooly.module.countnum.enums.CountNumTypeEnum;
 
 import lombok.Getter;
@@ -52,15 +49,10 @@ public class CreateCountNumGameDto implements Serializable {
 	private String createUserName;
 
 	/** 类型 **/
-	private CountNumTypeEnum type = CountNumTypeEnum.TIME_LIMIT;
+	private CountNumTypeEnum type = CountNumTypeEnum.NUM_DESC;
 
 	/** 过期时间 */
 	private Date overdueTime;
-
-	/**
-	 * 是否参与覆盖
-	 */
-	private CountNumIsCoverEnum isCover = CountNumIsCoverEnum.NO;
 
 	/** 最大参与人数(0:无限次) */
 	private Long maxNum = 0L;

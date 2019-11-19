@@ -15,27 +15,24 @@ import java.util.Map;
 import com.acooly.core.utils.enums.Messageable;
 
 /**
- * 游戏-计数 CountNumTypeEnum 枚举定义
+ * 游戏-计数 CountNumSortEnum 排序 枚举定义
  * 
  * @author cuifuq Date: 2019-07-03 11:48:59
  */
-public enum CountNumTypeEnum implements Messageable {
+public enum CountNumSortEnum implements Messageable {
 
-	/** num 降序(由大到小) */
-	NUM_DESC("NUM_DESC", "时间限制-降序"),
+	/** 降序(由大到小) */
+	DESC("DESC", "降序(由大到小)"),
 
-	/** num 升序(由小到大) */
-	NUM_ASC("NUM_ASC", "数量限制-升序"),
-
-	/** NUM 降序(由大到小)，TIME 升序(由小到大) */
-	NUM_DESC_TIME_ASC("NUM_DESC_TIME_ASC", "数量限制-降序(升序)"),
+	/** 降序(由小到大) */
+	ASC("ASC", "降序(由小到大)"),
 
 	;
 
 	private final String code;
 	private final String message;
 
-	private CountNumTypeEnum(String code, String message) {
+	private CountNumSortEnum(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}
@@ -60,7 +57,7 @@ public enum CountNumTypeEnum implements Messageable {
 
 	public static Map<String, String> mapping() {
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		for (CountNumTypeEnum type : values()) {
+		for (CountNumSortEnum type : values()) {
 			map.put(type.getCode(), type.getMessage());
 		}
 		return map;
@@ -73,8 +70,8 @@ public enum CountNumTypeEnum implements Messageable {
 	 * @return 枚举值码对应的枚举值。
 	 * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
 	 */
-	public static CountNumTypeEnum find(String code) {
-		for (CountNumTypeEnum status : values()) {
+	public static CountNumSortEnum find(String code) {
+		for (CountNumSortEnum status : values()) {
 			if (status.getCode().equals(code)) {
 				return status;
 			}
@@ -87,9 +84,9 @@ public enum CountNumTypeEnum implements Messageable {
 	 * 
 	 * @return 全部枚举值。
 	 */
-	public static List<CountNumTypeEnum> getAll() {
-		List<CountNumTypeEnum> list = new ArrayList<CountNumTypeEnum>();
-		for (CountNumTypeEnum status : values()) {
+	public static List<CountNumSortEnum> getAll() {
+		List<CountNumSortEnum> list = new ArrayList<CountNumSortEnum>();
+		for (CountNumSortEnum status : values()) {
 			list.add(status);
 		}
 		return list;
@@ -102,7 +99,7 @@ public enum CountNumTypeEnum implements Messageable {
 	 */
 	public static List<String> getAllCode() {
 		List<String> list = new ArrayList<String>();
-		for (CountNumTypeEnum status : values()) {
+		for (CountNumSortEnum status : values()) {
 			list.add(status.code());
 		}
 		return list;

@@ -87,9 +87,24 @@ public class CountNumOrder extends AbstractEntity {
 	private String userName;
 
 	/**
-	 * 有效值
+	 * 排序因子-有效值 *
+	 * <li>支持类型 NUM_DESC: num 降序(由大到小)
+	 * <li>支持类型 NUM_ASC: num 升序(由小到大)
 	 */
 	private Long num;
+
+	/**
+	 * 排序因子-有效值
+	 * 
+	 * <li>支持类型 NUM_DESC_TIME_ASC: NUM 降序(由大到小)，TIME 升序(由小到大)
+	 */
+	private Long time;
+
+	/**
+	 * 数据扩展
+	 */
+	@Size(max = 512)
+	private String dataMap;
 
 	/**
 	 * 备注

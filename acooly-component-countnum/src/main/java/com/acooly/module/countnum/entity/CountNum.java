@@ -19,7 +19,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.countnum.enums.CountNumIsCoverEnum;
 import com.acooly.module.countnum.enums.CountNumStatusEnum;
 import com.acooly.module.countnum.enums.CountNumTypeEnum;
 
@@ -66,7 +65,7 @@ public class CountNum extends AbstractEntity {
 	 * 类型
 	 */
 	@Enumerated(EnumType.STRING)
-	private CountNumTypeEnum type = CountNumTypeEnum.TIME_LIMIT;
+	private CountNumTypeEnum type = CountNumTypeEnum.NUM_DESC;
 
 	/**
 	 * 状态

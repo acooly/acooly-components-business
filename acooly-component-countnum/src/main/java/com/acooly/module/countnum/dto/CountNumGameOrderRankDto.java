@@ -6,10 +6,15 @@
 */
 package com.acooly.module.countnum.dto;
 
+import java.util.Map;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.acooly.core.utils.Strings;
+import com.alibaba.fastjson.JSON;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +39,19 @@ public class CountNumGameOrderRankDto extends CountNumGameOrderDto {
 
 	/** 用户排名比例（百分比，2位小数） */
 	private String overstepRate = "0.00";
+
+	/** 扩展数据，字符串格式 **/
+	private String dataMapStr;
+
+	@Override
+	public Map<String, Object> getDataMap() {
+		String dataMapStr = getDataMapStr();
+		if (Strings.isNotBlank(dataMapStr)) {
+			Map<String, Object> toDataMap = JSON.parseObject(dataMapStr);
+			return toDataMap;
+		}
+		return super.getDataMap();
+	}
 
 	@Override
 	public String toString() {

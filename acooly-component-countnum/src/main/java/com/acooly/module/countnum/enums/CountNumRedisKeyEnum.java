@@ -15,25 +15,27 @@ import java.util.Map;
 import com.acooly.core.utils.enums.Messageable;
 
 /**
- * 游戏-计数 CountNumIsCoverEnum 枚举定义
+ * 游戏-计数 CountNumSortEnum 排序 枚举定义
  * 
- * @author cuifuq
- * Date: 2019-07-03 11:48:59
+ * @author cuifuq Date: 2019-07-03 11:48:59
  */
-public enum CountNumIsCoverEnum implements Messageable {
+public enum CountNumRedisKeyEnum implements Messageable {
 
-	YES("YES", "是"),
-	NO("NO", "否"),
+	/** 降序(由大到小) */
+	DESC("DESC", "降序(由大到小)"),
+
+	/** 降序(由小到大) */
+	ASC("ASC", "降序(由小到大)"),
+
 	;
 
 	private final String code;
 	private final String message;
 
-	private CountNumIsCoverEnum(String code, String message) {
+	private CountNumRedisKeyEnum(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}
-
 
 	public String getCode() {
 		return code;
@@ -55,7 +57,7 @@ public enum CountNumIsCoverEnum implements Messageable {
 
 	public static Map<String, String> mapping() {
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		for (CountNumIsCoverEnum type : values()) {
+		for (CountNumRedisKeyEnum type : values()) {
 			map.put(type.getCode(), type.getMessage());
 		}
 		return map;
@@ -64,14 +66,12 @@ public enum CountNumIsCoverEnum implements Messageable {
 	/**
 	 * 通过枚举值码查找枚举值。
 	 * 
-	 * @param code
-	 *            查找枚举值的枚举值码。
+	 * @param code 查找枚举值的枚举值码。
 	 * @return 枚举值码对应的枚举值。
-	 * @throws IllegalArgumentException
-	 *             如果 code 没有对应的 Status 。
+	 * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
 	 */
-	public static CountNumIsCoverEnum find(String code) {
-		for (CountNumIsCoverEnum status : values()) {
+	public static CountNumRedisKeyEnum find(String code) {
+		for (CountNumRedisKeyEnum status : values()) {
 			if (status.getCode().equals(code)) {
 				return status;
 			}
@@ -84,9 +84,9 @@ public enum CountNumIsCoverEnum implements Messageable {
 	 * 
 	 * @return 全部枚举值。
 	 */
-	public static List<CountNumIsCoverEnum> getAll() {
-		List<CountNumIsCoverEnum> list = new ArrayList<CountNumIsCoverEnum>();
-		for (CountNumIsCoverEnum status : values()) {
+	public static List<CountNumRedisKeyEnum> getAll() {
+		List<CountNumRedisKeyEnum> list = new ArrayList<CountNumRedisKeyEnum>();
+		for (CountNumRedisKeyEnum status : values()) {
 			list.add(status);
 		}
 		return list;
@@ -99,7 +99,7 @@ public enum CountNumIsCoverEnum implements Messageable {
 	 */
 	public static List<String> getAllCode() {
 		List<String> list = new ArrayList<String>();
-		for (CountNumIsCoverEnum status : values()) {
+		for (CountNumRedisKeyEnum status : values()) {
 			list.add(status.code());
 		}
 		return list;

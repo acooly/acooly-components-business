@@ -67,8 +67,7 @@ public class TestCountNumManagerController {
 			dto.setTitle("计数游戏01");
 			dto.setCreateUserId(999L);
 			dto.setCreateUserName("999OOO");
-			dto.setType(CountNumTypeEnum.TIME_LIMIT);
-			dto.setType(CountNumTypeEnum.NUM_LIMIT);
+			dto.setType(CountNumTypeEnum.NUM_DESC_TIME_ASC);
 
 			dto.setBusinessId("100000L");
 
@@ -77,19 +76,33 @@ public class TestCountNumManagerController {
 			dto.setOverdueTime(overdueTime);
 			dto.setLimitNum(5L);
 
-			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
+//			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
 
 //			Long countNumId = countDto.getCountNumId();
-			Long countNumId = 4758L;
+			Long countNumId = 4860L;
 
 			CountNumGameResultDto gameDto = new CountNumGameResultDto();
 			gameDto.setCountNumId(countNumId);
 //			gameDto.setUserId(119L);
-			gameDto.setUserId((long) (1 + Math.random() * (20 - 10 + 1)));
+			gameDto.setUserId((long) (1 + Math.random() * (50 - 10 + 1)));
 
 			gameDto.setUserName("888OOO");
 			gameDto.setNum((long) (0 + Math.random() * (99 - 10 + 1)));
+			gameDto.setTime((long) (0 + Math.random() * (99 - 10 + 1)));
+			
+			gameDto.setNum(0L);
+			gameDto.setTime(0L);
+			
 //			gameDto.setNum(0L);
+
+			Map<String, Object> dataMap = Maps.newHashMap();
+			dataMap.put("head_img",
+					"https://wx.qlogo.cn/mmopen/vi_32/Kicpz5MhgFzUUxMNZLFW2mibEs8Ok1usnjRn3QIQJkicZn1KicOtI9PJY1gibNQdg3m5RYHB4CLMT48rOunQK8nH4icg/132");
+			dataMap.put("head_img2", "?一休哥😝");
+			dataMap.put("bbbb", "bbb");
+			dataMap.put("ccc", "ccc");
+			gameDto.setDataMap(dataMap);
+
 			CountNumGameOrderDto orderDto = countNumGameService.submitCountNumGameResult(gameDto);
 
 			// 提交游戏
@@ -102,8 +115,10 @@ public class TestCountNumManagerController {
 
 			System.out.println(orderDtoList.size());
 			for (CountNumGameOrderDto d : orderDtoList) {
-				System.out.println("成绩：" + d.getNum() + "----时间：" + Dates.format(d.getValidTime()) + "----用户"
-						+ d.getUserId() + "----参与次数:" + d.getJoinNum());
+				Map<String, Object> dataMaps = d.getDataMap();
+//				System.out.println(dataMaps.get("head_img"));
+				System.out.println("成绩：" + d.getNum() + "---" + d.getTime() + "----时间：" + Dates.format(d.getValidTime())
+						+ "----用户" + d.getUserId() + "----参与次数:" + d.getJoinNum()+"----id:"+d.getOrderNo());
 			}
 
 //			redisTemplate.opsForValue().set(orderDto.getOrderNo(), dto, 10, TimeUnit.SECONDS);
@@ -128,6 +143,10 @@ public class TestCountNumManagerController {
 		long endTime = System.currentTimeMillis();
 		log.info("程序运行时间：{} s", ((endTime - startTime) / 1000.00));
 		return result;
+	}
+
+	public static void main(String[] args) {
+
 	}
 
 }

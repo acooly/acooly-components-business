@@ -46,7 +46,8 @@ $(function() {
 			<th field="userId" sortable="true" sum="true">用户id</th>
 			<th field="userName">用户名称</th>
 			<th field="joinNum" sortable="true" sum="true">参与次数</th>
-			<th field="num" sortable="true" sum="true">有效值</th>
+			<th field="num" sortable="true" sum="true">有效值1</th>
+			<th field="time" sortable="true" sum="true">有效值2</th>
 		    <th field="validTime" formatter="dateTimeFormatter">有效值更新时间</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>

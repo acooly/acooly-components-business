@@ -12,6 +12,8 @@
 
 	<artifactId>acooly-component-countnum</artifactId>
 	<name>acooly-component-countnum</name>
+<!-- 	<version>4.2.0.20191024-SNAPSHOT</version> -->
+
 	<dependencies>
 
 		<!-- 基础组件依赖 -->

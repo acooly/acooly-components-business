@@ -1,11 +1,16 @@
 package com.acooly.module.countnum.business.service.conver;
 
 import java.util.List;
+import java.util.Map;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.module.countnum.dto.CountNumGameDto;
 import com.acooly.module.countnum.dto.CountNumGameOrderDto;
 import com.acooly.module.countnum.entity.CountNum;
 import com.acooly.module.countnum.entity.CountNumOrder;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 
 public class CountNumEntityConverDto {
 
@@ -72,9 +77,17 @@ public class CountNumEntityConverDto {
 		orderDto.setUserId(countNumOrder.getUserId());
 		orderDto.setUserName(countNumOrder.getUserName());
 		orderDto.setNum(countNumOrder.getNum());
+		orderDto.setTime(countNumOrder.getTime());
 		orderDto.setCreateTime(countNumOrder.getCreateTime());
 		orderDto.setJoinNum(countNumOrder.getJoinNum());
 		orderDto.setValidTime(countNumOrder.getValidTime());
+
+		String dataMapStr = countNumOrder.getDataMap();
+		if (Strings.isNotBlank(dataMapStr)) {
+			Map<String, Object> dataMap = JSON.parseObject(dataMapStr);
+			orderDto.setDataMap(dataMap);
+		}
 		return orderDto;
 	}
+
 }

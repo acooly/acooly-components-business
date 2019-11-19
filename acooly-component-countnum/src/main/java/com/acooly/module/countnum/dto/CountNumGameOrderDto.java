@@ -8,6 +8,7 @@ package com.acooly.module.countnum.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -58,6 +59,9 @@ public class CountNumGameOrderDto implements Serializable {
 
 	/** 游戏有效值 **/
 	private Long num;
+	
+	/** 游戏有效值 **/
+	private Long time=0L;
 
 	/** 创建时间 */
 	private Date createTime;
@@ -72,8 +76,25 @@ public class CountNumGameOrderDto implements Serializable {
 	 */
 	private Date validTime;
 
+//	/** 扩展数据，字符串格式 **/
+//	private String dataMapStr;
+
+	/** 扩展数据，同步缓存-缓存列表(头像，昵称等) **/
+	private Map<String, Object> dataMap;
+
+//	public void setDataMap(Map<String, Object> dataMap) {
+//		String dataMapStr = getDataMapStr();
+//		if (Strings.isNotBlank(dataMapStr)) {
+//			Map<String, Object> toDataMap = JSON.parseObject(dataMapStr);
+//			this.dataMap = toDataMap;
+//			return;
+//		}
+//		this.dataMap = dataMap;
+//	}
+
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
+
 }

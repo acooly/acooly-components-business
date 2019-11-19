@@ -8,6 +8,7 @@ package com.acooly.module.countnum.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,11 @@ import com.acooly.module.countnum.dto.CountNumGameDto;
 import com.acooly.module.countnum.dto.CountNumGameOrderRankDto;
 import com.acooly.module.countnum.dto.order.CountNumGameResultDto;
 import com.acooly.module.countnum.entity.CountNumOrder;
+import com.acooly.module.countnum.enums.CountNumSortEnum;
 import com.acooly.module.countnum.enums.CountNumTypeEnum;
 import com.acooly.module.countnum.service.CountNumOrderService;
 import com.acooly.module.event.EventBus;
+import com.alibaba.fastjson.JSON;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,11 +48,20 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 
 	@Override
 	public List<CountNumOrder> findByCountNumIdAndLimit(long countNumId, long limitNum, CountNumTypeEnum type) {
-		if (type == CountNumTypeEnum.NUM_LIMIT) {
-			return getEntityDao().findByCountNumIdAndLimitByNum(countNumId, limitNum);
-		} else {
-			return getEntityDao().findByCountNumIdAndLimitByTime(countNumId, limitNum);
+		if (type == CountNumTypeEnum.NUM_DESC) {
+			return getEntityDao().findByCountNumIdAndByNumSort(countNumId, limitNum, CountNumSortEnum.DESC.code());
 		}
+
+		if (type == CountNumTypeEnum.NUM_ASC) {
+			return getEntityDao().findByCountNumIdAndByNumSort(countNumId, limitNum, CountNumSortEnum.ASC.code());
+		}
+
+		if (type == CountNumTypeEnum.NUM_DESC_TIME_ASC) {
+			return getEntityDao().findByCountNumIdAndByNumTimeSort(countNumId, limitNum, CountNumSortEnum.DESC.code(),
+					CountNumSortEnum.ASC.code());
+		}
+
+		return null;
 	}
 
 	@Override
@@ -73,6 +85,7 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 		long userId = dto.getUserId();
 		long countNumId = dto.getCountNumId();
 		long currentNum = dto.getNum();
+		long currentTime = dto.getTime();
 		CountNumTypeEnum type = countNumGameDto.getType();
 
 		CountNumOrder order = getEntityDao().lockByUserIdAndCountId(userId, countNumId);
@@ -87,23 +100,41 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 			order.setUserId(userId);
 			order.setUserName(dto.getUserName());
 			order.setNum(currentNum);
+			order.setTime(currentTime);
+
+			Map<String, Object> dataMapStr = dto.getDataMap();
+			if (dataMapStr != null && dataMapStr.size() > 0) {
+				order.setDataMap(JSON.toJSONString(dataMapStr));
+			}
+
 			getEntityDao().create(order);
 		} else {
 			long dbNum = order.getNum();
+			long dbTime = order.getTime();
 			// 时间限制----num 降序(由大到小)
-			if (type == CountNumTypeEnum.TIME_LIMIT) {
+			if (type == CountNumTypeEnum.NUM_DESC) {
 				if (currentNum > dbNum) {
 					order.setNum(currentNum);
 					order.setValidTime(new Date());
 				}
 			}
+
 			// 数量限制---num 升序(由小到大)
-			if (type == CountNumTypeEnum.NUM_LIMIT) {
-				if ((currentNum < dbNum)&&(currentNum>0)) {
+			if (type == CountNumTypeEnum.NUM_ASC) {
+				if ((currentNum < dbNum) && (currentNum > 0)) {
 					order.setNum(currentNum);
 					order.setValidTime(new Date());
 				}
 			}
+
+			// 数量限制---NUM 降序(由大到小)，TIME 升序(由小到大)
+			if (type == CountNumTypeEnum.NUM_DESC_TIME_ASC) {
+				if ((currentNum > dbNum) && (currentNum > 0) && (currentTime < dbTime) && (currentTime > 0)) {
+					order.setNum(currentNum);
+					order.setValidTime(new Date());
+				}
+			}
+
 			// 参与次数
 			order.setJoinNum(order.getJoinNum() + 1);
 			getEntityDao().update(order);
@@ -123,6 +154,7 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 		event.setUserName(order.getUserName());
 		event.setType(order.getCountType());
 		event.setNum(order.getNum());
+		event.setTime(order.getTime());
 		event.setCreateTime(order.getCreateTime());
 		event.setJoinNum(order.getJoinNum());
 		event.setValidTime(order.getValidTime());
@@ -131,11 +163,17 @@ public class CountNumOrderServiceImpl extends EntityServiceImpl<CountNumOrder, C
 
 	@Override
 	public CountNumGameOrderRankDto userRankByCountNumId(long userId, long countNumId, CountNumTypeEnum type) {
-		if (type == CountNumTypeEnum.TIME_LIMIT) {
-			return getEntityDao().userRankingByCountNumIdGroupNum(countNumId, userId);
-		} else {
-			return getEntityDao().userRankingByCountNumIdGroupTime(countNumId, userId);
+		if (type == CountNumTypeEnum.NUM_DESC) {
+			return getEntityDao().userRankingByCountNumIdGroupNumSort(countNumId, userId, CountNumSortEnum.DESC.code());
 		}
+		if (type == CountNumTypeEnum.NUM_ASC) {
+			return getEntityDao().userRankingByCountNumIdGroupNumSort(countNumId, userId, CountNumSortEnum.ASC.code());
+		}
+		if (type == CountNumTypeEnum.NUM_DESC_TIME_ASC) {
+			return getEntityDao().userRankingByCountNumIdGroupNumTimeSort(countNumId, userId,
+					CountNumSortEnum.DESC.code(), CountNumSortEnum.ASC.code());
+		}
+		return null;
 	}
 
 }

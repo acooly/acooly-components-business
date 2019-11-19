@@ -39,6 +39,9 @@ public enum CountNumGameResultCodeEnum implements Messageable {
 	/** 达到游戏参与最大数量 **/
 	COUNT_NUM_MAX_NUM("COUNT_NUM_MAX_NUM", "超过游戏最大人数限制"),
 
+	/** 获取缓存锁失败，获取锁lock 失败 **/
+	COUNT_NUM_LOCK_ERROR("COUNT_NUM_LOCK_ERROR", "获取缓存锁失败"),
+	
 	;
 
 	private final String code;

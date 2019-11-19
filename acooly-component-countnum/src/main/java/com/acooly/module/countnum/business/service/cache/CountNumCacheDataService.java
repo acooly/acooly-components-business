@@ -77,15 +77,28 @@ public class CountNumCacheDataService {
 
 	/**
 	 * 
-	 * game_count_num_key_redis_lock_listener_xxxx
+	 * game_count_num_key_redis_listener_xxxx
 	 * 
 	 * 获取Redis key计数游戏 监听器锁
 	 * 
 	 * @param countNumId
 	 * @return
 	 */
-	public String getListenerCountNumRedisLockKey(long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_listener_" + countNumId;
+	public String getListenerCountNumRedisKey(long countNumId) {
+		return countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_" + countNumId;
+	}
+
+	/**
+	 * 
+	 * game_count_num_key_redis_listener_mark_xxxx
+	 * 
+	 * 获取Redis key计数游戏 监听器锁
+	 * 
+	 * @param countNumId
+	 * @return
+	 */
+	public String getListenerCountNumRedisMarkKey(long countNumId) {
+		return countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_mark_" + countNumId;
 	}
 
 	/**
@@ -99,7 +112,8 @@ public class CountNumCacheDataService {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setListenerCountNumRedisLockKey(long countNumId, CountNumGameDto dto, Date overdueTime) {
-		String listenerKey = getListenerCountNumRedisLockKey(countNumId);
+		String listenerKey = getListenerCountNumRedisKey(countNumId);
+		String listenerMarkKey = getListenerCountNumRedisMarkKey(countNumId);
 		Date currentDate = new Date();
 		long times = overdueTime.getTime() - currentDate.getTime();
 		String overdueTimeStr = Dates.format(overdueTime);
@@ -108,6 +122,10 @@ public class CountNumCacheDataService {
 				times);
 		if (times > 0) {
 			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
+
+			// 新增监听锁，主要处理分布式部署，过期事件重复通知
+			long addTime = Dates.addDate(overdueTime, COUNT_NUM_REDIS_TIME, TimeUnit.MINUTES).getTime();
+			redisTemplate.opsForValue().set(listenerMarkKey, dto, times + addTime, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -228,6 +246,7 @@ public class CountNumCacheDataService {
 		String mapKey = getCountNumRedisMapKey(countNumId);
 		String hashKey = String.valueOf(orderDto.getUserId());
 		long currentNum = orderDto.getNum();
+		long currentTime = orderDto.getTime();
 
 		CountNumGameDto countNumGame = getCountNumRedisDataByKey(countNumId);
 		CountNumTypeEnum type = countNumGame.getType();
@@ -240,21 +259,31 @@ public class CountNumCacheDataService {
 		CountNumGameOrderDto redisOrderDto = (CountNumGameOrderDto) redisMap.get(mapKey, hashKey);
 		if (redisOrderDto != null) {
 			long redisNum = redisOrderDto.getNum();
-			if (type == CountNumTypeEnum.NUM_LIMIT) {
-				// 次数限制
-				if ((currentNum < redisNum) && (currentNum > 0)) {
-					redisMap.put(mapKey, hashKey, orderDto);
-				}
-			} else {
-				// 时间限制---num 升序(由小到大)
+			long redisTime = redisOrderDto.getTime();
+
+			// num 降序(由大到小)
+			if (type == CountNumTypeEnum.NUM_DESC) {
 				if (currentNum > redisNum) {
 					redisMap.put(mapKey, hashKey, orderDto);
 				}
 			}
-		} else {
-			if (currentNum > 0) {
-				redisMap.put(mapKey, hashKey, orderDto);
+
+			// num 降序(由小到大)
+			if (type == CountNumTypeEnum.NUM_ASC) {
+				if (currentNum < redisNum) {
+					redisMap.put(mapKey, hashKey, orderDto);
+				}
 			}
+
+			// NUM 降序(由大到小)，TIME 升序(由小到大)
+			if (type == CountNumTypeEnum.NUM_DESC_TIME_ASC) {
+//				if (((currentNum < redisNum) && (currentNum > 0)) && ((currentTime > redisTime) && (currentTime > 0))) {
+				if ((currentNum > redisNum) && (currentTime < redisTime)) {
+					redisMap.put(mapKey, hashKey, orderDto);
+				}
+			}
+		} else {
+			redisMap.put(mapKey, hashKey, orderDto);
 		}
 
 		// 删除N后 排名记录
@@ -331,17 +360,33 @@ public class CountNumCacheDataService {
 	public List<CountNumGameOrderDto> countNumRedisMapSort(long countNumId, CountNumTypeEnum type) {
 		String mapKey = getCountNumRedisMapKey(countNumId);
 		List<CountNumGameOrderDto> orderDtoList = redisTemplate.opsForHash().values(mapKey);
-		if (type == CountNumTypeEnum.NUM_LIMIT) {
-			// 次数限制
-			orderDtoList.sort(
-					Comparator.comparing(CountNumGameOrderDto::getNum).thenComparing(CountNumGameOrderDto::getValidTime)
-							.thenComparing(CountNumGameOrderDto::getCountNumOrderId));
-		} else {
-			// 时间限制
+
+		for (CountNumGameOrderDto d : orderDtoList) {
+			log.debug("未排序-成绩：" + d.getNum() + "---" + d.getTime() + "----时间：" + Dates.format(d.getValidTime())
+					+ "----用户" + d.getUserId() + "----参与次数:" + d.getJoinNum());
+		}
+
+		// num 降序(由大到小)
+		if (type == CountNumTypeEnum.NUM_DESC) {
 			orderDtoList.sort(Comparator.comparing(CountNumGameOrderDto::getNum).reversed()
 					.thenComparing(CountNumGameOrderDto::getValidTime)
 					.thenComparing(CountNumGameOrderDto::getCountNumOrderId));
 		}
+
+		// num 升序(由小到大)
+		if (type == CountNumTypeEnum.NUM_ASC) {
+			orderDtoList.sort(
+					Comparator.comparing(CountNumGameOrderDto::getNum).thenComparing(CountNumGameOrderDto::getValidTime)
+							.thenComparing(CountNumGameOrderDto::getCountNumOrderId));
+		}
+
+		// NUM 降序(由大到小)，TIME 升序(由小到大)
+		if (type == CountNumTypeEnum.NUM_DESC_TIME_ASC) {
+			orderDtoList.sort(Comparator.comparing(CountNumGameOrderDto::getNum).reversed()
+					.thenComparing(CountNumGameOrderDto::getTime).thenComparing(CountNumGameOrderDto::getValidTime)
+					.thenComparing(CountNumGameOrderDto::getCountNumOrderId));
+		}
+
 		return orderDtoList;
 	}
 

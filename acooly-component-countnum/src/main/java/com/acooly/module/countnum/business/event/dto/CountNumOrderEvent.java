@@ -58,10 +58,13 @@ public class CountNumOrderEvent implements Serializable {
 	private String userName;
 
 	/** 类型 **/
-	private CountNumTypeEnum type = CountNumTypeEnum.TIME_LIMIT;
+	private CountNumTypeEnum type = CountNumTypeEnum.NUM_DESC;
 
 	/** 游戏有效值 **/
 	private Long num;
+	
+	/** 游戏有效值 **/
+	private Long time;
 
 	/** 创建时间 */
 	private Date createTime;

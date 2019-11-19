@@ -32,5 +32,13 @@ public class CountNumProperties {
 
 	/** 计数类游戏-布式 redis缓存记录条数 */
 	private long countNumRedisOrderNum = 50L;
+	
+	/**
+	 * 分布式部署 单个计数游戏过期通知（不考虑单机部署）
+	 * <li>true: 通知所有服务器节点
+	 * <li>false：仅通知单服务器
+	 * 
+	 */
+	private boolean isOverdueMoreNotify = true;
 
 }
