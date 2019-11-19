@@ -42,16 +42,6 @@ public class CountNumRedisListener implements MessageListener {
 	@Transactional
 	public void onMessage(Message message, byte[] pattern) {
 		String redisKey = message.toString();
-		String countNumKey = countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_listener_";
-		if (redisKey.contains(countNumKey)) {
-			log.info("[计数游戏组件]即将要失效的Key:{}", redisKey);
-			long countNumId = Long.parseLong(redisKey.replaceAll(countNumKey, ""));
-			if (isSendEvent(countNumId)) {
-				CountNum countNum = countNumService.countNumGameFinish(countNumId);
-				countNumService.pushEvent(countNum);
-			}
-		}
-
 		String countNumKeyId = countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_";
 		if (redisKey.contains(countNumKeyId)) {
 			log.info("[计数游戏组件]即将要失效的Key:{}", redisKey);
