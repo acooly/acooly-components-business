@@ -1,11 +1,14 @@
 package com.acooly.module.redpack.business.service.conver;
 
 import java.util.List;
+import java.util.Map;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.module.redpack.entity.RedPack;
 import com.acooly.module.redpack.entity.RedPackOrder;
 import com.acooly.module.redpack.event.dto.RedPackDto;
 import com.acooly.module.redpack.event.dto.RedPackOrderDto;
+import com.alibaba.fastjson.JSON;
 
 public class RedPackEntityConverDto {
 
@@ -51,6 +54,13 @@ public class RedPackEntityConverDto {
 			orderDto.setIsFirst(redPackOrder.getIsFirst());
 			orderDto.setType(redPackOrder.getType());
 			orderDto.setCreateTime(redPackOrder.getCreateTime());
+
+			String dataMapStr = redPackOrder.getDataMap();
+			if (Strings.isNotBlank(dataMapStr)) {
+				Map<String, Object> dataMap = JSON.parseObject(dataMapStr);
+				orderDto.setDataMap(dataMap);
+			}
+
 			orderDtoList.add(orderDto);
 		}
 		return orderDtoList;

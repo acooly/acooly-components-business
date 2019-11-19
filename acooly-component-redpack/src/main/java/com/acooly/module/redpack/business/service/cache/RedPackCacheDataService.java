@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RedPackCacheDataService {
 
 	/** 红包 redis 缓存时间 **/
-	public static Long RED_PACK_REDIS_TIME = 10L;
+	public static final Long RED_PACK_REDIS_TIME = 10L;
 
 	@Autowired
 	private RedPackService redPackService;
@@ -276,12 +276,27 @@ public class RedPackCacheDataService {
 	 * @param countNumId
 	 * @return
 	 */
-	public String getListenerRedPackRedisLockKey(long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_lock_listener_" + redPackId;
+	public String getListenerRedPackRedisKey(long redPackId) {
+		return redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_" + redPackId;
 	}
 
+	/**
+	 * 
+	 * red_pack_key
+	 * 
+	 * 获取Redis key红包游戏 监听器锁
+	 * 
+	 * @param countNumId
+	 * @return
+	 */
+	public String getListenerRedPackRedisMarkKey(long redPackId) {
+		return redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_mark_" + redPackId;
+	}
+
+	@SuppressWarnings("unchecked")
 	public void setListenerRedPackRedisLockKey(Long redPackId, RedPackDto dto, Date overdueTime) {
-		String listenerKey = getListenerRedPackRedisLockKey(redPackId);
+		String listenerKey = getListenerRedPackRedisKey(redPackId);
+		String listenerMarkKey = getListenerRedPackRedisMarkKey(redPackId);
 		Date currentDate = new Date();
 		long times = overdueTime.getTime() - currentDate.getTime();
 		String overdueTimeStr = Dates.format(overdueTime);
@@ -290,6 +305,10 @@ public class RedPackCacheDataService {
 				currentDateStr, times);
 		if (times > 0) {
 			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
+
+			// 新增监听锁，主要处理分布式部署，过期事件重复通知
+			long addTime = Dates.addDate(overdueTime, 1, TimeUnit.HOURS).getTime();
+			redisTemplate.opsForValue().set(listenerMarkKey, dto, times + addTime, TimeUnit.MILLISECONDS);
 		}
 	}
 

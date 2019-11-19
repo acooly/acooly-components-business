@@ -65,11 +65,13 @@ public class RedPackAutoConfig {
 			Environment environment) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
+		String redisHost = environment.getProperty("spring.redis.host");
 		String redisDataBase = environment.getProperty("spring.redis.database");
 		if (Strings.isBlank(redisDataBase)) {
 			redisDataBase = "0";
 		}
-		log.info("[计数游戏组件]:初始化RedisMessageListenerContainer监听事件,spring.redis.database:{}", redisDataBase);
+		log.info("[红包组件]:初始化RedisMessageListenerContainer监听事件,redisHost:{},redisDatabase:{}", redisHost,
+				redisDataBase);
 		String subscribeChannel = "__keyevent@" + redisDataBase + "__:expired";
 		container.addMessageListener(redPackRedisListener, new PatternTopic(subscribeChannel));
 		return container;

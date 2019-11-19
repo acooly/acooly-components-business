@@ -30,4 +30,12 @@ public class RedPackProperties {
 	/** 红包分布式 redis缓存时间(最少设置10分钟) */
 	private Long redPackRedisTime = 10L;
 
+	/**
+	 * 分布式部署 单个红包过期通知（不考虑单机部署）
+	 * <li>true: 通知所有服务器节点
+	 * <li>false：仅通知单服务器
+	 * 
+	 */
+	private boolean isOverdueMoreNotify = true;
+
 }

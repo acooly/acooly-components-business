@@ -8,6 +8,7 @@ package com.acooly.module.redpack.business.event.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -68,6 +69,9 @@ public class RedPackOrderEvent implements Serializable {
 	@Size(max = 64)
 	private Long amount;
 
+	/** 扩展数据，同步缓存-缓存列表(头像，昵称等) **/
+	private Map<String, Object> dataMap;
+
 	/** 获取红包金额 */
 	private WhetherEnum isFirst = WhetherEnum.NO;
 
@@ -76,7 +80,7 @@ public class RedPackOrderEvent implements Serializable {
 
 	/** 状态 */
 	private RedPackOrderStatusEnum status = RedPackOrderStatusEnum.INIT;
-	
+
 	/** 创建时间 */
 	private Date createTime;
 

@@ -9,7 +9,6 @@ package com.acooly.module.redpack.business.event.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;

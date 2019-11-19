@@ -30,6 +30,7 @@ import com.acooly.core.utils.Dates;
 import com.acooly.module.distributedlock.DistributedLockFactory;
 import com.acooly.module.redpack.business.service.RedPackTradeService;
 import com.acooly.module.redpack.dto.CreateRedPackDto;
+import com.acooly.module.redpack.dto.SendRedPackDto;
 import com.acooly.module.redpack.event.dto.RedPackOrderDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,70 +61,54 @@ public class TestRedPackManagerController {
 		long startTime = System.currentTimeMillis();
 
 		try {
-			
-			CreateRedPackDto dto=new CreateRedPackDto();
+
+			CreateRedPackDto dto = new CreateRedPackDto();
 			dto.setTitle("12321");
 			dto.setSendUserId(100L);
 			dto.setSendUserName("111");
 			dto.setTotalAmount(100L);
 			dto.setTotalNum(100L);
 			dto.setPartakeNum(10L);
+			dto.setPartakeNum(0L);
 			dto.setBusinessId("1");
-			
+
 			dto.setOverdueTime(Dates.addDate(new Date(), 10000L));
-			
-			redPackTradeService.createRedPack(dto);
-			
-			
+
+//			redPackTradeService.createRedPack(dto);
 
 //			Long redPackId=536L;
 //			redPackTradeService.findRedPack(redPackId);
-//			
 //			List<RedPackOrderDto> list = redPackTradeService.findRedPackOrder(redPackId);
 //			
-//			
-//			Map<Object, Object> data=Maps.newHashMap();
-//			data.put("key", list);
-//			result.setData(data);
-			
-//			String redPackId = request.getParameter("redPackId");
-//			redPackId = "185";
-//			SendRedPackDto dto = new SendRedPackDto();
-//			dto.setRedPackId(Long.parseLong(redPackId));
-//			dto.setUserId(100L);
-//			dto.setUserName("cuifuq");
 
-//			List<RedPackOrderDto> sss = redPackTradeService.findRedPackOrder(Long.parseLong(redPackId));
-//			for (RedPackOrderDto redPackOrderDto : sss) {
-//				System.out.println("---1---" + redPackOrderDto.getUserId() + "----" + redPackOrderDto.getCreateTime()
-//						+ "-------" + redPackOrderDto.getAmount());
-//			}
-//
-//			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), true);
-//			for (RedPackOrderDto redPackOrderDto : sss) {
+			String redPackId = request.getParameter("redPackId");
+			redPackId = "28";
+			SendRedPackDto sdto = new SendRedPackDto();
+			sdto.setRedPackId(Long.parseLong(redPackId));
+			sdto.setUserId(100L);
+			sdto.setUserName("cuifuq");
+			
+			Map<String, Object> dataMap = Maps.newHashMap();
+			dataMap.put("head_img",
+					"https://wx.qlogo.cn/mmopen/vi_32/Kicpz5MhgFzUUxMNZLFW2mibEs8Ok1usnjRn3QIQJkicZn1KicOtI9PJY1gibNQdg3m5RYHB4CLMT48rOunQK8nH4icg/132");
+			dataMap.put("head_img2", "?一休哥😝");
+			dataMap.put("bbbb", "bbb");
+			dataMap.put("ccc", "ccc");
+			sdto.setDataMap(dataMap);
+			
+			
+			redPackTradeService.sendRedPack(sdto);
+
+			List<RedPackOrderDto> lists = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), true);
+			for (RedPackOrderDto redPackOrderDto : lists) {
 //				System.out.println("---2---" + redPackOrderDto.getUserId() + "----" + redPackOrderDto.getCreateTime()
 //						+ "-------" + redPackOrderDto.getAmount());
-//			}
+			}
 //
-//			sss = redPackTradeService.findRedPackOrderSort(Long.parseLong(redPackId), false);
-//			for (RedPackOrderDto redPackOrderDto : sss) {
-//				System.out.println("---3---" + redPackOrderDto.getUserId() + "----" + redPackOrderDto.getCreateTime()
-//						+ "-------" + redPackOrderDto.getAmount());
-//			}
+			Map<Object, Object> data = Maps.newHashMap();
+			data.put("key", lists);
+			result.setData(data);
 
-			// 数据库 锁
-//			testRedPackService.sendRedPack(dto);
-
-//			redis 分布式 锁
-//			redPackTradeService.sendRedPack(dto);
-			
-			
-			
-//			for (int i = 1; i < 500; i++) {
-//				redPackTradeService.sendRedPack(dto);
-//			}
-			
-			
 		} catch (BusinessException e) {
 			result.setSuccess(false);
 			result.setCode(e.getCode());
@@ -134,7 +119,7 @@ public class TestRedPackManagerController {
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-		log.info("程序运行时间：{} s", ((endTime - startTime)/1000.00));
+		log.info("程序运行时间：{} s", ((endTime - startTime) / 1000.00));
 		return result;
 	}
 

@@ -1,16 +1,5 @@
-/*
- * www.yiji.com Inc.
- * Copyright (c) 2017 All Rights Reserved
- */
-
-/*
- * 修订记录:
- * kuli@yiji.com 2017-03-10 17:04 创建
- */
 package com.acooly.module.redpack;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.acooly.core.common.boot.component.ComponentInitializer;
@@ -19,9 +8,14 @@ import com.acooly.core.common.boot.component.ComponentInitializer;
  * @author cuifuq
  */
 public class RedPackComponentInitializer implements ComponentInitializer {
-    private static final Logger logger = LoggerFactory.getLogger(RedPackComponentInitializer.class);
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+    	
+    	/** 升级扩展字段 */
+		setPropertyIfMissing("acooly.ds.dbPatchs.red_red_pack_order[0].columnName", "data_map");
+		setPropertyIfMissing("acooly.ds.dbPatchs.red_red_pack_order[0].patchSql",
+				"ALTER TABLE `red_red_pack_order` ADD COLUMN `data_map` VARCHAR(512) NULL COMMENT '业务扩展';");
+
     }
 }

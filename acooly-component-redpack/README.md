@@ -148,6 +148,10 @@ maven坐标：
 
 
 ##版本说明
+####v1:2019-10
+- 1.发红包，新增 扩展数据Map<String, Object> dataMap（如头像,昵称）,并持久化，支持数据库缓存
+- 2.优化redis缓存方案 tryLock 优化
+
 
 ####v1:2019-09
 新增功能支持，红包过期后发送 红包过期事件，RedPackOverdueEvent

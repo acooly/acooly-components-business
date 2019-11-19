@@ -8,6 +8,7 @@ package com.acooly.module.redpack.event.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -53,6 +54,9 @@ public class RedPackOrderDto implements Serializable {
 
 	/** 类型 */
 	private RedPackOrderTypeEnum type = RedPackOrderTypeEnum.RED_PACK;
+
+	/** 扩展数据，同步缓存-缓存列表(头像，昵称等) **/
+	private Map<String, Object> dataMap;
 
 	/** 创建时间 */
 	private Date createTime;

@@ -12,6 +12,7 @@
 
 	<artifactId>acooly-component-redpack</artifactId>
 	<name>acooly-component-redpack</name>
+<!-- 	<version>4.2.0.20191024-SNAPSHOT</version> -->
 	<dependencies>
 
 		<!-- 基础组件依赖 -->

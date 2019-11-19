@@ -8,6 +8,7 @@ package com.acooly.module.redpack.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,6 +45,9 @@ public class SendRedPackDto implements Serializable {
 	/** 用户名称 */
 	@Size(max = 64)
 	private String userName;
+	
+	/** 扩展数据，同步缓存-缓存列表(头像，昵称等) **/
+	private Map<String, Object> dataMap;
 
 	@Override
 	public String toString() {

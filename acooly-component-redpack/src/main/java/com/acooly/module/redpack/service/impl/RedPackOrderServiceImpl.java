@@ -7,6 +7,7 @@
 package com.acooly.module.redpack.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.redpack.business.event.dto.RedPackOrderEvent;
 import com.acooly.module.redpack.dao.RedPackOrderDao;
@@ -22,6 +24,7 @@ import com.acooly.module.redpack.entity.RedPackOrder;
 import com.acooly.module.redpack.enums.RedPackOrderStatusEnum;
 import com.acooly.module.redpack.enums.RedPackOrderTypeEnum;
 import com.acooly.module.redpack.service.RedPackOrderService;
+import com.alibaba.fastjson.JSON;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,6 +87,13 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 		sendRedPackEvent.setType(redPackOrder.getType());
 		sendRedPackEvent.setIsFirst(redPackOrder.getIsFirst());
 		sendRedPackEvent.setCreateTime(redPackOrder.getCreateTime());
+
+		String dataMapStr = redPackOrder.getDataMap();
+		if (Strings.isNotBlank(dataMapStr)) {
+			Map<String, Object> dataMap = JSON.parseObject(dataMapStr);
+			sendRedPackEvent.setDataMap(dataMap);
+		}
+
 		eventBus.publishAfterTransactionCommitted(sendRedPackEvent);
 	}
 

@@ -121,11 +121,12 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	public RedPackOrderDto sendRedPack(SendRedPackDto sendDto) {
 		RedPackOrderDto orderDto = new RedPackOrderDto();
 		Long redPackId = sendDto.getRedPackId();
+		// red_pack_key_redis_lock_28
 		String redPackLockKey = redPackCacheDataService.getRedPackLockKey(redPackId);
 
 		Lock lock = factory.newLock(redPackLockKey);
 		try {
-			log.info("红包组件:[发送红包],开始获取锁,lockKey:{},红包id:{}", redPackLockKey, redPackId);
+			log.info("红包组件--发送红包--,开始获取锁,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
 				try {
 					RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
@@ -159,7 +160,7 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 					redPackDto.setSendOutNum(redPackDto.getSendOutNum() + 1);
 					redPackDto.setStatus(RedPackStatusEnum.PROCESSING);
 
-					log.info("红包组件:[发送红包]lockKey:{},红包id:{},领取人 userId:{},userName:{},领取金额：{}", redPackLockKey,
+					log.info("红包组件--发送红包--lockKey:{},红包id:{},领取人 userId:{},userName:{},领取金额：{}", redPackLockKey,
 							redPackId, sendDto.getUserId(), sendDto.getUserName(), Money.cent(redPackAmount));
 
 					// 组建order订单
@@ -174,29 +175,33 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 					eventBus.publishAfterTransactionCommitted(insideEvent);
 
 				} catch (BusinessException e) {
-					log.info("红包组件:[发送红包],业务处理失败,lockKey:{},红包id:{},{}", redPackLockKey, redPackId, e);
+					log.info("红包组件--发送红包--,业务处理失败,lockKey:{},红包id:{},{}", redPackLockKey, redPackId, e);
 					throw new BusinessException(e.getMessage(), e.getCode());
 				} finally {
 					lock.unlock();
 				}
 			} else {
-				log.info("红包组件:[发送红包],获取锁失败,lockKey:{},红包id:{}", redPackLockKey, redPackId);
+				if (redisTemplate.hasKey(redPackLockKey)) {
+					log.info("红包组件-发送红包,当前key未释放,系统删除:lockKey:{},红包id:{}", redPackLockKey, redPackId);
+					redisTemplate.delete(redPackLockKey);
+				}
+				log.info("红包组件--发送红包--,获取锁失败,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 				throw new BusinessException(RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.message(),
 						RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.code());
 			}
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
-			log.error("红包组件:[发送红包]发送红包失败,红包id:{},{}", redPackId, e);
-			throw new BusinessException("红包组件:[发送红包]发送红包失败");
+			log.error("红包组件--发送红包--发送红包失败,红包id:{},{}", redPackId, e);
+			throw new BusinessException("红包组件--发送红包--发送红包失败");
 		}
-
 		return orderDto;
 	}
 
 	/**
 	 * 退款
 	 */
+	@SuppressWarnings("unchecked")
 	public RedPackOrderDto refundRedPack(Long redPackId) {
 		RedPackOrderDto orderDto = new RedPackOrderDto();
 
@@ -204,9 +209,8 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		Lock lock = factory.newLock(redPackLockKey);
 		try {
 
-			log.info("红包组件:[红包退款],开始获取锁,lockKey:{},红包id:{}", redPackLockKey, redPackId);
+			log.info("红包组件--红包退款--,开始获取锁,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 			if (lock.tryLock(REDIS_TRY_LOCK_TIME, TimeUnit.SECONDS)) {
-
 				try {
 					RedPackDto redPackDto = redPackCacheDataService.getRedPackRedisDataByKey(redPackId);
 
@@ -225,8 +229,9 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 					redPackDto.setRefundAmount(surplusAmount);
 					redPackDto.setStatus(RedPackStatusEnum.REFUNDING);
 
-					log.info("红包组件:[退款]lockKey:{},红包id:{},退款人 userId:{},userName:{},退款金额：{}", redPackLockKey, redPackId,
-							redPackDto.getSendUserId(), redPackDto.getSendUserName(), Money.cent(surplusAmount));
+					log.info("红包组件--退款--lockKey:{},红包id:{},退款人 userId:{},userName:{},退款金额：{}", redPackLockKey,
+							redPackId, redPackDto.getSendUserId(), redPackDto.getSendUserName(),
+							Money.cent(surplusAmount));
 
 					// 组建order订单
 					orderDto = buildRefundRedPackOrderDto(redPackDto);
@@ -246,7 +251,12 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 				}
 
 			} else {
-				log.info("红包组件:[红包退款],获取锁失败,lockKey:{},红包id:{}", redPackLockKey, redPackId);
+				if (redisTemplate.hasKey(redPackLockKey)) {
+					log.info("红包组件-红包退款,当前key未释放,系统删除:lockKey:{},红包id:{}", redPackLockKey, redPackId);
+					redisTemplate.delete(redPackLockKey);
+				}
+
+				log.info("红包组件--红包退款--,获取锁失败,lockKey:{},红包id:{}", redPackLockKey, redPackId);
 				throw new BusinessException(RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.message(),
 						RedPackResultCodeEnum.RED_PACK_SEND_LOCK_ERROR.code());
 			}
@@ -254,8 +264,8 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e.getCode());
 		} catch (Exception e) {
-			log.error("红包组件:[红包退款]红包退款失败,红包id:{},{}", redPackId, e);
-			throw new BusinessException("红包组件:[红包退款]红包退款失败");
+			log.error("红包组件--红包退款--红包退款失败,红包id:{},{}", redPackId, e);
+			throw new BusinessException("红包组件-红包退款-红包退款失败");
 		}
 
 		return orderDto;
@@ -307,14 +317,14 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	 * @return
 	 */
 	private RedPackOrderDto buildSendRedPackOrderDto(SendRedPackDto sendDto, Long redPackId, Long redPackAmount) {
-		RedPackOrderDto orderDto;
-		orderDto = new RedPackOrderDto();
+		RedPackOrderDto orderDto = new RedPackOrderDto();
 		orderDto.setRedPackId(redPackId);
 		orderDto.setUserId(sendDto.getUserId());
 		orderDto.setUserName(sendDto.getUserName());
 		orderDto.setAmount(redPackAmount);
 		orderDto.setType(RedPackOrderTypeEnum.RED_PACK);
 		orderDto.setCreateTime(new Date());
+		orderDto.setDataMap(sendDto.getDataMap());
 		return orderDto;
 	}
 
