@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.module.countnum.CountNumProperties;
+import com.acooly.module.countnum.business.common.CountNumGameConstant;
 import com.acooly.module.countnum.dto.CountNumGameDto;
 import com.acooly.module.countnum.entity.CountNum;
 import com.acooly.module.countnum.service.CountNumService;
@@ -42,7 +43,7 @@ public class CountNumRedisListener implements MessageListener {
 	@Transactional
 	public void onMessage(Message message, byte[] pattern) {
 		String redisKey = message.toString();
-		String countNumKeyId = countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_";
+		String countNumKeyId = countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_LISTENER;
 		if (redisKey.contains(countNumKeyId)) {
 			log.info("[计数游戏组件]即将要失效的Key:{}", redisKey);
 			long countNumId = Long.parseLong(redisKey.replaceAll(countNumKeyId, ""));
@@ -62,8 +63,8 @@ public class CountNumRedisListener implements MessageListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean isSendEvent(Long countNumKeyId) {
-		String listenerMarkKey = countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_mark_"
-				+ countNumKeyId;
+		String listenerMarkKey = countNumProperties.getCountNumDistributedLockKey()
+				+ CountNumGameConstant.REDIS_LISTENER_MARK + countNumKeyId;
 		String listenerLockKey = listenerMarkKey + "_lock";
 		// 分布式 部署通知
 		if (countNumProperties.isOverdueMoreNotify()) {

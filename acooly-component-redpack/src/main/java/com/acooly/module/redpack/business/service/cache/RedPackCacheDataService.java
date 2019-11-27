@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Dates;
 import com.acooly.module.redpack.RedPackProperties;
+import com.acooly.module.redpack.business.common.RedpackConstant;
 import com.acooly.module.redpack.business.service.conver.RedPackEntityConverDto;
 import com.acooly.module.redpack.entity.RedPack;
 import com.acooly.module.redpack.entity.RedPackOrder;
@@ -66,20 +67,20 @@ public class RedPackCacheDataService {
 	 * @return
 	 */
 	public String getRedPackLockKey(Long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_lock_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_LOCK + redPackId;
 	}
 
 	/**
 	 * 
-	 * red_pack_lock_key_redis_xxxxx
+	 * red_pack_redis_xxxxx
 	 * 
-	 * 获取Redis key红包锁
+	 * 获取Redis key红包
 	 * 
 	 * @param redPackId
 	 * @return
 	 */
 	public String getRedPackRedisKey(Long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_MAIN + redPackId;
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class RedPackCacheDataService {
 	 * @return
 	 */
 	public String getRedPackRedisListKey(Long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_list_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_LIST + redPackId;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -210,7 +211,7 @@ public class RedPackCacheDataService {
 	 * @return
 	 */
 	public String getRedPackRedisMapKey(Long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_map_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_MAP + redPackId;
 	}
 
 	/**
@@ -277,7 +278,7 @@ public class RedPackCacheDataService {
 	 * @return
 	 */
 	public String getListenerRedPackRedisKey(long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_LISTENER + redPackId;
 	}
 
 	/**
@@ -290,7 +291,7 @@ public class RedPackCacheDataService {
 	 * @return
 	 */
 	public String getListenerRedPackRedisMarkKey(long redPackId) {
-		return redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_mark_" + redPackId;
+		return redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_LISTENER_MARK + redPackId;
 	}
 
 	/**

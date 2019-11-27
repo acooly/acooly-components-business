@@ -137,7 +137,6 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	public RedPackOrderDto sendRedPack(SendRedPackDto sendDto) {
 		RedPackOrderDto orderDto = new RedPackOrderDto();
 		Long redPackId = sendDto.getRedPackId();
-		// red_pack_key_redis_lock_28
 		String redPackLockKey = redPackCacheDataService.getRedPackLockKey(redPackId);
 
 		Lock lock = factory.newLock(redPackLockKey);

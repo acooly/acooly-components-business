@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Dates;
 import com.acooly.module.countnum.CountNumProperties;
+import com.acooly.module.countnum.business.common.CountNumGameConstant;
 import com.acooly.module.countnum.business.service.conver.CountNumEntityConverDto;
 import com.acooly.module.countnum.dto.CountNumGameDto;
 import com.acooly.module.countnum.dto.CountNumGameOrderDto;
@@ -59,7 +60,7 @@ public class CountNumCacheDataService {
 	 * @return
 	 */
 	public String getCountNumRedisLockKey(long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_lock_" + countNumId;
+		return countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_LOCK + countNumId;
 	}
 
 	/**
@@ -85,12 +86,12 @@ public class CountNumCacheDataService {
 	 * @return
 	 */
 	public String getListenerCountNumRedisKey(long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_" + countNumId;
+		return countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_LISTENER + countNumId;
 	}
 
 	/**
 	 * 
-	 * game_count_num_key_redis_listener_mark_xxxx
+	 * game_count_num_key_redis_listener-mark_xxxx
 	 * 
 	 * 获取Redis key计数游戏 监听器锁
 	 * 
@@ -98,7 +99,8 @@ public class CountNumCacheDataService {
 	 * @return
 	 */
 	public String getListenerCountNumRedisMarkKey(long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_listener_mark_" + countNumId;
+		return countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_LISTENER_MARK
+				+ countNumId;
 	}
 
 	/**
@@ -139,7 +141,7 @@ public class CountNumCacheDataService {
 	 * @return
 	 */
 	public String getCountNumRedisKey(long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_" + countNumId;
+		return countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_MAIN + countNumId;
 	}
 
 	/**
@@ -189,7 +191,8 @@ public class CountNumCacheDataService {
 	 * @return
 	 */
 	public String getCountNumOrderOneKey(long countNumId, long userId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_one_" + countNumId + "_" + userId;
+		return countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_ONE + countNumId + "_"
+				+ userId;
 	}
 
 	/**
@@ -232,7 +235,7 @@ public class CountNumCacheDataService {
 	 * @return
 	 */
 	public String getCountNumRedisMapKey(long countNumId) {
-		return countNumProperties.getCountNumDistributedLockKey() + "_redis_map_" + countNumId;
+		return countNumProperties.getCountNumDistributedLockKey() + CountNumGameConstant.REDIS_MAP + countNumId;
 	}
 
 	/**

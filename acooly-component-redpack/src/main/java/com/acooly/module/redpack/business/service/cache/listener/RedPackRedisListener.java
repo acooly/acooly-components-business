@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.acooly.module.distributedlock.DistributedLockFactory;
 import com.acooly.module.redpack.RedPackProperties;
+import com.acooly.module.redpack.business.common.RedpackConstant;
 import com.acooly.module.redpack.entity.RedPack;
 import com.acooly.module.redpack.event.dto.RedPackDto;
 import com.acooly.module.redpack.service.RedPackService;
@@ -40,17 +41,7 @@ public class RedPackRedisListener implements MessageListener {
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
 		String redisKey = message.toString();
-		String redPackKey = redPackProperties.getRedPackDistributedLockKey() + "_redis_lock_listener_";
-		if (redisKey.contains(redPackKey)) {
-			log.info("[红包组件]即将要失效的Key:{}", redisKey);
-			long redPackId = Long.parseLong(redisKey.replaceAll(redPackKey, ""));
-			if (isSendEvent(redPackId)) {
-				RedPack redPack = redPackService.get(redPackId);
-				redPackService.pushEventOverdue(redPack);
-			}
-		}
-
-		String redPackKeyId = redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_";
+		String redPackKeyId = redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_LISTENER;
 		if (redisKey.contains(redPackKeyId)) {
 			log.info("[红包组件]即将要失效的Key:{}", redisKey);
 			long redPackId = Long.parseLong(redisKey.replaceAll(redPackKeyId, ""));
@@ -70,7 +61,7 @@ public class RedPackRedisListener implements MessageListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean isSendEvent(Long redPackId) {
-		String listenerMarkKey = redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_mark_" + redPackId;
+		String listenerMarkKey = redPackProperties.getRedPackDistributedLockKey() + RedpackConstant.REDIS_LISTENER_MARK + redPackId;
 		String listenerLockKey = listenerMarkKey + "_lock";
 		// 分布式 部署通知
 		if (redPackProperties.isOverdueMoreNotify()) {
@@ -90,7 +81,7 @@ public class RedPackRedisListener implements MessageListener {
 				} finally {
 					lock.unlock();
 				}
-			}else {
+			} else {
 				if (redisTemplate.hasKey(listenerLockKey)) {
 					log.info("[红包组件],失效事件当前key未释放,系统删除:lockKey:{}", listenerLockKey);
 					redisTemplate.delete(listenerLockKey);

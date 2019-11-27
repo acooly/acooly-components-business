@@ -76,10 +76,10 @@ public class TestCountNumManagerController {
 			dto.setOverdueTime(overdueTime);
 			dto.setLimitNum(5L);
 
-//			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
+			CountNumGameDto countDto = countNumGameService.createCountNumGame(dto);
 
-//			Long countNumId = countDto.getCountNumId();
-			Long countNumId = 4860L;
+			Long countNumId = countDto.getCountNumId();
+//			Long countNumId = 4860L;
 
 			CountNumGameResultDto gameDto = new CountNumGameResultDto();
 			gameDto.setCountNumId(countNumId);
