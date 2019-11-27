@@ -8,6 +8,7 @@ import java.util.concurrent.locks.Lock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.module.countnum.business.service.CountNumGameService;
@@ -163,6 +164,7 @@ public class CountNumGameServiceImpl implements CountNumGameService {
 	}
 
 	@Override
+	@Transactional
 	public CountNumGameDto countNumGameOverdueFinish(long countNumId, Date overdueDate) {
 		CountNum countNum = countNumService.setOverdueDate(countNumId, overdueDate);
 

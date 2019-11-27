@@ -41,14 +41,14 @@ $(function() {
 			<th field="createUserName">创建者用户名</th>
 			<th field="type" formatter="mappingFormatter">类型</th>
 			<th field="status" formatter="mappingFormatter">状态</th>
-			<th field="overdueTime" formatter="dateTimeFormatter">过期时间</th>
+			<th field="overdueTime" formatter="dateTimeFormatter" sortable="true">过期时间</th>
 			
 <!--			<th field="isCover" formatter="mappingFormatter">是否参与覆盖</th>-->
 			<th field="maxNum" sortable="true" sum="true">最大参与人数</th>
 			<th field="limitNum" sortable="true" sum="true">单人可参与次数</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
-			<th field="businessId">业务id</th>
+			<th field="businessId"  sortable="true">业务id</th>
 			<th field="businessData" formatter="contentFormatter">业务参数</th>
 			<th field="comments">备注</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_countNum_action',value,row)}">动作</th>

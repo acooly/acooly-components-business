@@ -73,6 +73,7 @@ public class CountNumServiceImpl extends EntityServiceImpl<CountNum, CountNumDao
 	}
 
 	@Override
+	@Transactional
 	public CountNum setOverdueDate(long countNumId, Date overdueDate) {
 		CountNum countNum = lockById(countNumId);
 		countNum.setOverdueTime(overdueDate);
