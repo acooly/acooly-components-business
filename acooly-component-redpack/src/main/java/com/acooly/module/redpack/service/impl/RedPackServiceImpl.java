@@ -45,6 +45,15 @@ public class RedPackServiceImpl extends EntityServiceImpl<RedPack, RedPackDao> i
 
 	@Override
 	@Transactional
+	public RedPack setOverdueDate(long redPackId, Date overdueDate) {
+		RedPack redPack = lockById(redPackId);
+		redPack.setOverdueTime(overdueDate);
+		getEntityDao().update(redPack);
+		return redPack;
+	}
+
+	@Override
+	@Transactional
 	public void checkRedPackOverdue(RedPack redPack) {
 		redPack = lockById(redPack.getId());
 		RedPackStatusEnum status = redPack.getStatus();

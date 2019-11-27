@@ -54,7 +54,7 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	@Autowired
 	private DistributedLockFactory factory;
 
-	@SuppressWarnings({ "unused", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@Autowired
 	private RedisTemplate redisTemplate;
 
@@ -103,7 +103,7 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 
 			// 设置缓存监听事件
 			if (createDto.getOverdueTime() != null) {
-				redPackCacheDataService.setListenerRedPackRedisLockKey(dto.getRedPackId(), dto,
+				redPackCacheDataService.setListenerMarkRedPackRedisKey(dto.getRedPackId(), dto,
 						createDto.getOverdueTime());
 			}
 
@@ -112,6 +112,22 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 			throw new BusinessException(RedPackResultCodeEnum.RED_PACK_CREATE_ERROR.message(),
 					RedPackResultCodeEnum.RED_PACK_CREATE_ERROR.code());
 		}
+		return dto;
+	}
+	
+
+	@Override
+	@Transactional
+	public RedPackDto setRedPackOverdueTime(long redPackId, Date overdueDate) {
+		RedPack redPack = redPackService.setOverdueDate(redPackId, overdueDate);
+
+		// 设置缓存数据
+		RedPackDto dto = new RedPackDto();
+		RedPackEntityConverDto.converRedPackDto(redPack, dto);
+		redPackCacheDataService.setRedPackRedisData(dto);
+
+		// 设置redis监听
+		redPackCacheDataService.setListenerMarkRedPackRedisKey(redPackId, dto, overdueDate);
 		return dto;
 	}
 
@@ -397,5 +413,6 @@ public class RedPackTradeServiceImpl implements RedPackTradeService {
 	public Long coutRedOrderNum(long userId, long redPackId) {
 		return redPackOrderService.coutRedOrderNum(userId, redPackId);
 	}
+
 
 }

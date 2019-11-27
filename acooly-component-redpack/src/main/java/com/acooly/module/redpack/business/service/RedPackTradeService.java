@@ -7,6 +7,7 @@
  */
 package com.acooly.module.redpack.business.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.acooly.module.redpack.dto.CreateRedPackDto;
@@ -52,6 +53,16 @@ public interface RedPackTradeService {
 	 * @return
 	 */
 	RedPackOrderDto sendRedPack(SendRedPackDto sendRedPackDto);
+
+	/**
+	 * 红包游戏过期时间设置，(到达过期时间，自动结束)
+	 * 
+	 * 
+	 * <li>游戏结束后，不再处理提交的游戏结果
+	 * 
+	 * @return
+	 */
+	RedPackDto setRedPackOverdueTime(long redPackId, Date overdueDate);
 
 	/**
 	 * 红包退款

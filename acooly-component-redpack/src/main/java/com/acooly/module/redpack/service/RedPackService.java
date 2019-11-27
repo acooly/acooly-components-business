@@ -7,6 +7,8 @@
  */
 package com.acooly.module.redpack.service;
 
+import java.util.Date;
+
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.redpack.entity.RedPack;
 
@@ -21,6 +23,15 @@ import com.acooly.module.redpack.entity.RedPack;
 public interface RedPackService extends EntityService<RedPack> {
 
 	public RedPack lockById(Long redPackId);
+
+	/**
+	 * 设置过期时间
+	 * 
+	 * @param redPackId
+	 * @param overdueDate
+	 * @return
+	 */
+	public RedPack setOverdueDate(long redPackId, Date overdueDate);
 
 	/** 发布事件 **/
 	public void pushEvent(RedPack redPack);

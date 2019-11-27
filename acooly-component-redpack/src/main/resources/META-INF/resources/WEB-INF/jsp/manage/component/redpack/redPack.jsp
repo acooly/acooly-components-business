@@ -54,7 +54,7 @@ $(function() {
 			<th field="sendUserId">用户id</th>
 			<th field="sendUserName">用户名</th>
 			<th field="status" formatter="mappingFormatter">状态</th>
-		    <th field="overdueTime" formatter="dateTimeFormatter">过期时间</th>
+		    <th field="overdueTime" formatter="dateTimeFormatter"  sortable="true">过期时间</th>
 			<th field="totalAmount" sum="true" formatter="centMoneyFormatter">红包总金额</th>
 			<th field="sendOutAmount" sum="true" formatter="centMoneyFormatter">已发送金额</th>
 			<th field="refundAmount" sum="true" formatter="centMoneyFormatter">退款金额</th>

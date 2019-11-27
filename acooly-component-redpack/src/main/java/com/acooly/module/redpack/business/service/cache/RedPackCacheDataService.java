@@ -293,8 +293,15 @@ public class RedPackCacheDataService {
 		return redPackProperties.getRedPackDistributedLockKey() + "_redis_listener_mark_" + redPackId;
 	}
 
+	/**
+	 * 过期时间监听
+	 * 
+	 * @param redPackId
+	 * @param dto
+	 * @param overdueTime
+	 */
 	@SuppressWarnings("unchecked")
-	public void setListenerRedPackRedisLockKey(Long redPackId, RedPackDto dto, Date overdueTime) {
+	public void setListenerMarkRedPackRedisKey(Long redPackId, RedPackDto dto, Date overdueTime) {
 		String listenerKey = getListenerRedPackRedisKey(redPackId);
 		String listenerMarkKey = getListenerRedPackRedisMarkKey(redPackId);
 		Date currentDate = new Date();
