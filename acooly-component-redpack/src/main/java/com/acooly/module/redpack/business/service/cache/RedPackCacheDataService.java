@@ -33,6 +33,9 @@ public class RedPackCacheDataService {
 	/** 红包 redis 缓存时间 **/
 	public static final Long RED_PACK_REDIS_TIME = 10L;
 
+	/** 计数游戏 redis 守护过期监听（1分钟） **/
+	public static long RED_PACK_MARK_REDIS_TIME = 60000L;
+
 	@Autowired
 	private RedPackService redPackService;
 	@Autowired
@@ -312,11 +315,12 @@ public class RedPackCacheDataService {
 		log.info("红包游戏组件:[设置游戏过期时间],监听id:{},红包游戏id:{},过期时间:{},当前时间:{}有效时间:{}毫秒", listenerKey, redPackId, overdueTimeStr,
 				currentDateStr, times);
 		if (times > 0) {
+			// 过期监听
 			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
 
-			// 新增监听锁，主要处理分布式部署，过期事件重复通知
-			long addTime = Dates.addDate(overdueTime, 1, TimeUnit.HOURS).getTime();
-			redisTemplate.opsForValue().set(listenerMarkKey, dto, times + addTime, TimeUnit.MILLISECONDS);
+			// 过期监听守护,新增监听锁，主要处理分布式部署，过期事件重复通知（比监听器多1分钟）
+			times = times + RED_PACK_MARK_REDIS_TIME;
+			redisTemplate.opsForValue().set(listenerMarkKey, dto, times, TimeUnit.MILLISECONDS);
 		}
 	}
 

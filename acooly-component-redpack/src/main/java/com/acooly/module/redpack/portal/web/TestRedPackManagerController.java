@@ -72,9 +72,10 @@ public class TestRedPackManagerController {
 			dto.setPartakeNum(0L);
 			dto.setBusinessId("1");
 
-			dto.setOverdueTime(Dates.addDate(new Date(), 10000L));
+			dto.setOverdueTime(Dates.addDate(new Date(), 10L,TimeUnit.MINUTES));
 
-//			redPackTradeService.createRedPack(dto);
+			System.out.println(dto.getOverdueTime());
+			redPackTradeService.createRedPack(dto);
 
 //			Long redPackId=536L;
 //			redPackTradeService.findRedPack(redPackId);

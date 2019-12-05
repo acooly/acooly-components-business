@@ -72,7 +72,7 @@ public class TestCountNumManagerController {
 			dto.setBusinessId("100000L");
 
 			Date currentDate = new Date();
-			Date overdueTime = Dates.addDate(currentDate, 1000000000L);
+			Date overdueTime = Dates.addDate(currentDate, 10L,TimeUnit.MINUTES);
 			dto.setOverdueTime(overdueTime);
 			dto.setLimitNum(5L);
 

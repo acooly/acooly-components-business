@@ -37,6 +37,9 @@ public class CountNumCacheDataService {
 	/** 计数游戏 单个用户 redis 缓存时间 5分钟 **/
 	public static long COUNT_NUM_ORDER_ONE_REDIS_TIME = 5L;
 
+	/** 计数游戏 redis 守护过期监听（1分钟） **/
+	public static long COUNT_NUM_MARK_REDIS_TIME = 60000L;
+
 	@Autowired
 	private CountNumService countNumService;
 
@@ -123,11 +126,12 @@ public class CountNumCacheDataService {
 		log.info("计数游戏组件:[设置游戏过期时间],计数游戏id:{},过期时间:{},当前时间:{}有效时间:{}毫秒", countNumId, overdueTimeStr, currentDateStr,
 				times);
 		if (times > 0) {
+			// 过期监听
 			redisTemplate.opsForValue().set(listenerKey, dto, times, TimeUnit.MILLISECONDS);
-
-			// 新增监听锁，主要处理分布式部署，过期事件重复通知
-			long addTime = Dates.addDate(overdueTime, COUNT_NUM_REDIS_TIME, TimeUnit.MINUTES).getTime();
-			redisTemplate.opsForValue().set(listenerMarkKey, dto, times + addTime, TimeUnit.MILLISECONDS);
+			
+			// 过期监听守护,新增监听锁，主要处理分布式部署，过期事件重复通知（比监听器多1分钟）
+			times = times + COUNT_NUM_MARK_REDIS_TIME;
+			redisTemplate.opsForValue().set(listenerMarkKey, dto, times, TimeUnit.MILLISECONDS);
 		}
 	}
 
