@@ -1,7 +1,5 @@
 package com.acooly.module.redpack.event.handle;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +14,6 @@ import com.acooly.module.redpack.event.dto.RedPackOrderDto;
 import com.acooly.module.redpack.event.order.InsideRedPackOrderEvent;
 import com.acooly.module.redpack.service.RedPackOrderService;
 import com.acooly.module.redpack.service.RedPackService;
-import com.alibaba.fastjson.JSON;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
@@ -53,12 +50,6 @@ public class InsideRedPackOrderEventHandle {
 		order.setUserId(redPackOrderDto.getUserId());
 		order.setUserName(redPackOrderDto.getUserName());
 		order.setAmount(redPackOrderDto.getAmount());
-
-		Map<String, Object> dataMapStr = redPackOrderDto.getDataMap();
-		if (dataMapStr != null && dataMapStr.size() > 0) {
-			order.setDataMap(JSON.toJSONString(dataMapStr));
-		}
-
 		order.setType(type);
 		order.setCreateTime(redPackOrderDto.getCreateTime());
 		redPackOrderService.save(order);

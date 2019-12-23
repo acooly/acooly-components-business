@@ -87,13 +87,6 @@ public class RedPackOrderServiceImpl extends EntityServiceImpl<RedPackOrder, Red
 		sendRedPackEvent.setType(redPackOrder.getType());
 		sendRedPackEvent.setIsFirst(redPackOrder.getIsFirst());
 		sendRedPackEvent.setCreateTime(redPackOrder.getCreateTime());
-
-		String dataMapStr = redPackOrder.getDataMap();
-		if (Strings.isNotBlank(dataMapStr)) {
-			Map<String, Object> dataMap = JSON.parseObject(dataMapStr);
-			sendRedPackEvent.setDataMap(dataMap);
-		}
-
 		eventBus.publishAfterTransactionCommitted(sendRedPackEvent);
 	}
 
