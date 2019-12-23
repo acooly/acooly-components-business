@@ -6,7 +6,7 @@
  */
 package com.acooly.module.account.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.AbleStatus;
@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/component/account/accountBill")
-public class AccountBillManagerController extends AbstractJQueryEntityController<AccountBill, AccountBillService> {
+public class AccountBillManagerController extends AbstractJsonEntityController<AccountBill, AccountBillService> {
 
     /**
      * 后台管理功能，暂不考虑并发加载问题。

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.redpack.entity.RedPackOrder;
 import com.acooly.module.redpack.service.RedPackOrderService;
 import com.acooly.module.redpack.enums.RedPackOrderTypeEnum;
@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping(value = "/manage/component/redpack/redPackOrder")
-public class RedPackOrderManagerController extends AbstractJQueryEntityController<RedPackOrder, RedPackOrderService> {
+public class RedPackOrderManagerController extends AbstractJsonEntityController<RedPackOrder, RedPackOrderService> {
 	
 
 	{

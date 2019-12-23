@@ -18,7 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
@@ -40,7 +40,7 @@ import com.acooly.module.account.service.tradecode.TradeCodeLoader;
  */
 @Controller
 @RequestMapping(value = "/manage/component/account/account")
-public class AccountManagerController extends AbstractJQueryEntityController<Account, AccountService> {
+public class AccountManagerController extends AbstractJsonEntityController<Account, AccountService> {
 
 	{
 		allowMapping = "*";

@@ -6,7 +6,7 @@
  */
 package com.acooly.module.point.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.point.domain.PointStatistics;
 import com.acooly.module.point.enums.PointStaticsStatus;
 import com.acooly.module.point.service.PointStatisticsService;

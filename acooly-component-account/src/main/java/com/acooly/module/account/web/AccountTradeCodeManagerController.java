@@ -9,7 +9,7 @@ package com.acooly.module.account.web;
 import com.acooly.module.account.entity.AccountTradeCode;
 import com.acooly.module.account.enums.DirectionEnum;
 import com.acooly.module.account.manage.AccountTradeCodeService;
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/component/account/accountTradeCode")
-public class AccountTradeCodeManagerController extends AbstractJQueryEntityController<AccountTradeCode, AccountTradeCodeService> {
+public class AccountTradeCodeManagerController extends AbstractJsonEntityController<AccountTradeCode, AccountTradeCodeService> {
 
 
     {

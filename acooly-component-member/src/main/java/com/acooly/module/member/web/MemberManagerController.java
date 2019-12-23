@@ -7,7 +7,7 @@
 package com.acooly.module.member.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.WhetherStatus;
@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/component/member/member")
-public class MemberManagerController extends AbstractJQueryEntityController<Member, MemberEntityService> {
+public class MemberManagerController extends AbstractJsonEntityController<Member, MemberEntityService> {
 
     {
         allowMapping = "*";

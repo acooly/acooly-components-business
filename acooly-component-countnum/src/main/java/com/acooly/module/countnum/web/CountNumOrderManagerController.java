@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.countnum.entity.CountNumOrder;
 import com.acooly.module.countnum.enums.CountNumTypeEnum;
 import com.acooly.module.countnum.service.CountNumOrderService;
@@ -27,7 +27,7 @@ import com.acooly.module.countnum.service.CountNumOrderService;
  */
 @Controller
 @RequestMapping(value = "/manage/component/countnum/countNumOrder")
-public class CountNumOrderManagerController extends AbstractJQueryEntityController<CountNumOrder, CountNumOrderService> {
+public class CountNumOrderManagerController extends AbstractJsonEntityController<CountNumOrder, CountNumOrderService> {
 	
 
 	{

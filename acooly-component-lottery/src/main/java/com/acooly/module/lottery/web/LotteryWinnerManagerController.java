@@ -1,6 +1,6 @@
 package com.acooly.module.lottery.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Money;
 import com.acooly.module.lottery.domain.LotteryWinner;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryWinner")
 public class LotteryWinnerManagerController
-        extends AbstractJQueryEntityController<LotteryWinner, LotteryWinnerService> {
+        extends AbstractJsonEntityController<LotteryWinner, LotteryWinnerService> {
 
     @Autowired
     private LotteryWinnerService lotteryWinnerService;

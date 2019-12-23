@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.member.entity.MemberSecretQa;
 import com.acooly.module.member.manage.MemberSecretQaEntityService;
 
@@ -22,7 +22,7 @@ import com.acooly.module.member.manage.MemberSecretQaEntityService;
  */
 @Controller
 @RequestMapping(value = "/manage/component/member/memberSecretQa")
-public class MemberSecretQaManagerController extends AbstractJQueryEntityController<MemberSecretQa, MemberSecretQaEntityService> {
+public class MemberSecretQaManagerController extends AbstractJsonEntityController<MemberSecretQa, MemberSecretQaEntityService> {
 	
 
 	{

@@ -6,7 +6,7 @@ import com.acooly.module.member.enums.AuthRoleEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

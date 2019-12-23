@@ -13,7 +13,7 @@ import com.acooly.core.common.facade.InfoBase;
 import com.acooly.module.member.enums.CertTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

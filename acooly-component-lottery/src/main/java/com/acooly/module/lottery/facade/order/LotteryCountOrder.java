@@ -10,7 +10,7 @@
 package com.acooly.module.lottery.facade.order;
 
 import com.acooly.core.common.facade.OrderBase;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 可抽奖次数 order

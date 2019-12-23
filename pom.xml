@@ -6,11 +6,10 @@
 	<parent>
 		<artifactId>acooly-app-parent</artifactId>
 		<groupId>com.acooly</groupId>
-		<version>4.2.0-SNAPSHOT</version>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.acooly</groupId>
 	<artifactId>acooly-components-business-parent</artifactId>
-	<version>4.2.0-SNAPSHOT</version>
 
 	<name>acooly-components-business Projects</name>
 	<packaging>pom</packaging>
@@ -105,5 +104,5 @@
 		<module>acooly-component-point</module>
 		<module>acooly-component-redpack</module>
 		<module>acooly-component-countnum</module>
-	</modules>
+    </modules>
 </project>

@@ -13,7 +13,7 @@ import com.acooly.core.utils.ToString;
 import com.acooly.module.lottery.domain.LotteryWinner;
 import com.acooly.module.lottery.dto.LotteryAwardInfo;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 

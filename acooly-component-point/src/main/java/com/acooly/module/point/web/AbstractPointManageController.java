@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.service.EntityService;
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.module.point.PointProperties;
 import com.acooly.module.point.domain.PointGrade;
 import com.acooly.module.point.service.PointGradeService;
 import com.google.common.collect.Maps;
 
 public class AbstractPointManageController<T extends AbstractEntity, M extends EntityService<T>>
-		extends AbstractJQueryEntityController<T, M> {
+		extends AbstractJsonEntityController<T, M> {
 
 	@Autowired
 	protected PointProperties pointProperties;
