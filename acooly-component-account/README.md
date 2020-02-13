@@ -1,6 +1,7 @@
 <!-- title:账务组件 -->
 <!-- type: business -->
 <!-- author: zhangpu -->
+<!-- date: 2018-12-28 -->
 账务组件 account-component-account
 ====
 

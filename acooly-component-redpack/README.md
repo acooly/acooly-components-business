@@ -1,9 +1,7 @@
 <!-- title: 红包组件 -->
 <!-- type: business -->
 <!-- author: cuifuqiang -->
-acooly-component-redpack(红包组件)
-====
-
+<!-- date: 2018-12-22 -->
 ## 简介
 
 acooly-component-point以acooly框架为基础,分布式红包逻辑组件,采用redis缓存机制，支持 红包创建，红包发放，红包退款标记；

@@ -1,9 +1,7 @@
-NUM<!-- title: 游戏-计数组件 -->
+<!-- title: 游戏计数组件 -->
 <!-- type: business -->
 <!-- author: cuifuqiang -->
-acooly-component-countnum(游戏-计数组件)
-====
-
+<!-- date: 2018-12-20 -->
 ## 简介
 
 acooly-component-countnum以acooly框架为基础,采用redis缓存机制，支持高并发的计数类（游戏）组件；

@@ -1,9 +1,7 @@
 <!-- title:积分组件 -->
 <!-- type: business -->
 <!-- author: cuifuqiang -->
-acooly-component-point(积分组件)
-====
-
+<!-- date: 2018-12-26 -->
 ## 简介
 
 acooly-component-point以acooly框架为基础开发的积分业务组件

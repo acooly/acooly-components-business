@@ -1,6 +1,7 @@
 <!-- title:会员组件 -->
 <!-- type: business -->
 <!-- author: zhangpu -->
+<!-- date: 2018-12-30 -->
 会员组件 acooly-component-member
 ====
 
