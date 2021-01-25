@@ -33,5 +33,14 @@ public class MemberComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("acooly.ds.dbPatchs.b_member[0].patchSql", "ALTER TABLE `b_member` ADD COLUMN `path` VARCHAR(255) NULL " +
                 "COMMENT '搜索路径（/id/id/）';");
 
+        /**
+         * 扩展：注册来源和业务分类
+         */
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member[1].columnName", "registry_source");
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member[1].patchSql", "ALTER TABLE `b_member` ADD COLUMN `registry_source` VARCHAR(32) NULL " + "COMMENT '注册来源';");
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member[2].columnName", "busi_type");
+        setPropertyIfMissing("acooly.ds.dbPatchs.b_member[2].patchSql", "ALTER TABLE `b_member` ADD COLUMN `busi_type` VARCHAR(16) NULL " + "COMMENT '业务分类';");
+
+
     }
 }

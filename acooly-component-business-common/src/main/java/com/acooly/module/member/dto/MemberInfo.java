@@ -110,6 +110,23 @@ public class MemberInfo extends InfoBase {
      */
     private int grade = MemberGradeEnum.normal.code();
 
+    /**
+     * 注册来源
+     */
+    @Size(max = 32)
+    private String registrySource;
+
+    /**
+     * 业务分类 编码
+     */
+    @Size(max = 16)
+    private String busiType;
+
+    /**
+     * 业务分类 名称
+     */
+    @Size(max = 32)
+    private String busiTypeName;
 
     /**
      * 备注

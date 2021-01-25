@@ -37,13 +37,6 @@
  			<artifactId>acooly-component-point</artifactId>
  		</dependency>
 
-
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>acooly-component-redpack</artifactId>
-		</dependency>
-
-
 		<dependency>
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-countnum</artifactId>

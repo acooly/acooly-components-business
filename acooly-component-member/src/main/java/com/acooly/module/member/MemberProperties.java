@@ -23,6 +23,7 @@ import java.util.Map;
 /**
  * @author zhangpu
  * @date 2018-07-10
+ * todo: 注册来源，用户业务分类
  */
 @ConfigurationProperties(MemberProperties.PREFIX)
 @Data

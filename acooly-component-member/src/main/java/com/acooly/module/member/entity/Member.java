@@ -16,6 +16,7 @@ import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -96,6 +97,13 @@ public class Member extends AbstractEntity {
     private MemberUserTypeEnum userType = MemberUserTypeEnum.personal;
 
     /**
+     * 业务分类
+     * @see com.acooly.module.member.service.busitype.MemberBusiTypeLoder
+     */
+    @Size(max = 16)
+    private String busiType;
+
+    /**
      * 手机号码
      */
     @Size(max = 16)
@@ -139,6 +147,11 @@ public class Member extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatusEnum status = MemberStatusEnum.notactive;
 
+    /**
+     * 注册来源
+     */
+    @Size(max = 32)
+    private String registrySource;
 
     /**
      * 备注

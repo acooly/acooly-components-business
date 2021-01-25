@@ -20,6 +20,8 @@ import com.acooly.module.member.enums.MemberStatusEnum;
 import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.MemberService;
+import com.acooly.module.member.service.busitype.MemberBusiTypeLoader;
+import com.acooly.module.member.service.busitype.MemberBusiTypeLoaderImpl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,6 +55,9 @@ public class MemberManagerController extends AbstractJsonEntityController<Member
 
     @Autowired
     private MemberProperties memberProperties;
+
+    @Autowired
+    private MemberBusiTypeLoader memberBusiTypeLoader;
 
     @Override
     protected Member doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
@@ -97,6 +102,7 @@ public class MemberManagerController extends AbstractJsonEntityController<Member
         model.put("allStatuss", MemberStatusEnum.mapping());
         model.put("allActiveTypes", MemberActiveTypeEnum.mapping());
         model.put("allWhtherStatuss", WhetherStatus.mapping());
+        model.put("allBusiTypes", memberBusiTypeLoader.loadMemberBusiTypes());
         model.put("manage", memberProperties.getManage());
     }
 

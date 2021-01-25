@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
 <div>
-    <form id="manage_member_editform" action="${pageContext.request.contextPath}/manage/component/member/member/${action=='create'?'saveJson':'updateJson'}.html" method="post">
+    <form id="manage_member_editform" action="/manage/component/member/member/${action=='create'?'saveJson':'updateJson'}.html" method="post">
         <jodd:form bean="member" scope="request">
             <input name="id" type="hidden"/>
             <table class="tableForm" width="100%">
@@ -104,6 +104,14 @@
                         </select></td>
                     </tr>
                 </c:if>
+                <tr>
+                    <th>业务分类：</th>
+                    <td><select name="busiType" editable="false" style="height:27px;min-width:200px;" panelHeight="auto" class="easyui-combobox">
+                        <c:forEach items="${allBusiTypes}" var="e">
+                            <option value="${e.code}">${e.name}</option>
+                        </c:forEach>
+                    </select></td>
+                </tr>
 
                 <tr>
                     <th>经纪人：</th>
@@ -112,6 +120,10 @@
                 <tr>
                     <th>介绍人：</th>
                     <td><input type="text" name="inviter" size="48" placeholder="请输入介绍人..." class="easyui-validatebox text" data-options="validType:['length[1,32]']"/></td>
+                </tr>
+                <tr>
+                    <th>注册来源：</th>
+                    <td><input type="text" name="registrySource" size="48" placeholder="注册来源为集成端自定义..." class="easyui-validatebox text" data-options="validType:['length[1,32]']"/></td>
                 </tr>
                 <tr>
                     <th>用户等级：</th>
