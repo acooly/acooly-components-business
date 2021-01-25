@@ -5,11 +5,11 @@
 会员组件 acooly-component-member
 ====
 
-## 组件介绍
+## 1. 组件介绍
 
 会员组件是根据多个项目的实践积累和抽取，封装的通用会员业务体系组件。涵盖了会员相关的基础功能和通用信息管理，可作为具体业务项目的会员中心基础，也可作为CRM的基础核心模块。
 
-### 特性
+### 1.1. 特性
 
 * 会员的注册：注册/短信激活（发送）/邮件激活（发送）/
 * 会员级联开account账户
@@ -18,17 +18,19 @@
 * 会员密码安全：修改/重置/找回
 * 个人会员实名认证和解析
 * 会员业务关联：经纪人/介绍人/管理人
+* 会员外部注册来源标记
+* 会员自定义业务分类，通过接口注入方式扩展
 * [todo] 企业会员实名认证和解析 
 * [doing] 会员多操作员管理和认证
 
-### 设计
+### 1.2. 设计
 
-#### 核心关系设计
+#### 1.2.1. 核心关系设计
 
 * 每个会员都有id（主键ID物理标志）和userNo（逻辑编码标志）两个唯一标志。
 * 全局username唯一（逻辑标志）
 
-#### 核心实体关系
+#### 1.2.2. 核心实体关系
 
 * Member(会员实体) ---(1对1)---> MemberProfile(会员配置实体) 
 * Member(会员实体) ---(1对1)---> MemberPersonal(个人会员信息实体) 
@@ -36,13 +38,13 @@
 * Member(会员实体) ---(1对1)---> MemberContact(会员联系信息实体) 
 * [doing] Member(会员实体) ---(1对N)---> MemberAuth(会员认证信息，也可以作为操作员) 
 
-## 使用说明
+## 2. 使用说明
 
-### 集成
+### 2.1. 集成
 
 通用组件集成模式，通过pom引用，默认为开启状态。参数配置前缀：acooly.account.
 
-### 配置
+### 2.2. 配置
 请参考acooly-components-business的测试模块配置。如下：
 
 ```ini
@@ -121,16 +123,17 @@ acooly.mail.password=*******
 
 ...
 
-### 核心接口及功能
+### 2.3. 核心接口及功能
 
 * 会员基础服务，主要提供和封装核心：注册，激活和状态管理相关的那些事~ 接口：com.acooly.module.member.service.MemberService
 * 会员发送服务：发送短信和邮件的业务封装。接口：com.acooly.module.member.service.MemberSendingService
 * 会员安全服务：登录/验证，密码管理等。接口：com.acooly.module.member.service.MemberSecurityService
 * 实名认证服务：com.acooly.module.member.service.MemberRealNameService
 
-### 组件自定义和扩展
 
-#### 注册逻辑扩展
+### 2.4. 组件自定义和扩展
+
+#### 2.4.1. 注册逻辑扩展
 
 **场景：**主要应对具体业务场景中，会员组件提供的信息不能完全满足业务，需要根据业务扩展自定义的会员扩展表，并在注册等业务逻辑处，需要自定义处理逻辑和数据。
 
@@ -191,7 +194,7 @@ public interface MemberRegistryInterceptor {
 }
 ```
 
-#### 短信和邮件发送扩展
+#### 2.4.2. 短信和邮件发送扩展
 
 组件考虑，在特殊情况下，内置的短信或邮件模板及模板参数并不能满足集成系统需求的情况下，可以采用扩展的方式实现。组件发送信息模块设计在发送消息前，调用了拦截器进行处理，你可以实现拦截器（放入你的spring容器即可），返回你的模板名称和模板参数。
 
@@ -220,6 +223,24 @@ public interface MemberCaptchaInterceptor {
 
 }
 ```
+
+#### 2.4.1. 会员自定义业务分类
+
+会员组件内部已按主体类型划分了用户类型（个人，个体，企业），但实际业务场景中会有自定义业务分类的需求，这里提供已接口方式扩展自定义业务分类的能力。
+
+**关键接口：**
+
+* MemberBusiType：定义业务类型（核心为：code和name）
+* MemberBusiTypeLoader：业务类型加载接口（核心为：提供列表返回的MemberBusiType）
+
+**扩展方法：**
+
+1. 在集成系统内实现MemberBusiType接口的类，作为业务分类的实体（也可以直接使用组件内的`DefaultMemberBusiType`默认实现）
+2. 在集成系统内实现MemberBusiTypeLoader接口的`loadMemberBusiTypes`方法，返回你自定义的业务分类列表。
+3. 把你实现的MemberBusiTypeLoader对象加入到spring容器中（`@Component`标记即可）
+
+>完成后，你启动系统，可以在后头的会员管理模块的界面中直接选择你扩展的自定义业务类型，当然你也可以在后头的服务接口中解析使用。
+
 
 ### Q&A
 
