@@ -87,7 +87,12 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
         <tr>
           <td align="left">
           	<div>
-                编码: <input type="text" class="text" size="12" name="search_EQ_userNo"/>
+                查询模式: <select style="width:100px;height:27px;" name="search_childrenType" editable="false" panelHeight="auto" class="easyui-combobox">
+                <option value="">查自己</option>
+                <option value="all">查社区</option>
+                <option value="under">查直属</option>
+            </select>
+                编码: <input type="text" class="text" size="24" name="search_EQ_userNo"/>
                 用户名: <input type="text" class="text" size="10" name="search_EQ_username"/>
                 手机: <input type="text" class="text" size="15" name="search_EQ_mobileNo"/>
                 姓名: <input type="text" class="text" size="15" name="search_EQ_realName"/>
@@ -123,18 +128,19 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
       <thead>
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
-			<th field="id" sortable="true">会员ID</th>
-			<th field="userNo" sortable="true">会员编码</th>
+			<th field="id" sortable="true">ID</th>
+            <th field="parentUserNo" sortable="true">父编码</th>
+			<th field="userNo" sortable="true">编码</th>
 			<th field="username">用户名</th>
             <th field="userType" formatter="mappingFormatter">类型</th>
             <th field="realName">真实姓名</th>
-                <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'realNameStatus');}">是否实名认证
+                <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'realNameStatus');}">实名认证
             </th>
 			<th field="mobileNo">手机</th>
             <th field="memberProfile.mobileNoStatus"
-                data-options="formatter:function(v,r,i,d){if(!r.memberProfile || !r.memberProfile.mobileNoStatus){return null;} return d['data'].allWhtherStatuss[r.memberProfile.mobileNoStatus];}">是否手机认证</th>
+                data-options="formatter:function(v,r,i,d){if(!r.memberProfile || !r.memberProfile.mobileNoStatus){return null;} return d['data'].allWhtherStatuss[r.memberProfile.mobileNoStatus];}">手机认证</th>
 			<th field="email">邮件</th>
-            <th field="memberProfile.emailStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'emailStatus');}">是否邮件认证</th>
+            <th field="memberProfile.emailStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'emailStatus');}">邮件认证</th>
             <th field="memberProfile.broker" data-options="formatter:function(v,r,i,d){return r.memberProfile.broker;}">经纪人</th>
             <th field="memberProfile.inviter" data-options="formatter:function(v,r,i,d){return r.memberProfile.inviter;}">介绍人</th>
 			<th field="grade" formatter="mappingFormatter">等级</th>

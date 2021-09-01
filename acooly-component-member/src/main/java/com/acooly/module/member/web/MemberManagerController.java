@@ -21,9 +21,9 @@ import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.MemberService;
 import com.acooly.module.member.service.busitype.MemberBusiTypeLoader;
-import com.acooly.module.member.service.busitype.MemberBusiTypeLoaderImpl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,10 +83,37 @@ public class MemberManagerController extends AbstractJsonEntityController<Member
             sorts.put("id", false);
         }
         Map<String, Object> params = getSearchParams(request);
+        // ~~~ 废除逻辑 ~~~ start
         String memberPath = Servlets.getParameter(request, "memberPath");
         if (Strings.isNotBlank(memberPath)) {
             params.put(memberPath + "_path", "");
         }
+        // ~~~ 废除逻辑 ~~~ end
+
+        // 支持查询子会员
+        Member uniqueMember = null;
+        String userNo = (String) params.get("EQ_userNo");
+        if (Strings.isNotBlank(userNo)) {
+            uniqueMember = getEntityService().findUniqueByUserNo(userNo);
+        }
+        String username = (String) params.get("EQ_username");
+        if (uniqueMember == null && Strings.isNotBlank(username)) {
+            uniqueMember = getEntityService().findUniqueByUsername(username);
+        }
+
+        String childrenType = Servlets.getParameter(request, "search_childrenType");
+        if (uniqueMember != null) {
+            if (Strings.equalsIgnoreCase(childrenType, "under")) {
+                params.put("EQ_parentUserNo", uniqueMember.getUserNo());
+                params.remove("EQ_userNo");
+                params.remove("EQ_username");
+            } else if (Strings.equalsIgnoreCase(childrenType, "all")) {
+                params.put("RLIKE_path", uniqueMember.getPath() + uniqueMember.getId());
+                params.remove("EQ_userNo");
+                params.remove("EQ_username");
+            }
+        }
+
         Map<String, Boolean> sortMap = getSortMap(request);
         if (sortMap != null && sortMap.get("id") != null) {
             sortMap.put("member.id", sortMap.get("id"));

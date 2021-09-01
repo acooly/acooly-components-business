@@ -109,8 +109,8 @@
           <if test="map.EQ_manager != null and map.EQ_manager != ''"> AND memberProfile.manager = #{map.EQ_manager}</if>
           <if test="map.EQ_broker != null and map.EQ_broker != ''"> AND memberProfile.broker = #{map.EQ_broker}</if>
           <if test="map.EQ_inviter != null and map.EQ_inviter != ''"> AND memberProfile.inviter = #{map.EQ_inviter}</if>
-            <!--<if test="map.EQ_path != null and map.EQ_path != ''"> AND member.path = #{map.EQ_path}</if>-->
-            <!--<if test="map.RLIKE_path != null and map.RLIKE_path != ''"> AND member.path = '#{map.RLIKE_path}%'</if>-->
+            <if test="map.EQ_path != null and map.EQ_path != ''"> AND member.path = #{map.EQ_path}</if>
+            <if test="map.RLIKE_path != null and map.RLIKE_path != ''"> AND member.path LIKE '${map.RLIKE_path}%'</if>
 		  <if test="map.EQ_realNameStatus != null and map.EQ_realNameStatus != ''"> AND memberProfile.real_name_status = #{map.EQ_realNameStatus}</if>
 		  <if test="map.EQ_parentid != null"> AND member.parentid = #{map.EQ_parentid}</if>
 		  <if test="map.EQ_parentUserNo != null and map.EQ_parentUserNo != ''"> AND member.parent_user_no = #{map.EQ_parentUserNo}</if>
