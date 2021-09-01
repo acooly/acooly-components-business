@@ -19,6 +19,7 @@
         <result property="certNo" column="member_cert_no"/>
         <result property="status" column="member_status"/>
         <result property="userType" column="member_user_type"/>
+        <result property="busiType" column="member_busi_type"/>
         <result property="grade" column="member_grade"/>
         <result property="createTime" column="member_create_time"/>
         <result property="updateTime" column="member_update_time"/>
@@ -61,6 +62,7 @@
             member.cert_no as member_cert_no,
             member.status as member_status,
             member.user_type as member_user_type,
+            member.busi_type as member_busi_type,
             member.grade as member_grade,
             member.create_time as member_create_time,
             member.update_time as member_update_time,
