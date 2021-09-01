@@ -108,7 +108,7 @@
                     <th>业务分类：</th>
                     <td><select name="busiType" editable="false" style="height:27px;min-width:200px;" panelHeight="auto" class="easyui-combobox">
                         <c:forEach items="${allBusiTypes}" var="e">
-                            <option value="${e.code}">${e.name}</option>
+                            <option value="${e.key}">${e.value}</option>
                         </c:forEach>
                     </select></td>
                 </tr>

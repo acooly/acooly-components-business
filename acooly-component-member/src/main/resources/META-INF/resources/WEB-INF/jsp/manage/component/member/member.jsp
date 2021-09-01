@@ -133,6 +133,7 @@ function manage_memeber_profile_formatter(v,r,i,d,property) {
 			<th field="userNo" sortable="true">编码</th>
 			<th field="username">用户名</th>
             <th field="userType" formatter="mappingFormatter">类型</th>
+            <th field="busiType" formatter="mappingFormatter">业务分类</th>
             <th field="realName">真实姓名</th>
                 <th field="memberProfile.realNameStatus" data-options="formatter:function(v,r,i,d){return manage_memeber_profile_formatter(v,r,i,d,'realNameStatus');}">实名认证
             </th>

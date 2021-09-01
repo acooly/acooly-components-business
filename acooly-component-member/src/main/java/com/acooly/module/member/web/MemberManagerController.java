@@ -129,7 +129,7 @@ public class MemberManagerController extends AbstractJsonEntityController<Member
         model.put("allStatuss", MemberStatusEnum.mapping());
         model.put("allActiveTypes", MemberActiveTypeEnum.mapping());
         model.put("allWhtherStatuss", WhetherStatus.mapping());
-        model.put("allBusiTypes", memberBusiTypeLoader.loadMemberBusiTypes());
+        model.put("allBusiTypes", memberBusiTypeLoader.mapping());
         model.put("manage", memberProperties.getManage());
     }
 
