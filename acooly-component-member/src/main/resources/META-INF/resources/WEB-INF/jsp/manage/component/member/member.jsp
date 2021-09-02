@@ -1,4 +1,4 @@
-<%@page import="com.acooly.core.utils.Strings"%>
+<%@ page import="com.acooly.core.utils.Strings"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp"%>
 <c:if test="${initParam['ssoEnable']=='true'}">
