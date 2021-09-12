@@ -66,12 +66,14 @@ public class AccountKeepInfo extends AccountInfo {
         this.busiId = busiId;
         this.busiData = busiData;
     }
+
     @Deprecated
     public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount) {
         this.setAccountId(accountId);
         this.setTradeCode(tradeCode);
         this.setAmount(amount);
     }
+
     @Deprecated
     public AccountKeepInfo(Long accountId, TradeCode tradeCode, Money amount, String comments) {
         this.setAccountId(accountId);
@@ -115,6 +117,8 @@ public class AccountKeepInfo extends AccountInfo {
         this.setAccountType(accountInfo.getAccountType());
         this.tradeCode = tradeCode;
         this.amount = amount;
+        this.setBizOrderNo(accountInfo.getBizOrderNo());
+        this.setMerchOrderNo(accountInfo.getMerchOrderNo());
         setComments(comments);
     }
 
@@ -129,6 +133,8 @@ public class AccountKeepInfo extends AccountInfo {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper("AccountKeepInfo")
+                .add("merchOrderNo", getMerchOrderNo())
+                .add("bizOrderNo", getBizOrderNo())
                 .add("accountId", getAccountId())
                 .add("accountNo", getAccountNo())
                 .add("userId", getUserId())

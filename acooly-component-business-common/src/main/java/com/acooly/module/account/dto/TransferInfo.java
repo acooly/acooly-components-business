@@ -1,5 +1,6 @@
 package com.acooly.module.account.dto;
 
+import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Money;
 import com.acooly.module.account.TradeCode;
 import com.acooly.module.account.enums.CommonTradeCodeEnum;
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
-public class TransferInfo {
+public class TransferInfo extends InfoBase {
 
     /**
      * 转出方
@@ -36,9 +37,19 @@ public class TransferInfo {
     @NotNull
     private Money amount;
 
+
+    /**
+     * 外部订单号
+     * 如果该字段传入，则from和to中的merchOrderNo可不传入，优先级内部高于外部。
+     */
+    private String merchOrderNo;
+
     /**
      * 业务订单号
+     * 内部订单号废弃，应该采用from和to内部的bizOrderNo标记唯一内部记账编码，merchOrderNo也同理
+     * 一般情况下，转账业务中，merchOrderNo在from和to中可能相同，但bizOrderNo应该不同
      */
+    @Deprecated
     private String bizOrderNo;
 
     /**

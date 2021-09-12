@@ -278,11 +278,23 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         AccountKeepInfo from = new AccountKeepInfo(transferInfo.getFrom(),
                 transferInfo.getTradeCodeFrom(), transferInfo.getAmount(), transferInfo.getComments());
         from.setBatchNo(transferInfo.getBatchNo());
-        from.setBizOrderNo(transferInfo.getBizOrderNo());
+        if (Strings.isBlank(from.getBizOrderNo())) {
+            from.setBizOrderNo(transferInfo.getBizOrderNo());
+        }
+        if (Strings.isBlank(from.getMerchOrderNo())) {
+            from.setMerchOrderNo(transferInfo.getMerchOrderNo());
+        }
+
         AccountKeepInfo to = new AccountKeepInfo(transferInfo.getTo(),
                 transferInfo.getTradeCodeTo(), transferInfo.getAmount(), transferInfo.getComments());
         to.setBatchNo(transferInfo.getBatchNo());
-        to.setBizOrderNo(transferInfo.getBizOrderNo());
+        if (Strings.isBlank(to.getBizOrderNo())) {
+            to.setBizOrderNo(transferInfo.getBizOrderNo());
+        }
+        if (Strings.isBlank(to.getMerchOrderNo())) {
+            to.setMerchOrderNo(transferInfo.getMerchOrderNo());
+        }
+
         return Lists.newArrayList(from, to);
     }
 
