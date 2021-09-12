@@ -19,6 +19,7 @@ import com.acooly.module.account.manage.AccountBillService;
 import com.acooly.module.account.service.AccountTradeService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -363,7 +364,7 @@ public class AccountTradeServiceImpl extends AccountSupportService implements Ac
         accountBill.setBatchNo(accountKeepInfo.getBatchNo());
         accountBill.setAccountType(account.getAccountType());
         accountBillService.save(accountBill);
-        log.debug("记账 [流水] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
+        log.info("记账 [流水] 成功。{} - {}/{}/{} - {}", account.getLabel(), accountKeepInfo.getTradeCode().code(),
                 accountKeepInfo.getTradeCode().message(), accountKeepInfo.getTradeCode().direction(),
                 accountKeepInfo.getAmount().getCent());
         return accountBill;

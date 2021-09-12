@@ -1,5 +1,6 @@
 package com.acooly.module.account;
 
+import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.module.account.dto.AccountInfo;
 import com.acooly.module.account.dto.AccountKeepInfo;
@@ -73,7 +74,15 @@ public class AccountTradeServiceTest extends AbstractAccountTest {
      */
     @Test
     public void testTransfer() {
-        TransferInfo transferInfo = new TransferInfo(USER_FROM.getUserNo(), USER_DEST.getUserNo(), Money.amout("10"));
+        String merchOrderNo = Ids.did();
+        AccountInfo from = AccountInfo.withNo(USER_FROM.getUserNo());
+//        from.setBizOrderNo(Ids.oid());
+//        from.setMerchOrderNo(merchOrderNo);
+        AccountInfo to = AccountInfo.withNo(USER_DEST.getUserNo());
+//        to.setBizOrderNo(Ids.oid());
+//        to.setMerchOrderNo(merchOrderNo);
+        TransferInfo transferInfo = new TransferInfo(from, to, CommonTradeCodeEnum.transfer_out, CommonTradeCodeEnum.transfer_in, Money.amout("10"));
+        transferInfo.setMerchOrderNo(merchOrderNo);
         accountTradeService.transfer(transferInfo);
     }
 
