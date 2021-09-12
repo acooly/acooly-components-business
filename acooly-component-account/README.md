@@ -1,14 +1,15 @@
-<!-- title:账务组件 -->
+<!-- title: 账务组件 -->
+<!-- name: acooly-component-account -->
 <!-- type: business -->
 <!-- author: zhangpu -->
 <!-- date: 2018-12-28 -->
 账务组件 account-component-account
 ====
 
-## 组件介绍
+## 1 组件介绍
 根据多个项目的需求和经验，抽象封装账务相关的基础能力，以实现基础账务的实现统一，标准，安全可控。主要包含的账户及余额管理，进出账流水记账，记账交易码的定义管理，基础统计分析。对外提供统一的接口提供标准开户，单笔记账，批量记账，单笔/批量转账等核心能力。
 
-### 特性
+### 1.1 特性
 
 * 交易码定义和管理，包括：内置，管理界面自定义和集成系统扩展定义三部分的整合，接口：TradeCode
 * 账户的定义和开户，包括与userId，userNo及accountType的关系。
@@ -22,15 +23,15 @@
 * [待实现]：冻结码管理
 
 
-### 设计
+### 1.2 设计
 
-#### 核心关系设计
+#### 1.2.1 核心关系设计
 
 * 每个账户都有accountId（主键ID物理标志）和accountNo（逻辑编码标志）两个唯一标志。
 * 每个账户都有userId（物理ID）和userNo（逻辑编码）两个用户标志属性。
 * 支持每个用户多账户，通过accountType区分，默认账户类型为main。userId/userNo+accountType可唯一确定一个账户。一般默认账户的accountId=userId, accountNo=userNo
 
-#### 交易码设计
+#### 1.2.2 交易码设计
 
 组件定义了专用的TradeCode接口，用于标志账务流水的交易码。
 
@@ -68,13 +69,13 @@ TradeCode的来源：
 
 
 
-## 使用说明
+## 2 使用说明
 
-### 集成
+### 2.1 集成
 
 通用组件集成模式，通过pom引用，默认为开启状态。参数配置前缀：acooly.account.
 
-### 推荐方案
+### 2.2 推荐方案
 
 * 根据场景情况，优先推荐查看单元测试，里面有完整场景的测试案例代码和文档描述，可直接运行
 * 所有账户的操作（包括：开户，单笔，批量等），账户的定位方式推荐使用：AccountInfo对应,内置三种定位逻辑
@@ -92,7 +93,7 @@ AccountInfo accountInfo = new AccountInfo(userId,accountType)
 ```
 	
 
-### 核心接口使用说明
+### 2.3 核心接口使用说明
 
 ```java
 // 账户管理服务
@@ -108,9 +109,9 @@ TradeCodeLoader
 ```
 详细接口，方法和参数说明请参考源代码的javadoc
 
-### 核心DTO
+### 2.4 核心DTO
 
-#### AccountInfo
+#### 2.4.1 AccountInfo
 
 用于定义账户信息的DTO，主要用于定位用户的参数集合和组织创建账户的基本信息。
 
@@ -146,19 +147,19 @@ public AccountInfo(@Nullable Long accountId, @Nullable String accountNo, Long us
 可以通过以上两个构造来创建AccountInfo,用于查询，定位和以account标志为基础的账务操作。
 
 
-#### AccountKeepInfo
+#### 2.4.2 AccountKeepInfo
 
 记账信息Dto, 用于完整描述一条记账请求数据。AccountKeepInfo是AccountInfo的子类，用于表述制定账户的记账信息，除了AccountInfo的账户信息外，主要增加：TradeCode, amount, busiId, busiData, batchNo等。
 
 详细的构造记账信息的方法请参考该DTO的构造方法及javadoc说明。
 
-#### TransferInfo
+#### 2.4.3 TransferInfo
 
 TransferInfo是专用于转账的DTO，是对AccountKeepInfo的补充，主要描述的是两元记账信息。表述的是从某个账户转账到另外一个账户的信息情况。
 
-### 账户管理接口
+### 2.5 账户管理接口
 
-#### 开户
+#### 2.5.1 开户
 
 ```java
 /**
@@ -171,21 +172,21 @@ Account openAccount(AccountInfo accountInfo);
 1. 用户ID和用户编码与账户ID和账户编码一致，一般用于默认账户，方便业务关联和管理。同时账户ID不采用数据库自增长方式生成，而是由userId方式指定。请参考单元测试：com.acooly.component.account.AccountTradeServiceTest的testOpenAccountWithUserIdEquelsAccountId方法。
 2. 用户ID和用户编码与账户ID和编码不一致，并通过accountType区分账户唯一性。需要对AccountInfo传入userId和userNo，但设置accountId和accountNo（也可以手动设置）为空，由账务组件自动生成。详细用法请参考单元测试：AccountTradeServiceTest.testOpenAccountByUserId()方法。
 
-#### 暂停/启用/禁用
+#### 2.5.2 暂停/启用/禁用
 
 待开发（其实是忘记了...）
 
-#### 查询账户
+#### 2.5.3 查询账户
 
 ```java
 Account loadAccount(AccountInfo accountInfo);
 ```
 
-### 账务交易接口
+### 2.6 账务交易接口
 
 注意：所有的批量记账（包括转账和批量冻结/解冻）都会返回本次批量的批次号，可用于与上层业务关联。批次号也可以通过AccountKeepInfo传入，但必须保持本批次所有记录一致。
 
-#### 单笔记账
+#### 2.6.1 单笔记账
 
 ```java
     /**
@@ -198,7 +199,7 @@ Account loadAccount(AccountInfo accountInfo);
 ```
 
 
-#### 批量记账
+#### 2.6.2 批量记账
 
 
 ```java
@@ -226,7 +227,7 @@ Account loadAccount(AccountInfo accountInfo);
 
 ```
 
-#### 转账
+#### 2.6.3 转账
 
 ```java
     /**
@@ -250,7 +251,7 @@ Account loadAccount(AccountInfo accountInfo);
 ```
 
 
-#### 冻结/解冻
+#### 2.6.4 冻结/解冻
 
 ```java
     /**
@@ -289,6 +290,14 @@ Account loadAccount(AccountInfo accountInfo);
 
 ```
 
+## 3 changelogs
+
+### 5.0.0-SNAPSHOT.20210912
+
+* 修正：account组件的transfer交易的bizOrderNo和merchOrderNo的逻辑。 针对`transferInfo` 这个双边交易传值对象进行调整如下3点。
+* 新增外部订单号（merchOrderNo），如果该字段传入，则from和to中的merchOrderNo可不传入，但优先级内部高于外部
+* 废弃业务订单号（bizOrderNo），应该采用from和to内部的bizOrderNo标记唯一内部记账编。为保持兼容，如果内部的from和to没有传递bizOrderNo，仍然会使用transferInfo的bizOrderNo进行记账。
+* 一般情况下，转账业务中，merchOrderNo在from和to中可能相同，但bizOrderNo应该不同
 
 
 
