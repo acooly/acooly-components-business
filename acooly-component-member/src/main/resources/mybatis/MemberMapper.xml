@@ -116,6 +116,7 @@
 		  <if test="map.EQ_realNameStatus != null and map.EQ_realNameStatus != ''"> AND memberProfile.real_name_status = #{map.EQ_realNameStatus}</if>
 		  <if test="map.EQ_parentid != null"> AND member.parentid = #{map.EQ_parentid}</if>
 		  <if test="map.EQ_parentUserNo != null and map.EQ_parentUserNo != ''"> AND member.parent_user_no = #{map.EQ_parentUserNo}</if>
+          <if test="map.EQ_busiType != null and map.EQ_busiType != ''"> AND member.busi_type = #{map.EQ_busiType}</if>
         </if>
 
 
