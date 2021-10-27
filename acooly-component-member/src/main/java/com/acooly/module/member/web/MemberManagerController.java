@@ -8,6 +8,7 @@ package com.acooly.module.member.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.WhetherStatus;
@@ -21,15 +22,17 @@ import com.acooly.module.member.enums.MemberUserTypeEnum;
 import com.acooly.module.member.manage.MemberEntityService;
 import com.acooly.module.member.service.MemberService;
 import com.acooly.module.member.service.busitype.MemberBusiTypeLoader;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -131,6 +134,43 @@ public class MemberManagerController extends AbstractJsonEntityController<Member
         model.put("allWhtherStatuss", WhetherStatus.mapping());
         model.put("allBusiTypes", memberBusiTypeLoader.mapping());
         model.put("manage", memberProperties.getManage());
+    }
+
+    /**
+     * 导出表头
+     */
+    @Override
+    public List<String> getExportTitles() {
+        List<String> headerList = new ArrayList<String>();
+        headerList.add("id");
+        headerList.add("用户编码");
+        headerList.add("父用户编码");
+        headerList.add("用户名");
+        headerList.add("类型");
+        headerList.add("业务分类");
+        headerList.add("真实姓名");
+        headerList.add("手机号");
+        headerList.add("介绍人");
+        headerList.add("状态");
+        headerList.add("注册时间");
+        return headerList;
+    }
+
+    @Override
+    protected List<String> doExportEntity(Member entity) {
+        List<String> es = Lists.newArrayList();
+        es.add(entity.getId().toString());
+        es.add(entity.getUserNo());
+        es.add(entity.getParentUserNo());
+        es.add(entity.getUsername());
+        es.add(entity.getUserType().getMessage());
+        es.add(entity.getBusiType());
+        es.add(entity.getRealName());
+        es.add(entity.getMobileNo());
+        es.add(entity.getParentUserNo());
+        es.add(entity.getStatus().getMessage());
+        es.add(entity.getCreateTime() != null ? Dates.format(entity.getCreateTime()) : "");
+        return es;
     }
 
 }
