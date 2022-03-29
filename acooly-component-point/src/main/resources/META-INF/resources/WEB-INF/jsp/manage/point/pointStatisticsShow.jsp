@@ -40,7 +40,7 @@
         </tr>
         <tr>
             <th>备注:</th>
-            <td>${pointStatistics.memo}</td>
+            <td>${pointStatistics.comments}</td>
         </tr>
     </table>
 </div>

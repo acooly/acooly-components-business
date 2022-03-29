@@ -8,8 +8,8 @@
 package com.acooly.module.point.service;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.module.point.domain.PointAccount;
-import com.acooly.module.point.domain.PointGrade;
+import com.acooly.module.point.entity.PointAccount;
+import com.acooly.module.point.entity.PointGrade;
 
 /**
  * 积分等级 Service接口
@@ -21,7 +21,7 @@ import com.acooly.module.point.domain.PointGrade;
 public interface PointGradeService extends EntityService<PointGrade> {
 
     /**
-     * 获取用户积分等级
+     	* 获取用户积分等级
      *
      * @param point
      * @return

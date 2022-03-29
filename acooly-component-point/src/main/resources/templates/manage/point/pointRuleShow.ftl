@@ -1,0 +1,40 @@
+<div style="padding: 5px;font-family:微软雅黑;">
+<table class="tableForm" width="100%">
+	<tr>
+		<th>id:</th>
+		<td>${pointRule.id}</td>
+	</tr>					
+	<tr>
+		<th width="25%">规则标题:</th>
+		<td>${pointRule.title}</td>
+	</tr>					
+	<tr>
+		<th>规则编码:</th>
+		<td>${pointRule.code}</td>
+	</tr>					
+	<tr>
+		<th>金额:</th>
+		<td>${pointRule.amount}</td>
+	</tr>					
+	<tr>
+		<th>积分:</th>
+		<td>${pointRule.point}</td>
+	</tr>					
+	<tr>
+		<th>有效期:</th>
+		<td>${pointRule.expireType}</td>
+	</tr>					
+	<tr>
+		<th>创建时间:</th>
+		<td>${pointRule.createTime}</td>
+	</tr>					
+	<tr>
+		<th>更新时间:</th>
+		<td>${pointRule.updateTime}</td>
+	</tr>					
+	<tr>
+		<th>规则描述:</th>
+		<td>${pointRule.comments}</td>
+	</tr>					
+</table>
+</div>

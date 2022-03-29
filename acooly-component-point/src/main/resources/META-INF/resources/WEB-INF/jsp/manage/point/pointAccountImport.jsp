@@ -25,11 +25,14 @@
 <div align="center">
     <table class="tableForm" width="100%">
         <tr>
-            <th width="30%">文件类型：</th>
+            <th width="30%">操作说明：</th>
             <td>
-                1: 目前支持的格式包括：Excel2000(*.xls)。<br/>
-                2：电子表格依次排列<span style="color: red">【用户名，发放${pointModuleName}，发放备注】</span>，其他字段无效<br/>
-                <!--     根据文件扩展名自动适配导入文件类型，目前支持的格式包括：Excel2000(*.xls)和CSV(*.csv)。 请<a href="/manage/point/template/pointTemplate.xls">下载模板文件</a>。 -->
+                1: 手动发放的${pointModuleName}数量，不会使用${pointModuleName}规则，仅处理 ${pointModuleName}的数量<br/><br/>
+                2：业务类型对应关系：<br/>${allBusiTypeEnumss }	<br/><br/>
+                3：电子表格依次排列<span style="color: red">【用户号；用户名；发放${pointModuleName}数量；业务类型；业务类型描述；${pointModuleName}到期时间；备注】</span>
+                		&nbsp;&nbsp;&nbsp; 请<a href="/file/pointTemplate.xls">下载模板文件</a><br/><br/>
+                4:例子：<br/><img src="/assets/images/model/files01.png"  alt="上传文件示例" height="120px;" width="550px;"/>
+                
             </td>
         </tr>
         <tr>

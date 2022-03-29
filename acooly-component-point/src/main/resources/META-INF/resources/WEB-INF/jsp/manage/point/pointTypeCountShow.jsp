@@ -36,7 +36,7 @@
 	</tr>					
 	<tr>
 		<th>备注:</th>
-		<td>${pointTypeCount.memo}</td>
+		<td>${pointTypeCount.comments}</td>
 	</tr>					
 </table>
 </div>

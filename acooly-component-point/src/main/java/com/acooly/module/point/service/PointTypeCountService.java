@@ -8,7 +8,7 @@
 package com.acooly.module.point.service;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.module.point.domain.PointTrade;
+import com.acooly.module.point.entity.PointTrade;
 import com.acooly.module.point.entity.PointTypeCount;
 
 /**

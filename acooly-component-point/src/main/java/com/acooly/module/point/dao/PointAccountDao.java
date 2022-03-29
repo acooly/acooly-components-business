@@ -7,7 +7,8 @@
 package com.acooly.module.point.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
-import com.acooly.module.point.domain.PointAccount;
+import com.acooly.module.point.entity.PointAccount;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -20,19 +21,19 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface PointAccountDao extends EntityMybatisDao<PointAccount> {
 
-    @Select("select * from point_account where user_name=#{userName}")
-    PointAccount findByUserName(@Param("userName") String userName);
+    @Select("select * from pt_point_account where user_no=#{userNo}")
+    PointAccount findByUserNo(@Param("userNo") String userNo);
 
-    @Select("select * from point_account where user_name=#{userName} for update")
-    PointAccount findByUserNameForUpdate(@Param("userName") String userName);
+    @Select("select * from pt_point_account where user_no=#{userNo} for update")
+    PointAccount lockByUserNo(@Param("userNo") String userNo);
 
-
-    @Select(
-            "SELECT count(id) FROM point_account where grade_id=#{gradeId} and balance>=(SELECT balance FROM point_account where user_name=#{userName})")
-    int pointRankByUserNameAndGradeId(
-            @Param("userName") String userName, @Param("gradeId") Long gradeId);
 
     @Select(
-            "SELECT count(id) FROM point_account where balance>=(SELECT balance FROM point_account where user_name=#{userName})")
-    int pointRankByUserName(@Param("userName") String userName);
+            "SELECT count(id) FROM pt_point_account where grade_id=#{gradeId} and balance>=(SELECT balance FROM pt_point_account where user_no=#{userNo})")
+    int pointRankByUserNoAndGradeId(
+            @Param("userNo") String userNo, @Param("gradeId") Long gradeId);
+
+    @Select(
+            "SELECT count(id) FROM pt_point_account where balance>=(SELECT balance FROM pt_point_account where user_no=#{userNo})")
+    int pointRankByUserNo(@Param("userNo") String userNo);
 }

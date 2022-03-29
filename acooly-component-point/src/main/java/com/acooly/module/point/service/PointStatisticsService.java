@@ -8,16 +8,33 @@
 package com.acooly.module.point.service;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.module.point.domain.PointStatistics;
+import com.acooly.module.point.entity.PointStatistics;
 
 /**
  * 积分统计 Service接口
  *
- * <p>Date: 2017-03-13 11:51:10
+ * <p>
+ * Date: 2017-03-13 11:51:10
  *
  * @author acooly
  */
 public interface PointStatisticsService extends EntityService<PointStatistics> {
+	
+	
+	/**
+	 * 默认统计清零时间为 前一天
+	 */
+	public void pointByCountAndClear();
 
-    public void pointStatistics(String startTime, String endTime);
+	/**
+	 * 积分清零统计
+	 * 
+	 * @param overdueDate
+	 */
+	public void pointClearCountByOverdueDate(String overdueDate);
+
+	/**
+	 * 积分清零
+	 */
+	public void pointClearByOverdueDate(String overdueDate);
 }

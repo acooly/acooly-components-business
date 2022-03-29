@@ -6,10 +6,11 @@
  */
 package com.acooly.module.point.dao;
 
-import com.acooly.module.mybatis.EntityMybatisDao;
-import com.acooly.module.point.domain.PointTrade;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import com.acooly.module.mybatis.EntityMybatisDao;
+import com.acooly.module.point.entity.PointTrade;
 
 /**
  * 积分交易信息 Mybatis Dao
@@ -21,21 +22,23 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface PointTradeDao extends EntityMybatisDao<PointTrade> {
 
-    @Select("select coalesce(sum(case trade_type when 'produce' then amount else 0 end)-sum(case trade_type when 'expense' then amount else 0 end) ,0) as point "
-            + "from point_trade where user_name=#{userName} " //
-            + "and create_time>=#{startTime} and create_time<=#{endTime} " //
-            + "and trade_type in('produce','expense')")
-    long getClearPoint(@Param("userName") String userName, @Param("startTime") String startTime,
-                       @Param("endTime") String endTime);
+	@Select("select coalesce(sum(amount),0) as point from pt_point_trade where user_no=#{userNo} " //
+			+ "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='produce'")
+	Long getProducePoint(@Param("userNo") String userNo, @Param("startTime") String startTime,
+			@Param("endTime") String endTime);
 
-    @Select("select coalesce(sum(amount),0) as point from point_trade where user_name=#{userName} " //
-            + "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='produce'")
-    long getProducePoint(@Param("userName") String userName, @Param("startTime") String startTime,
-                         @Param("endTime") String endTime);
+	@Select("select coalesce(sum(amount),0) as point from pt_point_trade where user_no=#{userNo} " //
+			+ "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='expense'")
+	Long getExpensePoint(@Param("userNo") String userNo, @Param("startTime") String startTime,
+			@Param("endTime") String endTime);
 
-    @Select("select coalesce(sum(amount),0) as point from point_trade where user_name=#{userName} " //
-            + "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='expense'")
-    long getExpensePoint(@Param("userName") String userName, @Param("startTime") String startTime,
-                         @Param("endTime") String endTime);
+	@Select("select coalesce(sum(amount),0) as point from pt_point_trade where trade_type ='produce' and "//
+			+ " user_no=#{userNo} and  busi_id=#{busiId}  and busi_type=#{busiType} GROUP BY user_no")
+	Long countProducePointByBusi(@Param("userNo") String userNo, @Param("busiId") String busiId,
+			@Param("busiType") String busiType);
+
+	@Select("select * from pt_point_trade where trade_type =#{tradeType} and user_no=#{userNo} and  busi_id=#{busiId}  and busi_type=#{busiType} ")
+	PointTrade findByUserNoAndBusiIdAndBusiType(@Param("tradeType") String tradeType, @Param("userNo") String userNo,
+			@Param("busiId") String busiId, @Param("busiType") String busiType);
 
 }

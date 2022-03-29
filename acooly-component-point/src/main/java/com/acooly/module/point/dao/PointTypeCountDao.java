@@ -21,7 +21,7 @@ import com.acooly.module.point.entity.PointTypeCount;
  */
 public interface PointTypeCountDao extends EntityMybatisDao<PointTypeCount> {
 
-	@Select("select * from point_type_count where user_name=#{userName} and busi_type=#{busiType} for update")
-	PointTypeCount lockUserNameAndBusiType(@Param("userName") String userName, @Param("busiType") String busiType);
+	@Select("select * from pt_point_type_count where user_no=#{userNo} and busi_type=#{busiType} for update")
+	PointTypeCount lockUserNoAndBusiType(@Param("userNo") String userNo, @Param("busiType") String busiType);
 
 }

@@ -8,6 +8,13 @@ $(function() {
 	$.acooly.framework.registerKeydown('manage_pointTypeCount_searchform','manage_pointTypeCount_datagrid');
 });
 
+$('#manage_pointTypeCount_datagrid').datagrid({
+	showFooter:true,
+	onLoadSuccess : function() {
+			$('#manage_pointTypeCount_datagrid').datagrid('statistics');
+		}
+});
+
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
   <!-- 查询条件 -->
@@ -17,6 +24,7 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
+					用户号: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
 					用户名: <input type="text" class="text" size="15" name="search_LIKE_userName"/>
 					业务类型: <input type="text" class="text" size="15" name="search_EQ_busiType"/>
 					业务类型描述: <input type="text" class="text" size="15" name="search_EQ_busiTypeText"/>
@@ -38,6 +46,7 @@ $(function() {
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" sum="true">ID</th>
+			<th field="userNo">用户号</th>
 			<th field="userName">用户名</th>
 			<th field="num" sum="true">统计次数</th>
 			<th field="busiType">业务类型</th>
@@ -45,7 +54,7 @@ $(function() {
 			<th field="totalPoint" sum="true">总${pointModuleName}</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
-			<th field="memo">备注</th>
+			<th field="comments">备注</th>
 <!--           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_pointTypeCount_action',value,row)}">动作</th> -->
         </tr>
       </thead>

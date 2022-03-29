@@ -7,7 +7,8 @@
 package com.acooly.module.point.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
-import com.acooly.module.point.domain.PointGrade;
+import com.acooly.module.point.entity.PointGrade;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -20,6 +21,6 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface PointGradeDao extends EntityMybatisDao<PointGrade> {
 
-    @Select("select * from point_grade where start_point<=#{point} and end_point>=#{point}")
-    PointGrade getSectionPoint(@Param("point") Long point);
+    @Select("select * from pt_point_grade where start_point<=#{point} and end_point>=#{point}")
+    PointGrade getSectionPoint(@Param("point") long point);
 }

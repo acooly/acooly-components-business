@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <th>备注:</th>
-            <td>${pointAccount.memo}</td>
+            <td>${pointAccount.comments}</td>
         </tr>
     </table>
 </div>

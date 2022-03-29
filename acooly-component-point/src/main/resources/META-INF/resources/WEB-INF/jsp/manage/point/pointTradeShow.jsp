@@ -64,7 +64,7 @@
         </tr>
         <tr>
             <th>备注:</th>
-            <td>${pointTrade.memo}</td>
+            <td>${pointTrade.comments}</td>
         </tr>
     </table>
 </div>

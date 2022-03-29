@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <th>备注：</th>
-                    <td><textarea rows="3" cols="40" style="width:300px;" name="memo" class="easyui-validatebox"
+                    <td><textarea rows="3" cols="40" style="width:300px;" name="comments" class="easyui-validatebox"
                                   validType="byteLength[1,256]"></textarea></td>
                 </tr>
             </table>

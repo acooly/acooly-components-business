@@ -5,10 +5,9 @@
           method="post">
         <table class="tableForm" width="100%">
             <tr>
-                <th width="25%">用户名：</th>
+                <th width="25%">用户号：</th>
                 <td>
-                    <textarea rows="5" cols="40" style="width:300px;" name="userNames" data-options="required:true"
-                              class="easyui-validatebox" validType="byteLength[1,256]"></textarea>
+                    <textarea rows="5" cols="40" style="width:300px;" name="userNos" data-options="required:true" class="easyui-validatebox" validType="byteLength[1,256]"></textarea>
                     </br>
                     <span style="color: red;">多个用户名使用英文逗号分隔</span>
                 </td>
@@ -22,21 +21,32 @@
                     每一个用户发放数量
                 </td>
             </tr>
-            <tr>
+            
+			<tr>
                 <th>业务类型：</th>
                 <td>
-                    <input type="text" name="busiType" size="23" class="easyui-validatebox text" />可为空，不做分类统计
-                </td>
+            	<select name="busiType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox"
+                                data-options="required:true">
+                        <c:forEach items="${allBusiTypeEnumss}" var="e">
+                            <option value="${e.key}">${e.value}</option>
+                        </c:forEach>
+                    </select>
+            	</td>
             </tr>
-            <tr>
-                <th>业务类型描述：</th>
+            
+            
+             <tr>
+                <th>${pointModuleName}过期时间：</th>
                 <td>
-                    <input type="text" name="busiTypeText" size="23" class="easyui-validatebox text" />可为空，不做分类统计
-                </td>
+              	  <input size="15" class="text" id="overdueDate" name="overdueDate"  onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
+				</td>
             </tr>
+            
+            
+            
             <tr>
                 <th>备注：</th>
-                <td><input type="text" name="memo" size="23" class="easyui-validatebox text" data-options="required:true"
+                <td><input type="text" name="comments" size="23" class="easyui-validatebox text" data-options="required:true"
                            validType="byteLength[1,19]"/></td>
             </tr>
         </table>

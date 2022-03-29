@@ -15,6 +15,9 @@ import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableConfigurationProperties({PointProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
@@ -23,10 +26,11 @@ import com.google.common.collect.Lists;
 public class PointAutoConfig {
     @Bean
     public StandardDatabaseScriptIniter pointScriptIniter() {
+    	log.info("加载-积分组件[acooly-component-point]...");
         return new StandardDatabaseScriptIniter() {
             @Override
             public String getEvaluateTable() {
-                return "point_trade";
+                return "pt_point_trade";
             }
 
             @Override

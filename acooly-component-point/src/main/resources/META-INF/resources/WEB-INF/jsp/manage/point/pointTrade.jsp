@@ -6,6 +6,13 @@
         $.acooly.framework.registerKeydown('manage_pointTrade_searchform', 'manage_pointTrade_datagrid');
     });
 
+    
+    $('#manage_pointTrade_datagrid').datagrid({
+    	showFooter:true,
+    	onLoadSuccess : function() {
+    			$('#manage_pointTrade_datagrid').datagrid('statistics');
+    		}
+    });
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
     <!-- 查询条件 -->
@@ -15,14 +22,22 @@
                 <tr>
                     <td align="left">
                         <div>
+                            用户号: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
                             用户名: <input type="text" class="text" size="15" name="search_EQ_userName"/>
-                            交易类型: <select style="width:80px;height:27px;" name="search_EQ_tradeType" editable="false" panelHeight="auto"
-                                          class="easyui-combobox">
-                            <option value="">所有</option>
-                            <c:forEach var="e" items="${allTradeTypes}">
-                                <option value="${e.key}" ${param.search_EQ_tradeType == e.key?'selected':''}>${e.value}</option>
-                            </c:forEach></select>
-                            业务类型: <input type="text" class="text" size="15" name="search_EQ_busiType"/>
+                            交易类型: <select style="width:100px;height:27px;" name="search_EQ_tradeType" editable="false" panelHeight="auto"  class="easyui-combobox">
+                  <option value="">所有</option>
+                  <c:forEach var="e" items="${allTradeTypes}">
+                      <option value="${e.key}" ${param.search_EQ_tradeType == e.key?'selected':''}>${e.value}</option>
+                  </c:forEach></select>
+                            
+                            业务类型: <select style="width:120px;height:27px;" name="search_EQ_busiType" editable="false" panelHeight="auto"  class="easyui-combobox">
+                   <option value="">所有</option>
+                   <c:forEach var="e" items="${allBusiTypeEnumss}">
+                       <option value="${e.key}" ${param.search_EQ_busiType == e.key?'selected':''}>${e.value}</option>
+                   </c:forEach></select>
+                            
+                            
+                            
                             交易订单号: <input type="text" class="text" size="15" name="search_EQ_tradeNo"/>
                             创建时间: <input size="10" class="text" id="search_GTE_createTime" name="search_GTE_createTime"
                                          onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
@@ -54,18 +69,21 @@
                     data-options="formatter:function(value){ return formatRefrence('manage_pointTrade_datagrid','allTradeTypes',value);} ">
                     交易类型
                 </th>
+                <th field="userNo">用户号</th>
                 <th field="userName">用户名</th>
                 <th field="amount" sum="true">交易${pointModuleName}</th>
                 <th field="endFreeze" sum="true">交易后冻结${pointModuleName}</th>
                 <th field="endBalance" sum="true">交易后${pointModuleName}</th>
                 <th field="endAvailable" sum="true">交易后有效${pointModuleName}</th>
+                <th field="endDebtPoint" sum="true">交易后负债${pointModuleName}</th>
                 <th field="busiId">业务Id</th>
                 <th field="busiType">业务类型</th>
                 <th field="busiTypeText">业务类型描述</th>
                 <th field="busiData">相关业务数据</th>
+                <th field="overdueDate">到期时间</th>
                 <th field="createTime" formatter="formatDate">创建时间</th>
                 <th field="updateTime" formatter="formatDate">修改时间</th>
-                <th field="memo">备注</th>
+                <th field="comments">备注</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_pointTrade_action',value,row)}">动作
                 </th>

@@ -27,7 +27,7 @@
 			</tr>					
 			<tr>
 				<th>备注：</th>
-				<td><textarea rows="3" cols="40" placeholder="请输入备注..." style="width:300px;" name="memo" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
+				<td><textarea rows="3" cols="40" placeholder="请输入备注..." style="width:300px;" name="comments" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
 			</tr>					
         </table>
       </jodd:form>

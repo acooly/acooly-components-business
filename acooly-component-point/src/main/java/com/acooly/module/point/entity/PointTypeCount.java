@@ -26,14 +26,22 @@ import java.util.Date;
  * Date: 2018-08-06 16:18:40
  */
 @Entity
-@Table(name = "point_type_count")
+@Table(name = "pt_point_type_count")
 @Getter
 @Setter
 public class PointTypeCount extends AbstractEntity {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/** 用户号 */
+	@NotEmpty
+    private String userNo;
 
 	/** 用户名 */
 	@NotEmpty
-	@Size(max=32)
     private String userName;
 
 	/** 统计次数 */
@@ -54,6 +62,6 @@ public class PointTypeCount extends AbstractEntity {
 
 	/** 备注 */
 	@Size(max=256)
-    private String memo;
+    private String comments;
 
 }

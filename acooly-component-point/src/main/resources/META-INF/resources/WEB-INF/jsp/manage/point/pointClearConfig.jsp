@@ -86,7 +86,7 @@
                 </th>
                 <th field="createTime" formatter="formatDate">创建时间</th>
                 <th field="updateTime" formatter="formatDate">修改时间</th>
-                <th field="memo">备注</th>
+                <th field="comments">备注</th>
                 <th field="rowActions" formatter="manage_pointClearConfig_rowAction_formatter">动作</th>
             </tr>
             </thead>

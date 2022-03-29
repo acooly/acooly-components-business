@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,8 +24,8 @@ import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
-import com.acooly.module.point.domain.PointAccount;
-import com.acooly.module.point.dto.PointTradeDto;
+import com.acooly.module.point.dto.PointTradeInfoDto;
+import com.acooly.module.point.entity.PointAccount;
 import com.acooly.module.point.enums.PointAccountStatus;
 import com.acooly.module.point.service.PointAccountService;
 import com.acooly.module.point.service.PointTradeService;
@@ -49,6 +50,25 @@ public class PointAccountManagerController extends AbstractPointManageController
 		allowMapping = "*";
 	}
 
+	@RequestMapping(value = "updateStatusJson")
+	@ResponseBody
+	@Transactional
+	public JsonEntityResult<PointAccount> updateStatusJson(HttpServletRequest request, HttpServletResponse response) {
+		JsonEntityResult<PointAccount> result = new JsonEntityResult<PointAccount>();
+		try {
+			String userNo = request.getParameter("userNo");
+			String status = request.getParameter("status");
+			PointAccount pointAccount = pointAccountService.lockByUserNo(userNo);
+			pointAccount.setStatus(PointAccountStatus.find(status));
+			pointAccountService.update(pointAccount);
+			result.setEntity(pointAccount);
+            result.setMessage("更新状态成功");
+		} catch (Exception e) {
+			handleException(result, "积分账户更新状态", e);
+		}
+		return result;
+	}
+
 	@RequestMapping(value = { "importJson" })
 	@ResponseBody
 	public JsonResult importJson(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -67,17 +87,28 @@ public class PointAccountManagerController extends AbstractPointManageController
 			throws Exception {
 		List<PointAccount> lists = Lists.newArrayList();
 		Map<String, UploadResult> uploadResults = doUpload(request);
+		long rowNum = 1L;
 		List<List<String>> lineLists = loadImportFile(uploadResults, fileType, "UTF-8");
-		System.out.println(lineLists);
 		for (List<String> lines : lineLists) {
-			String userName = lines.get(0);
-			String point = lines.get(1);
-			String memo = lines.get(2);
-			PointTradeDto pointTradeDto = new PointTradeDto();
-			pointTradeDto.setBusiData(memo);
-			pointTradeDto.setMemo(memo);
-			pointTradeService.pointProduce(userName, Long.parseLong(point), pointTradeDto);
-			lists.add(pointAccountService.findByUserName(userName));
+			if (rowNum == 1L) {
+				rowNum = rowNum + 1;
+				continue;
+			}
+			String userNo = lines.get(0);
+			String userName = lines.get(1);
+			String point = lines.get(2);
+			String busiType = lines.get(3);
+			String busiTypeText = lines.get(4);
+			String overdueDate = lines.get(5);
+			String comments = lines.get(6);
+			PointTradeInfoDto pointTradeDto = new PointTradeInfoDto();
+			pointTradeDto.setRepeatTrade(true);
+			pointTradeDto.setBusiType(busiType);
+			pointTradeDto.setBusiTypeText(busiTypeText);
+			pointTradeDto.setComments(comments);
+			pointTradeDto.setBusiData(getBossUser().getUsername() + ":批量发放");
+			pointTradeService.pointProduce(userNo, userName, Long.parseLong(point), overdueDate, pointTradeDto);
+			lists.add(pointAccountService.findByUserNo(userNo));
 		}
 		return lists;
 	}
@@ -88,30 +119,34 @@ public class PointAccountManagerController extends AbstractPointManageController
 		JsonEntityResult<PointAccount> result = new JsonEntityResult<PointAccount>();
 		allow(request, response, MappingMethod.create);
 		try {
-			String userNames = request.getParameter("userNames");
+			String userNos = request.getParameter("userNos");
 			String point = request.getParameter("point");
 			String busiType = request.getParameter("busiType");
-			String busiTypeText=request.getParameter("busiTypeText");
+			String busiTypeText = getBusiTypeText(busiType);
+			String overdueDate = request.getParameter("overdueDate");
 
-			String memo = request.getParameter("memo");
-			List<String> userNameList = Lists.newArrayList(StringUtils.split(userNames, ","));
-			if (Collections3.isEmpty(userNameList)) {
+			String comments = request.getParameter("comments");
+			List<String> userNoList = Lists.newArrayList(StringUtils.split(userNos, ","));
+			if (Collections3.isEmpty(userNoList)) {
 				throw new RuntimeException("用户名不能为空，多个用户名使用英文逗号分隔");
 			}
-			if (userNameList.size() > 50) {
-				throw new RuntimeException("最多支持50个用户名");
+
+			if (userNoList.size() > 1000) {
+				throw new RuntimeException("最多支持1000个用户名");
 			}
-			for (String userName : userNameList) {
-				PointTradeDto pointTradeDto = new PointTradeDto();
+
+			for (String userNo : userNoList) {
+				PointTradeInfoDto pointTradeDto = new PointTradeInfoDto();
+				pointTradeDto.setRepeatTrade(true);
 				pointTradeDto.setBusiType(busiType);
 				pointTradeDto.setBusiTypeText(busiTypeText);
-				pointTradeDto.setBusiData(memo);
-				pointTradeDto.setMemo(memo);
-				pointTradeService.pointProduce(userName, Long.parseLong(point), pointTradeDto);
+				pointTradeDto.setBusiData(getBossUser().getUsername() + ":发放");
+				pointTradeDto.setComments(comments);
+				pointTradeService.pointProduce(userNo, null, Long.parseLong(point), overdueDate, pointTradeDto);
 			}
 			result.setMessage("积分发放成功");
 		} catch (Exception e) {
-			handleException(result, "新增", e);
+			handleException(result, "积分发放成功", e);
 		}
 		return result;
 	}
@@ -134,53 +169,12 @@ public class PointAccountManagerController extends AbstractPointManageController
 		return getListView() + "Grant";
 	}
 
-	@RequestMapping(value = "clearJson")
-	@ResponseBody
-	public JsonEntityResult<PointAccount> clearJson(HttpServletRequest request, HttpServletResponse response) {
-		JsonEntityResult<PointAccount> result = new JsonEntityResult<PointAccount>();
-		allow(request, response, MappingMethod.create);
-		try {
-			String startTime = request.getParameter("startTime");
-			String endTime = request.getParameter("endTime");
-			String memo = request.getParameter("memo");
-
-			PointTradeDto pointTradeDto = new PointTradeDto();
-			pointTradeDto.setBusiId("0");
-			pointTradeDto.setBusiType("pointClear");
-			pointTradeDto.setBusiTypeText("清分清零");
-			pointTradeDto.setBusiData(memo);
-			pointTradeDto.setMemo(memo);
-			pointTradeService.pointClearThread(startTime, endTime, pointTradeDto);
-			result.setMessage("积分清零正在处理中,之后刷新查看结果");
-		} catch (Exception e) {
-			handleException(result, "新增", e);
-		}
-		return result;
-	}
-
-	/**
-	 * 积分清零
-	 *
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "clear")
-	public String clear(HttpServletRequest request, HttpServletResponse response, Model model) {
-		try {
-			model.addAllAttributes(referenceData(request));
-		} catch (Exception e) {
-			handleException("积分清零", e, request);
-		}
-		return getListView() + "Clear";
-	}
-
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		super.referenceData(request, model);
 		model.put("allStatuss", PointAccountStatus.mapping());
 		model.put("allPointGrades", getPointGradeMap());
+		model.put("allBusiTypeEnumss", getBusiTypeMap());
 	}
 
 }

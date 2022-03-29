@@ -4,9 +4,13 @@
  * create by cuifuqiang
  * date:2017-02-03
  */
-package com.acooly.module.point.domain;
+package com.acooly.module.point.entity;
 
 import com.acooly.core.common.domain.AbstractEntity;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -18,8 +22,10 @@ import javax.persistence.Table;
  *
  * @author cuifuqiang Date: 2017-02-03 22:47:28
  */
+@Setter
+@Getter
 @Entity
-@Table(name = "point_grade")
+@Table(name = "pt_point_grade")
 public class PointGrade extends AbstractEntity {
     /**
      * serialVersionUID
@@ -49,55 +55,7 @@ public class PointGrade extends AbstractEntity {
     /**
      * 备注
      */
-    private String memo;
-
-    public Integer getNum() {
-        return this.num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Long getStartPoint() {
-        return startPoint;
-    }
-
-    public void setStartPoint(Long startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public Long getEndPoint() {
-        return endPoint;
-    }
-
-    public void setEndPoint(Long endPoint) {
-        this.endPoint = endPoint;
-    }
-
-    public String getPicture() {
-        return this.picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getMemo() {
-        return this.memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
+    private String comments;
 
     @Override
     public String toString() {

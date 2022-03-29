@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <th>备注:</th>
-            <td>${pointGrade.memo}</td>
+            <td>${pointGrade.comments}</td>
         </tr>
     </table>
 </div>

@@ -6,16 +6,17 @@
  */
 package com.acooly.module.point.web;
 
-import com.acooly.core.common.web.AbstractJsonEntityController;
-import com.acooly.module.point.domain.PointTrade;
-import com.acooly.module.point.enums.PointTradeType;
-import com.acooly.module.point.service.PointTradeService;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import com.acooly.module.point.entity.PointTrade;
+import com.acooly.module.point.enums.PointTradeType;
+import com.acooly.module.point.service.PointTradeService;
 
 /**
  * 积分交易信息 管理控制器
@@ -38,5 +39,6 @@ public class PointTradeManagerController extends AbstractPointManageController<P
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		super.referenceData(request, model);
 		model.put("allTradeTypes", PointTradeType.mapping());
+		model.put("allBusiTypeEnumss", getBusiTypeMap());
 	}
 }

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.module.point.dao.PointTypeCountDao;
-import com.acooly.module.point.domain.PointTrade;
+import com.acooly.module.point.entity.PointTrade;
 import com.acooly.module.point.entity.PointTypeCount;
 import com.acooly.module.point.enums.PointTradeType;
 import com.acooly.module.point.service.PointTypeCountService;
@@ -32,15 +32,17 @@ public class PointTypeCountServiceImpl extends EntityServiceImpl<PointTypeCount,
 	@Override
 	@Transactional
 	public void savePointTypeCount(PointTrade pointTrade) {
+		String userNo = pointTrade.getUserNo();
 		String userName = pointTrade.getUserName();
 		String busiType = pointTrade.getBusiType();
 		String busiTypeText = pointTrade.getBusiTypeText();
 
 		if (pointTrade.getTradeType() == PointTradeType.produce && StringUtils.isNotBlank(busiType)
 				&& StringUtils.isNotBlank(busiTypeText)) {
-			PointTypeCount pointTypeCount = getEntityDao().lockUserNameAndBusiType(userName, busiType);
+			PointTypeCount pointTypeCount = getEntityDao().lockUserNoAndBusiType(userNo, busiType);
 			if (null == pointTypeCount) {
 				pointTypeCount = new PointTypeCount();
+				pointTypeCount.setUserNo(userNo);
 				pointTypeCount.setUserName(userName);
 				pointTypeCount.setNum(1L);
 				pointTypeCount.setBusiType(busiType);
