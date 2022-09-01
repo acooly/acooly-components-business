@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>acooly-app-parent</artifactId>
 		<groupId>com.acooly</groupId>
-		<version>5.0.0-SNAPSHOT</version>
+		<version>5.2.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.acooly</groupId>
 	<artifactId>acooly-components-business-parent</artifactId>
-
+	<version>5.2.0-SNAPSHOT</version>
 	<name>acooly-components-business Projects</name>
 	<packaging>pom</packaging>
 
@@ -68,12 +68,6 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-core</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>acooly-configuration-processor</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.acooly</groupId>
