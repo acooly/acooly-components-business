@@ -22,14 +22,14 @@ import java.io.File;
 @Slf4j
 public class JspToFtl {
 
-    public static void main(String[] args) {
-        String jsp = "/Users/zhangpu/workspace/acooly/v5/acooly-components-business/acooly-component-member" +
-                "/src/main/resources/META-INF/resources/WEB-INF/jsp" +
-                "/manage/component/member/member.jsp";
-
-        String ftl = jspToFtlString(jsp);
-        System.out.println(ftl);
-    }
+//    public static void main(String[] args) {
+//        String jsp = "/Users/zhangpu/workspace/acooly/v5/acooly-components-business/acooly-component-member" +
+//                "/src/main/resources/META-INF/resources/WEB-INF/jsp" +
+//                "/manage/component/member/member.jsp";
+//
+//        String ftl = jspToFtlString(jsp);
+//        System.out.println(ftl);
+//    }
 
     public static String jspToFtlString(String fromJspPath) {
         String jspContent = loadFile(fromJspPath);

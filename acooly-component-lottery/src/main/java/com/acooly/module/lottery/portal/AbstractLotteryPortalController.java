@@ -6,7 +6,6 @@ import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.module.lottery.domain.Lottery;
 import com.acooly.module.lottery.facade.LotteryFacade;
 import com.acooly.module.lottery.facade.order.LotteryCountOrder;
@@ -83,7 +82,7 @@ public abstract class AbstractLotteryPortalController
             ResultBase resultBase = lotteryFacade.addLotteryCount(lotteryCountOrder);
             result.setCode(resultBase.getCode());
             result.setMessage(resultBase.getDetail());
-            result.setSuccess(resultBase.getStatus() == ResultStatus.success);
+            result.setSuccess(resultBase.success());
         } catch (Exception e) {
             handleException(result, "增加抽奖次数", e);
         }
@@ -102,7 +101,7 @@ public abstract class AbstractLotteryPortalController
             LotteryCountResult lotteryCountResult = lotteryFacade.getLotteryCount(lotteryCountOrder);
             result.setCode(lotteryCountResult.getCode());
             result.setMessage(lotteryCountResult.getDetail());
-            result.setSuccess(lotteryCountResult.getStatus() == ResultStatus.success);
+            result.setSuccess(lotteryCountResult.success());
             result.appendData("totalTimes", lotteryCountResult.getTotalTimes());
             result.appendData("playTimes", lotteryCountResult.getPlayTimes());
         } catch (Exception e) {
