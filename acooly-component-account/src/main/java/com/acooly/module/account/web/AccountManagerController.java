@@ -12,6 +12,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Money;
+import com.acooly.module.account.enums.CommonTradeCodeEnum;
+import com.acooly.module.account.enums.DirectionEnum;
+import com.acooly.module.account.service.AccountTradeService;
+import com.acooly.module.security.domain.User;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,135 +49,190 @@ import com.acooly.module.account.service.tradecode.TradeCodeLoader;
 @RequestMapping(value = "/manage/component/account/account")
 public class AccountManagerController extends AbstractJsonEntityController<Account, AccountService> {
 
-	{
-		allowMapping = "*";
-	}
+    {
+        allowMapping = "*";
+    }
 
-	@SuppressWarnings("unused")
-	@Autowired
-	private AccountService accountService;
-	@Autowired
-	private AccountManageService accountManageService;
-	@Resource(name = "tradeCodeLoader")
-	private TradeCodeLoader tradeCodeLoader;
-	
-	
-	@Autowired
-	private AccountProperties accountProperties;
+    @SuppressWarnings("unused")
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private AccountManageService accountManageService;
+    @Resource(name = "tradeCodeLoader")
+    private TradeCodeLoader tradeCodeLoader;
+    @Autowired
+    private AccountTradeService accountTradeService;
 
-	@Override
-	public JsonEntityResult<Account> saveJson(HttpServletRequest request, HttpServletResponse response) {
-		JsonEntityResult<Account> result = new JsonEntityResult();
-		this.allow(request, response, MappingMethod.create);
-		try {
-			String userId = request.getParameter("userId");
-			String userNo = request.getParameter("userNo");
-			if (!Strings.isNumeric(userId)) {
-				throw new RuntimeException("用户ID不能为空,只能为数字。");
-			}
-			if (Strings.isBlank(userNo)) {
-				userNo = Ids.getDid();
-			}
-			AccountInfo accountInfo = new AccountInfo();
-			accountInfo.setUserId(Long.parseLong(userId));
-			accountInfo.setUserNo(userNo);
-			accountInfo.setComments(request.getParameter("comments"));
-			accountInfo.setUsername(request.getParameter("username"));
-			accountInfo.setAccountType(request.getParameter("accountType"));
+    @Autowired
+    private AccountProperties accountProperties;
 
-			Account account = accountManageService.openAccount(accountInfo);
-			result.setEntity(account);
-			result.setMessage("新增成功");
-		} catch (Exception var5) {
-			this.handleException(result, "新增", var5);
-		}
-		return result;
-	}
+    @Override
+    public JsonEntityResult<Account> saveJson(HttpServletRequest request, HttpServletResponse response) {
+        JsonEntityResult<Account> result = new JsonEntityResult();
+        this.allow(request, response, MappingMethod.create);
+        try {
+            String userId = request.getParameter("userId");
+            String userNo = request.getParameter("userNo");
+            if (!Strings.isNumeric(userId)) {
+                throw new RuntimeException("用户ID不能为空,只能为数字。");
+            }
+            if (Strings.isBlank(userNo)) {
+                userNo = Ids.getDid();
+            }
+            AccountInfo accountInfo = new AccountInfo();
+            accountInfo.setUserId(Long.parseLong(userId));
+            accountInfo.setUserNo(userNo);
+            accountInfo.setComments(request.getParameter("comments"));
+            accountInfo.setUsername(request.getParameter("username"));
+            accountInfo.setAccountType(request.getParameter("accountType"));
 
-	@Override
-	public JsonEntityResult<Account> updateJson(HttpServletRequest request, HttpServletResponse response) {
-		this.allow(request, response, MappingMethod.update);
-		JsonEntityResult result = new JsonEntityResult();
-		try {
-			Account account = loadEntity(request);
-			account.setComments(request.getParameter("comments"));
-			account.setUsername(request.getParameter("username"));
-			accountService.update(account);
-			result.setEntity(account);
-			result.setMessage("更新成功");
-		} catch (Exception var5) {
-			this.handleException(result, "更新", var5);
-		}
-		return result;
-	}
+            Account account = accountManageService.openAccount(accountInfo);
+            result.setEntity(account);
+            result.setMessage("新增成功");
+        } catch (Exception var5) {
+            this.handleException(result, "新增", var5);
+        }
+        return result;
+    }
 
-	@RequestMapping({ "statusChange" })
-	@ResponseBody
-	public JsonResult statusChange(HttpServletRequest request, HttpServletResponse response) {
-		JsonResult result = new JsonResult();
-		this.allow(request, response, MappingMethod.delete);
+    @Override
+    public JsonEntityResult<Account> updateJson(HttpServletRequest request, HttpServletResponse response) {
+        this.allow(request, response, MappingMethod.update);
+        JsonEntityResult result = new JsonEntityResult();
+        try {
+            Account account = loadEntity(request);
+            account.setComments(request.getParameter("comments"));
+            account.setUsername(request.getParameter("username"));
+            accountService.update(account);
+            result.setEntity(account);
+            result.setMessage("更新成功");
+        } catch (Exception var5) {
+            this.handleException(result, "更新", var5);
+        }
+        return result;
+    }
 
-		try {
-			String id = request.getParameter("id");
-			String status = request.getParameter("status");
-			accountManageService.statusChange(Long.valueOf(id), SimpleStatus.findStatus(status));
-			result.setMessage("操作成功");
-		} catch (Exception e) {
-			this.handleException(result, "状态变更", e);
-		}
+    @RequestMapping({"statusChange"})
+    @ResponseBody
+    public JsonResult statusChange(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        this.allow(request, response, MappingMethod.delete);
 
-		return result;
-	}
+        try {
+            String id = request.getParameter("id");
+            String status = request.getParameter("status");
+            accountManageService.statusChange(Long.valueOf(id), SimpleStatus.findStatus(status));
+            result.setMessage("操作成功");
+        } catch (Exception e) {
+            this.handleException(result, "状态变更", e);
+        }
+
+        return result;
+    }
 
 
+    /**
+     * 关联账户创建页面
+     */
+    @RequestMapping({"accountRelationCreate"})
+    public String accountRelationCreate(HttpServletRequest request, HttpServletResponse response, Model model) {
+        this.allow(request, response, MappingMethod.list);
+        model.addAllAttributes(this.referenceData(request));
+        try {
+            String userId = request.getParameter("userId");
+            String userNo = request.getParameter("userNo");
+            String username = request.getParameter("username");
+            model.addAttribute("userId", userId);
+            model.addAttribute("userNo", userNo);
+            model.addAttribute("username", username);
+        } catch (Exception var5) {
+            this.handleException("关联账户创建", var5, request);
+        }
+        return "/manage/component/account/accountRelationCreate";
+    }
 
-	/**
-	 * 关联账户创建页面
-	 */
-	@RequestMapping({ "accountRelationCreate" })
-	public String accountRelationCreate(HttpServletRequest request, HttpServletResponse response, Model model) {
-		this.allow(request, response, MappingMethod.list);
-		model.addAllAttributes(this.referenceData(request));
-		try {
-			String userId = request.getParameter("userId");
-			String userNo = request.getParameter("userNo");
-			String username = request.getParameter("username");
-			model.addAttribute("userId", userId);
-			model.addAttribute("userNo", userNo);
-			model.addAttribute("username", username);
-		} catch (Exception var5) {
-			this.handleException("关联账户创建", var5, request);
-		}
-		return "/manage/component/account/accountRelationCreate";
-	}
+    /**
+     * 查询关联账户
+     */
+    @RequestMapping({"accountRelationList"})
+    public String accountRelationList(HttpServletRequest request, HttpServletResponse response, Model model) {
+        this.allow(request, response, MappingMethod.list);
+        try {
+            String userId = request.getParameter("userId");
+            String userNo = request.getParameter("userNo");
+            String username = request.getParameter("username");
+            model.addAttribute("userId", userId);
+            model.addAttribute("userNo", userNo);
+            model.addAttribute("username", username);
+        } catch (Exception e) {
+            this.handleException("查询关联账户", e, request);
+        }
 
-	/**
-	 * 查询关联账户
-	 */
-	@RequestMapping({ "accountRelationList" })
-	public String accountRelationList(HttpServletRequest request, HttpServletResponse response, Model model) {
-		this.allow(request, response, MappingMethod.list);
-		try {
-			String userId = request.getParameter("userId");
-			String userNo = request.getParameter("userNo");
-			String username = request.getParameter("username");
-			model.addAttribute("userId", userId);
-			model.addAttribute("userNo", userNo);
-			model.addAttribute("username", username);
-		} catch (Exception e) {
-			this.handleException("查询关联账户", e, request);
-		}
+        return "/manage/component/account/accountRelationList";
+    }
 
-		return "/manage/component/account/accountRelationList";
-	}
+    @RequestMapping({"handlePage"})
+    public String handlePage(HttpServletRequest request, HttpServletResponse response, Model model) {
+        this.allow(request, response, MappingMethod.list);
+        try {
+            Account account = accountService.get(Long.parseLong(request.getParameter("id")));
+            model.addAttribute("account", account);
 
-	
-	
-	@Override
-	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-		model.put("allAccountTypes", accountProperties.getAccountType());
-		model.put("allStatuss", SimpleStatus.mapping());
+            Map<String, String> allTradeCodes = CommonTradeCodeEnum.mapping();
+            allTradeCodes.remove("transfer_out");
+            allTradeCodes.remove("transfer_in");
+            model.addAttribute("allTradeCodes", allTradeCodes);
+        } catch (Exception e) {
+            this.handleException("账务处理", e, request);
+        }
+        return "/manage/component/account/accountHandle";
+    }
+
+    @RequestMapping({"handlePageJson"})
+    @ResponseBody
+    public JsonResult handlePageJson(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        this.allow(request, response, MappingMethod.update);
+        try {
+            long id = Long.parseLong(request.getParameter("id"));
+            String tradeCode = request.getParameter("tradeCode");
+            String money = request.getParameter("amount");
+            String comments = request.getParameter("comments");
+
+            //登陆用户
+            User user = (User) SecurityUtils.getSubject().getPrincipal();
+             comments =comments+ "[操作员:" + user.getId() + ":" + user.getUsername()+"]";
+
+            CommonTradeCodeEnum tradeCodeEnum = CommonTradeCodeEnum.find(tradeCode);
+            if (tradeCodeEnum == CommonTradeCodeEnum.transfer_in || tradeCodeEnum == CommonTradeCodeEnum.transfer_out) {
+                throw new BusinessException("暂时不支持调账功能");
+            }
+            if (tradeCodeEnum == CommonTradeCodeEnum.deposit || tradeCodeEnum == CommonTradeCodeEnum.deposit_offline) {
+                accountTradeService.deposit(id, Money.amout(money), tradeCodeEnum, comments);
+            }
+            if (tradeCodeEnum == CommonTradeCodeEnum.withdraw || tradeCodeEnum == CommonTradeCodeEnum.withdraw_offline) {
+                accountTradeService.withdraw(id, Money.amout(money), tradeCodeEnum, comments);
+            }
+            if (tradeCodeEnum == CommonTradeCodeEnum.freeze) {
+                accountTradeService.freeze(id, Money.amout(money), comments);
+            }
+            if (tradeCodeEnum == CommonTradeCodeEnum.unfreeze) {
+                accountTradeService.unfreeze(id, Money.amout(money), comments);
+            }
+            result.setMessage("账务处理-操作成功");
+        } catch (Exception e) {
+            this.handleException(result, "账务处理", e);
+        }
+
+        return result;
+    }
+
+
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allAccountTypes", accountProperties.getAccountType());
+        model.put("allStatuss", SimpleStatus.mapping());
         model.put("isCreateAccount", accountProperties.isCreateAccount());
-
-	}
+        model.put("allTradeCodes", CommonTradeCodeEnum.mapping());
+    }
 }

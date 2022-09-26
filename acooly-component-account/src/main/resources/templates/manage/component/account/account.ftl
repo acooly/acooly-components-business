@@ -28,7 +28,21 @@
 			return showValues;
 		}
     }
-    
+
+
+
+    /**
+     * 调账
+     */
+    function account_handle() {
+        var rowData = $.acooly.framework.getSelectedRow("manage_account_datagrid");
+        if (!rowData) {
+            $.messager.show({title: '提示', msg: '请先选择调账账户'});
+            return null;
+        }
+        //reload
+        $.acooly.framework.edit({url:'/manage/component/account/account/handlePage.html',id:rowData.id,entity:'account',width:500,height:400,title:"账务处理-调账",editButton:"确认",reload:true});
+    }
 
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
@@ -100,9 +114,15 @@
 
     <!-- 表格的工具栏 -->
     <div id="manage_account_toolbar">
-    <#if isCreateAccount>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/account/account/create.html',entity:'account',width:500,height:450})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>开户</a>
-    </#if>
+         <@shiro.hasPermission name="function_account:createAccount">
+             <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/component/account/account/create.html',entity:'account',width:500,height:450})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>开户</a>
+         </@shiro.hasPermission>
+
+        <@shiro.hasPermission name="function_account:handleAccount">
+            <a href="#" class="easyui-linkbutton" plain="true" onclick="account_handle()"><i class="fa fa-jpy fa-lg fa-fw fa-col"></i>调账</a>
+        </@shiro.hasPermission>
+
+
     </div>
   </div>
 

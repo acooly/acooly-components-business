@@ -20,12 +20,12 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">用户ID</label>
+                    <label class="col-sm-3 col-form-label">用户ID1</label>
                     <div class="col-sm-9">
                         <#if action='edit'>
                             ${account.userId}
                         <#else>
-                            <input type="text" name="userId" size="48" placeholder="请输入用户ID..." class="easyui-validatebox form-control" data-inputmask="'alias':'integer'" data-mask data-options="validType:['number[1,20]'],required:true"/>
+                            <input type="text" name="userId" size="48" placeholder="请输入用户ID..." class="easyui-validatebox form-control" data-inputmask="'alias':'integer'" data-mask data-options="validType:['length[1,20]'],required:true"/>
                         </#if>
                     </div>
                 </div>
