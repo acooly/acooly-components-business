@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
 
 <script type="text/javascript">
     $(function () {
@@ -66,8 +65,8 @@
         <div id="manage_pointGrade_action" style="display: none;">
             <a onclick="$.acooly.framework.edit({url:'/manage/point/pointGrade/edit.html',id:'{0}',entity:'pointGrade',width:550,height:400});"
                href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-            <a onclick="$.acooly.framework.show('/manage/point/pointGrade/show.html?id={0}',500,400);" href="#" title="查看"><i
-                    class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
+<#--            <a onclick="$.acooly.framework.show('/manage/point/pointGrade/show.html?id={0}',500,400);" href="#" title="查看"><i-->
+<#--                    class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
             <a onclick="$.acooly.framework.remove('/manage/point/pointGrade/deleteJson.html','{0}','manage_pointGrade_datagrid');" href="#"
                title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
         </div>

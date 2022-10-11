@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+<#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <div>
     <form id="manage_pointAccount_editform" action="${pageContext.request.contextPath}/manage/point/pointAccount/grantJson.html"
           method="post">
@@ -27,9 +26,7 @@
                 <td>
             	<select name="busiType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox"
                                 data-options="required:true">
-                        <c:forEach items="${allBusiTypeEnumss}" var="e">
-                            <option value="${e.key}">${e.value}</option>
-                        </c:forEach>
+                    <#list allBusiTypeEnumss as k,v><option value="${k}">${v}</option></#list>
                     </select>
             	</td>
             </tr>

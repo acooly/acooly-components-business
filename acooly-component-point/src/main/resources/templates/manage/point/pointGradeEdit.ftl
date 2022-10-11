@@ -1,10 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+<#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <div>
     <form id="manage_pointGrade_editform"
-          action="${pageContext.request.contextPath}/manage/point/pointGrade/${action=='create'?'saveJson':'updateJson'}.html"
+          action="${pageContext.request.contextPath}/manage/point/pointGrade/<#if action=='create'>saveJson<#else>updateJson</#if>.html"
           method="post" enctype="multipart/form-data">
-        <jodd:form bean="pointGrade" scope="request">
+        <@jodd.form bean="pointGrade" scope="request">
             <input name="id" type="hidden"/>
             <table class="tableForm" width="100%">
                 <tr>
@@ -31,10 +30,13 @@
       				<th> 图标：</th>
       				<td>
       				<input type="file" name="pictureFile" />
-      				<c:if test="${pointGrade.picture!=''}">
+
+<#--                        <#if action=='create'>saveJson<#else>updateJson</#if>-->
+
+      				<#if (pointGrade.picture)??>
       				<br/>
       				<a class="manage_onlineFile_datagrid_Thumbnail" target="_blank"  href="' + value + '"><img src="${pointGrade.picture}" width="120" height="100""/></a>
-      				</c:if>
+                    </#if>
       				</td>
 <!--       				<textarea rows="3" cols="40" style="width:300px;" name="picture" class="easyui-validatebox"  validType="byteLength[1,255]"></textarea> -->
       			</tr>					
@@ -44,6 +46,6 @@
                                   validType="byteLength[1,255]"></textarea></td>
                 </tr>
             </table>
-        </jodd:form>
+        </@jodd.form>
     </form>
 </div>

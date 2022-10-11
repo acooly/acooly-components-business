@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+
 <div style="padding: 5px;font-family:微软雅黑;">
     <table class="tableForm" width="100%">
         <tr>
@@ -24,15 +23,15 @@
         </tr>
         <tr>
             <th>create_time:</th>
-            <td><fmt:formatDate value="${pointGrade.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointGrade.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
         <tr>
             <th>update_time:</th>
-            <td><fmt:formatDate value="${pointGrade.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointGrade.updateTime?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
         <tr>
             <th> 图标:</th>
-            <td>${pointGrade.picture}</td>
+            <td><img src="${pointGrade.picture}" height="50px;" width="50px;"></td>
         </tr>
         <tr>
             <th>备注:</th>

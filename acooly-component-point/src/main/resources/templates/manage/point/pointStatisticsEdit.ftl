@@ -1,10 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+<#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <div>
     <form id="manage_pointStatistics_editform"
-          action="${pageContext.request.contextPath}/manage/point/pointStatistics/${action=='create'?'saveJson':'updateJson'}.html"
+          action="${pageContext.request.contextPath}/manage/point/pointStatistics/<#if action=='create'>saveJson<#else>updateJson</#if>.html"
           method="post">
-        <jodd:form bean="pointStatistics" scope="request">
+        <@jodd.form bean="pointStatistics" scope="request">
             <input name="id" type="hidden"/>
             <table class="tableForm" width="100%">
                 <tr>
@@ -37,9 +36,7 @@
                     <th>状态：</th>
                     <td><select name="status" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox"
                                 data-options="required:true">
-                        <c:forEach items="${allStatuss}" var="e">
-                            <option value="${e.key}">${e.value}</option>
-                        </c:forEach>
+                            <#list allStatuss as k,v><option value="${k}">${v}</option></#list>
                     </select></td>
                 </tr>
                 <tr>
@@ -48,6 +45,6 @@
                                   validType="byteLength[1,256]"></textarea></td>
                 </tr>
             </table>
-        </jodd:form>
+        </@jodd.form>
     </form>
 </div>

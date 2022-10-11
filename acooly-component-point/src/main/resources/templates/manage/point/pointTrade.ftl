@@ -1,6 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
-
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
 <script type="text/javascript">
     $(function () {
         $.acooly.framework.registerKeydown('manage_pointTrade_searchform', 'manage_pointTrade_datagrid');
@@ -26,18 +24,14 @@
                             用户名: <input type="text" class="text" size="15" name="search_EQ_userName"/>
                             交易类型: <select style="width:100px;height:27px;" name="search_EQ_tradeType" editable="false" panelHeight="auto"  class="easyui-combobox">
                   <option value="">所有</option>
-                  <c:forEach var="e" items="${allTradeTypes}">
-                      <option value="${e.key}" ${param.search_EQ_tradeType == e.key?'selected':''}>${e.value}</option>
-                  </c:forEach></select>
-                            
+                                <#list allTradeTypes as k,v><option value="${k}">${v}</option></#list>
+                            </select>
+
                             业务类型: <select style="width:120px;height:27px;" name="search_EQ_busiType" editable="false" panelHeight="auto"  class="easyui-combobox">
                    <option value="">所有</option>
-                   <c:forEach var="e" items="${allBusiTypeEnumss}">
-                       <option value="${e.key}" ${param.search_EQ_busiType == e.key?'selected':''}>${e.value}</option>
-                   </c:forEach></select>
-                            
-                            
-                            
+                                <#list allBusiTypeEnumss as k,v><option value="${k}">${v}</option></#list>
+                            </select>
+
                             交易订单号: <input type="text" class="text" size="15" name="search_EQ_tradeNo"/>
                             创建时间: <input size="10" class="text" id="search_GTE_createTime" name="search_GTE_createTime"
                                          onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
