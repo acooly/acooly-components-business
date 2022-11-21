@@ -25,6 +25,11 @@
 		<!-- 业务组件 -->
 		<dependency>
 			<groupId>com.acooly</groupId>
+			<artifactId>acooly-component-assetmgmt</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-account</artifactId>
 		</dependency>
 		<dependency>
@@ -47,7 +52,6 @@
 			<groupId>com.acooly</groupId>
 			<artifactId>acooly-component-countnum</artifactId>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.acooly</groupId>

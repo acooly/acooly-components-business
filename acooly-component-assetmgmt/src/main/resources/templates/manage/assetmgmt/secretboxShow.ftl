@@ -1,0 +1,32 @@
+<div class="card-body">
+	<dl class="row">
+		<dt class="col-sm-3">ID:</dt>
+		<dd class="col-sm-9">${secretbox.id}</dd>
+		<dt class="col-sm-3">标题:</dt>
+		<dd class="col-sm-9">${secretbox.title}</dd>
+		<dt class="col-sm-3">分类编码:</dt>
+		<dd class="col-sm-9">${secretbox.typeCode}</dd>
+		<dt class="col-sm-3">安全类型:</dt>
+		<dd class="col-sm-9">${secretbox.secretType.message()}</dd>
+		<dt class="col-sm-3">服务类型:</dt>
+		<dd class="col-sm-9">${secretbox.serviceType.message()}</dd>
+		<dt class="col-sm-3">访问入口:</dt>
+		<dd class="col-sm-9">${secretbox.accessPoint}</dd>
+		<dt class="col-sm-3">账号:</dt>
+		<dd class="col-sm-9">${secretbox.username}</dd>
+		<dt class="col-sm-3">密码:</dt>
+		<dd class="col-sm-9">${secretbox.password}</dd>
+		<dt class="col-sm-3">绑定手机:</dt>
+		<dd class="col-sm-9">${secretbox.bindMobileNo}</dd>
+		<dt class="col-sm-3">绑定密码:</dt>
+		<dd class="col-sm-9">${secretbox.bindEmail}</dd>
+		<dt class="col-sm-3">简介:</dt>
+		<dd class="col-sm-9">${secretbox.subject}</dd>
+		<dt class="col-sm-3">创建时间:</dt>
+		<dd class="col-sm-9">${secretbox.createTime?string('yyyy-MM-dd HH:mm:ss')}</dd>
+		<dt class="col-sm-3">修改时间:</dt>
+		<dd class="col-sm-9">${secretbox.updateTime?string('yyyy-MM-dd HH:mm:ss')}</dd>
+		<dt class="col-sm-3">备注:</dt>
+		<dd class="col-sm-9">${secretbox.comments}</dd>
+	</dl>
+</div>

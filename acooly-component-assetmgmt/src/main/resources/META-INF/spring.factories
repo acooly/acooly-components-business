@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.acooly.component.assetmgmt.AssetmgmtAutoConfig
+com.acooly.core.common.boot.component.ComponentInitializer=\
+cn.acooly.component.assetmgmt.AssetmgmtComponentInitializer

@@ -17,6 +17,13 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>com.acooly</groupId>
+				<artifactId>acooly-component-assetmgmt</artifactId>
+				<version>${parent.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>com.acooly</groupId>
 				<artifactId>acooly-component-account</artifactId>
@@ -62,19 +69,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-
-	<dependencies>
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>acooly-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>acooly-core-docs</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
 	<build>
 		<resources>
 			<resource>
@@ -98,5 +92,6 @@
 		<module>acooly-component-point</module>
 		<module>acooly-component-redpack</module>
 		<module>acooly-component-countnum</module>
+        <module>acooly-component-assetmgmt</module>
     </modules>
 </project>

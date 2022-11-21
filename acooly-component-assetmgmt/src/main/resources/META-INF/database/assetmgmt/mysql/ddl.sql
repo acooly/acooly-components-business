@@ -1,0 +1,23 @@
+CREATE TABLE `ac_secretbox` (
+    `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编码',
+    `title` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+    `type_code` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类编码(自定义多级分类)',
+    `type_name` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '分类名称',
+    `type_path` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '类型目录',
+    `secret_type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '安全类型 {account:账号密码,accessKey:访问码,key:单秘钥,keyPair:秘钥对}',
+    `username` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
+    `password` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
+    `access_point` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '访问入口',
+    `service_type` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '服务类型{ssh:远程登录,database:数据库,web:web服务}',
+    `bind_email` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '绑定邮箱',
+    `bind_mobile_no` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '绑定手机号码',
+    `subject` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '简介',
+    `expired` timestamp NULL DEFAULT NULL COMMENT '过期时间',
+    `secret_status` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '{title:"状态",type:"option",options:{enable:"正常",expired:"过期",disable:"禁用"}}',
+    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `comments` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`ID`),
+    UNIQUE KEY `UK_SECRETBOX_CODE` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='密码箱';
