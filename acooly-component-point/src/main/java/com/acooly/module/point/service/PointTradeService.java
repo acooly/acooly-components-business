@@ -120,8 +120,8 @@ public interface PointTradeService extends EntityService<PointTrade> {
     /**
      * 积分交易（业务系统自行计算积分）
      *
-     * @param oldUserNo
-     * @param oldUserName
+     * @param sourceUserNo
+     * @param sourceUserName
      * @param tradePoint     交易积分
      * @param isFreeze       是否存在冻结（true:存在冻结积分,false:不存在冻结积分）
      *                       true：解冻后执行积分交易
@@ -131,5 +131,5 @@ public interface PointTradeService extends EntityService<PointTrade> {
      * @param pointTradeDto  业务数据
      * @return
      */
-    void pointTrade(String oldUserNo, String oldUserName, long tradePoint, boolean isFreeze, String targetUserNo, String targetUserName, PointTradeInfoDto pointTradeDto);
+    void pointTrade(String sourceUserNo, String sourceUserName, long tradePoint, boolean isFreeze, String targetUserNo, String targetUserName, PointTradeInfoDto pointTradeDto);
 }

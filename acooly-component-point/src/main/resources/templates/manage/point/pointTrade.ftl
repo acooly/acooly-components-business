@@ -75,8 +75,8 @@
                 <th field="busiTypeText">业务类型描述</th>
                 <th field="busiData">相关业务数据</th>
                 <th field="overdueDate">到期时间</th>
-                <th field="createTime" formatter="formatDate">创建时间</th>
-                <th field="updateTime" formatter="formatDate">修改时间</th>
+                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
                 <th field="comments">备注</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_pointTrade_action',value,row)}">动作

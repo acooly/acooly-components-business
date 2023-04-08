@@ -51,8 +51,8 @@
                 <th field="picture" data-options="formatter:function(value){return showThumbnail(value)}">图标</th>
                 <th field="startPoint">${pointModuleName}区间_开始</th>
                 <th field="endPoint">${pointModuleName}区间_结束</th>
-                <th field="createTime" formatter="formatDate">创建时间</th>
-                <th field="updateTime" formatter="formatDate">更新时间</th>
+                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
                 <th field="comments">备注</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_pointGrade_action',value,row)}">动作

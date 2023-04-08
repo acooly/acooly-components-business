@@ -177,8 +177,8 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
     /**
      * 积分交易（业务系统自行计算积分）
      *
-     * @param oldUserNo
-     * @param oldUserName
+     * @param sourceUserNo
+     * @param sourceUserName
      * @param tradePoint     交易积分
      * @param isFreeze       是否存在冻结（true:存在冻结积分,false:不存在冻结积分）
      *                       true：解冻后执行积分交易
@@ -190,14 +190,14 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
      */
     @Override
     @Transactional
-    public void pointTrade(String oldUserNo, String oldUserName, long tradePoint, boolean isFreeze, String targetUserNo, String targetUserName, PointTradeInfoDto pointTradeDto) {
+    public void pointTrade(String sourceUserNo, String sourceUserName, long tradePoint, boolean isFreeze, String targetUserNo, String targetUserName, PointTradeInfoDto pointTradeDto) {
         if (tradePoint <= 0L) {
             return;
         }
         //转出方
-        pointExpense(oldUserNo, oldUserName, tradePoint, isFreeze, pointTradeDto);
+        pointExpense(sourceUserNo, sourceUserName, tradePoint, isFreeze, pointTradeDto);
         //接收方
-        pointProduce(oldUserNo, oldUserName, tradePoint, null, pointTradeDto);
+        pointProduce(targetUserNo, targetUserName, tradePoint, null, pointTradeDto);
     }
 
     /**

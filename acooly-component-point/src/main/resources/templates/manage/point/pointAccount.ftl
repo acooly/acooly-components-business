@@ -60,8 +60,8 @@
                 <th field="totalProducePoint" sum="true"  sortable="true">总产生${pointModuleName}</th>
                 <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_pointAccount_datagrid','allStatuss',value);} ">状态 </th>
                 <th field="gradeId" data-options="formatter:function(value){ return formatRefrence('manage_pointAccount_datagrid','allPointGrades',value);} "> 用户等级 </th>
-                <th field="createTime" formatter="formatDate">创建时间</th>
-                <th field="updateTime" formatter="formatDate">修改时间</th>
+                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
                 <th field="comments">备注</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_pointAccount_action',value,row)}">动作
