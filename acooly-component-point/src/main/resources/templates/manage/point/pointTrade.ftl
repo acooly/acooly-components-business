@@ -33,6 +33,7 @@
                             </select>
 
                             交易订单号: <input type="text" class="text" size="15" name="search_EQ_tradeNo"/>
+                            业务数据: <input type="text" class="text" size="15" name="search_LIKE_busiData"/>
                             创建时间: <input size="10" class="text" id="search_GTE_createTime" name="search_GTE_createTime"
                                          onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             至<input size="10" class="text" id="search_LTE_createTime" name="search_LTE_createTime"
