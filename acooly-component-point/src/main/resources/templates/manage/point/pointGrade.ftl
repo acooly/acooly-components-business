@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
 
 <script type="text/javascript">
     $(function () {
@@ -52,8 +51,8 @@
                 <th field="picture" data-options="formatter:function(value){return showThumbnail(value)}">图标</th>
                 <th field="startPoint">${pointModuleName}区间_开始</th>
                 <th field="endPoint">${pointModuleName}区间_结束</th>
-                <th field="createTime" formatter="formatDate">创建时间</th>
-                <th field="updateTime" formatter="formatDate">更新时间</th>
+                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
                 <th field="comments">备注</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_pointGrade_action',value,row)}">动作
@@ -66,8 +65,8 @@
         <div id="manage_pointGrade_action" style="display: none;">
             <a onclick="$.acooly.framework.edit({url:'/manage/point/pointGrade/edit.html',id:'{0}',entity:'pointGrade',width:550,height:400});"
                href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-            <a onclick="$.acooly.framework.show('/manage/point/pointGrade/show.html?id={0}',500,400);" href="#" title="查看"><i
-                    class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
+<#--            <a onclick="$.acooly.framework.show('/manage/point/pointGrade/show.html?id={0}',500,400);" href="#" title="查看"><i-->
+<#--                    class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
             <a onclick="$.acooly.framework.remove('/manage/point/pointGrade/deleteJson.html','{0}','manage_pointGrade_datagrid');" href="#"
                title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
         </div>

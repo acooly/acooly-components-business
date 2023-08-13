@@ -1,15 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+
 <script type="text/javascript">
     $(function () {
         $.acooly.framework.createUploadify({
             /** 上传导入的URL */
-            url: '/manage/point/pointTrade/importJson.html?_csrf=${requestScope["org.springframework.security.web.csrf.CsrfToken"].token}&splitKey=v',
+            url: '/manage/point/pointGrade/importJson.html?_csrf=${_csrf.token}&splitKey=v',
             /** 导入操作消息容器 */
-            messager: 'manage_pointTrade_import_uploader_message',
+            messager: 'manage_pointGrade_import_uploader_message',
             /** 上传导入文件表单ID */
-            uploader: 'manage_pointTrade_import_uploader_file',
-            jsessionid: '<%=request.getSession().getId()%>'
+            uploader: 'manage_pointGrade_import_uploader_file',
+            jsessionid:'${Session.id}'
         });
     });
 </script>
@@ -24,13 +23,13 @@
         <tr>
             <th width="30%" height="15"></th>
             <td>
-                <div id="manage_pointTrade_import_uploader_message" style="color: red;"></div>
+                <div id="manage_pointGrade_import_uploader_message" style="color: red;"></div>
             </td>
         </tr>
         <tr>
             <th width="30%">文件：</th>
             <td>
-                <input type="file" name="manage_pointTrade_import_uploader_file" id="manage_pointTrade_import_uploader_file"/>
+                <input type="file" name="manage_pointGrade_import_uploader_file" id="manage_pointGrade_import_uploader_file"/>
             </td>
         </tr>
     </table>

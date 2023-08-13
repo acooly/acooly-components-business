@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
+
 <div style="padding: 5px;font-family:微软雅黑;">
     <table class="tableForm" width="100%">
         <tr>
@@ -20,19 +19,19 @@
         </tr>
         <tr>
             <th>状态:</th>
-            <td>${pointAccount.status.message}</td>
+            <td>${pointAccount.status}</td>
         </tr>
-        <tr>
-            <th>用户等级:</th>
-            <td>${allPointGrades[pointAccount.gradeId]}</td>
-        </tr>
+<#--        <tr>-->
+<#--            <th>用户等级:</th>-->
+<#--            <td><img src="${pointAccount.gradePicture}" width="50px" height="50px"></td>-->
+<#--        </tr>-->
         <tr>
             <th>创建时间:</th>
-            <td><fmt:formatDate value="${pointAccount.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointAccount.createTime?string("yyyy-MM-dd HH:mm:ss")} </td>
         </tr>
         <tr>
             <th>修改时间:</th>
-            <td><fmt:formatDate value="${pointAccount.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointAccount.updateTime?string("yyyy-MM-dd HH:mm:ss")} </td>
         </tr>
         <tr>
             <th>备注:</th>

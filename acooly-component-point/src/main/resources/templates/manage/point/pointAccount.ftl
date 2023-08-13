@@ -1,7 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
 <script type="text/javascript">
     $(function () {
         $.acooly.framework.registerKeydown('manage_pointAccount_searchform', 'manage_pointAccount_datagrid');
@@ -26,12 +23,8 @@
                         <div>
                             用户号: <input type="text" class="text" size="15" name="search_EQ_userNo"/>
                             用户名: <input type="text" class="text" size="15" name="search_EQ_userName"/>
-                            <%-- 					状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select> --%>
-                            用户等级: <select style="width:80px;height:27px;" name="search_EQ_gradeId" editable="false" panelHeight="auto" class="easyui-combobox">
-             <option value="">所有</option>
-             <c:forEach var="e" items="${allPointGrades}">
-                 <option value="${e.key}" ${param.search_EQ_gradeId == e.key?'selected':''}>${e.value}</option>
-             </c:forEach></select>
+                            状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><#list allStatuss as k,v><option value="${k}">${v}</option></#list></select>
+                            用户等级: <select style="width:80px;height:27px;" name="search_EQ_gradeId" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><#list allPointGrades as k,v><option value="${k}">${v}</option></#list></select>
                             创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime"
                                          onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime"
@@ -67,8 +60,8 @@
                 <th field="totalProducePoint" sum="true"  sortable="true">总产生${pointModuleName}</th>
                 <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_pointAccount_datagrid','allStatuss',value);} ">状态 </th>
                 <th field="gradeId" data-options="formatter:function(value){ return formatRefrence('manage_pointAccount_datagrid','allPointGrades',value);} "> 用户等级 </th>
-                <th field="createTime" formatter="formatDate">创建时间</th>
-                <th field="updateTime" formatter="formatDate">修改时间</th>
+                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
                 <th field="comments">备注</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_pointAccount_action',value,row)}">动作

@@ -1,5 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
 <div style="padding: 5px;font-family:微软雅黑;">
     <table class="tableForm" width="100%">
         <tr>
@@ -20,11 +18,11 @@
         </tr>
         <tr>
             <th>开始时间:</th>
-            <td><fmt:formatDate value="${pointStatistics.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointStatistics.startTime?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
         <tr>
             <th>结束时间:</th>
-            <td><fmt:formatDate value="${pointStatistics.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointStatistics.endTime?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
         <tr>
             <th>状态:</th>
@@ -32,11 +30,11 @@
         </tr>
         <tr>
             <th>创建时间:</th>
-            <td><fmt:formatDate value="${pointStatistics.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointStatistics.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
         <tr>
             <th>修改时间:</th>
-            <td><fmt:formatDate value="${pointStatistics.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td>${pointStatistics.updateTime?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
         <tr>
             <th>备注:</th>

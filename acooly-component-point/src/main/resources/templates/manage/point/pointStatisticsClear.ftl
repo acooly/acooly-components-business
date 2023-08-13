@@ -1,5 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
 <div>
     <form id="manage_pointStatistics_editform" action="${pageContext.request.contextPath}/manage/point/pointStatistics/${doType}.html"  method="post">
         <table class="tableForm" width="100%">

@@ -1,8 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp"%>
-<c:if test="${initParam['ssoEnable']=='true'}">
-    <%@ include file="/WEB-INF/jsp/manage/common/ssoInclude.jsp" %>
-</c:if>
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
+
 <script type="text/javascript">
 $(function() {
 	$.acooly.framework.registerKeydown('manage_pointTypeCount_searchform','manage_pointTypeCount_datagrid');

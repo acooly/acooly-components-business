@@ -1,6 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp" %>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
 
 <script type="text/javascript">
     $(function () {
@@ -34,11 +32,10 @@
           <div>
                             用户名: <input type="text" class="text" size="15" name="search_EQ_userName"/>
                             统计时间: <input size="15" class="text" id="search_GTE_startTime" name="search_GTE_startTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
-                            状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox">
+                            状态:
+              <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox">
                     <option value="">所有</option>
-                    <c:forEach var="e" items="${allStatuss}">
-                        <option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option>
-                    </c:forEach>
+                  <#list allStatuss as k,v><option value="${k}">${v}</option></#list>
                </select>
            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_pointStatistics_searchform','manage_pointStatistics_datagrid');">
            <i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>

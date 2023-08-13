@@ -290,7 +290,7 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
 	@Transactional
 	public PointAccount pointUnfreeze(String userNo, String userName, long point) {
 		checkPointValue(userNo, point);
-		PointAccount pointAccount = lockByUserNo(userName);
+		PointAccount pointAccount = lockByUserNo(userNo);
 		if (pointAccount == null) {
 			throw new BusinessException(userNo + "积分账户不存在,无法解冻");
 		}
